@@ -15,7 +15,6 @@
         <UserControls:StackPanelUserControl  DockPanel.Dock="Left" Width="220" Height="Auto"/>
         <Grid>
             <Canvas>
-                
             </Canvas>
         </Grid>
     </DockPanel>

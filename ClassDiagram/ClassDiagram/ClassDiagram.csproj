@@ -75,11 +75,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+<<<<<<< HEAD
     <Compile Include="View\UserControls\AddLineUserControl.xaml.cs">
       <DependentUpon>AddLineUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\UserControls\LineUserControl.xaml.cs">
       <DependentUpon>LineUserControl.xaml</DependentUpon>
+=======
+    <Compile Include="View\UserControls\BoxUserControl.xaml.cs">
+      <DependentUpon>BoxUserControl.xaml</DependentUpon>
+>>>>>>> ad20368081fc354011b692bc946208d9a0aa0db9
     </Compile>
     <Compile Include="View\UserControls\StackPanelUserControl.xaml.cs">
       <DependentUpon>StackPanelUserControl.xaml</DependentUpon>
@@ -113,11 +118,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+<<<<<<< HEAD
     <Page Include="View\UserControls\AddLineUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\UserControls\LineUserControl.xaml">
+=======
+    <Page Include="View\UserControls\BoxUserControl.xaml">
+>>>>>>> ad20368081fc354011b692bc946208d9a0aa0db9
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

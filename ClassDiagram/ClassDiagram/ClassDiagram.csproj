@@ -83,7 +83,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ViewModel\BaseViewModel.cs" />
+    <Compile Include="Properties\Annotations.cs" />
+    <Compile Include="ViewModel\ElementViewModels\BoxViewModel.cs" />
+    <Compile Include="ViewModel\ElementViewModels\ElementViewModel.cs" />
+    <Compile Include="ViewModel\ElementViewModels\LineViewModel.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
@@ -121,6 +124,7 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

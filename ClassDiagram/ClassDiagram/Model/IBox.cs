@@ -12,7 +12,7 @@ namespace ClassDiagram.Model
         double Height { get; set; } 
         double Width { get; }
         int Number { get; }         
-        double X { get; }           // Position in the canvas
+        double X { get; }           // Position in the canvas   
         double Y { get; }           // Position in the canvas
         EBox Type { get; }        // Square, circle, etc.
     }

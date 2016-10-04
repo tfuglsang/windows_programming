@@ -8,5 +8,6 @@ namespace ClassDiagram.Model
 {
     public interface Ibox
     {
+
     }
 }

@@ -5,53 +5,69 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight;
-using ClassDiagram.Model; 
+using ClassDiagram.Model;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
 {
-    public class BoxViewModel: ElementViewModel
+    public class BoxViewModel : ElementViewModel
     {
         private IBox _box;
 
         #region properties
-        public int Height {
-            get
-            {
-                // TDOD implement this to return a value From the box
-                return 0;
-            }
-            set
-            {
-                // Set the height value inside the box object
-                RaisePropertyChanged(propertyName: nameof(Height));
-            }
-        }
-        public int Width
+
+        public double Height
         {
-            get
-            {
-                return 0;
-                // this has to return the width From the box element
-            }
+            get { return _box.Height; }
             set
             {
-                // this need to set the width From the box element
-                RaisePropertyChanged(propertyName: nameof(Width));
+                _box.Height = value;
+                RaisePropertyChanged();
             }
         }
+
+        public double Width
+        {
+            get { return _box.Width; }
+            set
+            {
+                _box.Width = value;
+                RaisePropertyChanged();
+            }
+        }
+
         public Point Position
         {
-            get
-            {
-                return new Point(0,0); // return the position From the box object
+            get { return new Point(_box.X, _box.Y); 
             }
             set
             {
-                // set the position inside of the box object
-                RaisePropertyChanged(propertyName: nameof(Position));
+                _box.X = value.X;
+                _box.Y = value.Y;
+                RaisePropertyChanged();
             }
         }
-        #endregion 
+
+        public EBox Type
+        {
+            get { return _box.Type; }
+            set
+            {
+                _box.Type = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public string Label
+        {
+            get { return _box.Label; }
+            set
+            {
+                _box.Label = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        #endregion
 
         public BoxViewModel(IBox box)
         {

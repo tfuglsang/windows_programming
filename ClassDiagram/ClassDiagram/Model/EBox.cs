@@ -2,7 +2,8 @@
 {
     public enum EBox
     {
-        Circle,
-        Square
+        Class,
+        Abstract,
+        Interface
     }
 }

@@ -25,32 +25,23 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
-        public Point From
+        public int toNumber
         {
-            get
-            {
-                return new Point(0,0); // return the starting point From the lines element
-            }
-            set
-            {
-                // set the from variable inside of the line element
-                RaisePropertyChanged(propertyName: nameof(From));
-            }
+            get { return _line.ToNumber; }
         }
 
-        public Point To
+        public int fromNumber { get { return _line.FromNumber; } }
+
+
+        public ELine Type
         {
-            get
-            {
-                return new Point(0, 0); // return the end point to the lines element
-            }
+            get { return _line.Type; }
             set
             {
-                // set the to property inside of the line element 
-                RaisePropertyChanged(propertyName: nameof(To));
+                _line.Type = value;
+                RaisePropertyChanged();
             }
         }
-
 
         #endregion
 

@@ -10,10 +10,10 @@ namespace ClassDiagram.Model
     {
         string Label { get; set; }  // The name of the box shown in the View
         double Height { get; set; } 
-        double Width { get; }
+        double Width { get; set; }
         int Number { get; }         
-        double X { get; }           // Position in the canvas
-        double Y { get; }           // Position in the canvas
-        EBox Type { get; }        // Square, circle, etc.
+        double X { get; set;  }           // Position in the canvas   
+        double Y { get; set; }           // Position in the canvas
+        EBox Type { get; set; }        // Square, circle, etc.
     }
 }

@@ -2,9 +2,12 @@
 {
     public enum ELine
     {
-        // Line visual types
-        Solid,
-        Dashed,
-        Dotted,
+        // Line types
+        Association,
+        DirectedAssociation,
+        Aggregation,
+        Composition,
+        Inheritance,
+        Realization
     }
 }

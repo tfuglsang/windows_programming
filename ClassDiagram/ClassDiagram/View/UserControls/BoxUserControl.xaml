@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="ClassDiagram.View.UserControls.BoxUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ClassDiagram.View.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="100">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="15"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <TextBox Grid.Row="0" Text="ClassName" TextAlignment="Center"/>
+        <ListBox Grid.Row="1" BorderThickness="1,1,1,0" BorderBrush="Black">
+            <ListBoxItem>
+                <TextBox>Fields</TextBox>
+            </ListBoxItem>
+        </ListBox>
+        <ListBox Grid.Row="2" BorderThickness="1" BorderBrush="Black">
+            <ListBoxItem>
+                <TextBox>Methods</TextBox>
+            </ListBoxItem>
+        </ListBox>
+    </Grid>
+</UserControl>

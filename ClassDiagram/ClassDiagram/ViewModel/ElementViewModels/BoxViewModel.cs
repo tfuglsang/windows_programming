@@ -11,13 +11,13 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 {
     public class BoxViewModel: ElementViewModel
     {
-        private Ibox _box;
+        private IBox _box;
 
         #region properties
         public int Height {
             get
             {
-                // TDOD implement this to return a value from the box
+                // TDOD implement this to return a value From the box
                 return 0;
             }
             set
@@ -31,11 +31,11 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             get
             {
                 return 0;
-                // this has to return the width from the box element
+                // this has to return the width From the box element
             }
             set
             {
-                // this need to set the width from the box element
+                // this need to set the width From the box element
                 RaisePropertyChanged(propertyName: nameof(Width));
             }
         }
@@ -43,7 +43,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         {
             get
             {
-                return new Point(0,0); // return the position from the box object
+                return new Point(0,0); // return the position From the box object
             }
             set
             {
@@ -53,7 +53,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         }
         #endregion 
 
-        public BoxViewModel(Ibox box)
+        public BoxViewModel(IBox box)
         {
             _box = box;
         }

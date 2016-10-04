@@ -83,6 +83,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Model\Box.cs" />
+    <Compile Include="Model\Diagram.cs" />
+    <Compile Include="Model\EBox.cs" />
+    <Compile Include="Model\ELine.cs" />
+    <Compile Include="Model\Line.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\ElementViewModels\BoxViewModel.cs" />
     <Compile Include="ViewModel\ElementViewModels\ElementViewModel.cs" />

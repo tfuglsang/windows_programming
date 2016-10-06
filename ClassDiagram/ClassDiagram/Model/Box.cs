@@ -6,9 +6,16 @@ using System.Threading.Tasks;
 
 namespace ClassDiagram.Model
 {
-    class Box
+    class Box: IBox
     {
-        string Label { get; set; }          // The name of the box shown in the View
+        public Box()
+        {
+            Height = 100;
+            Width = 100;
+            X = 100;
+            Y = 100;
+        }
+        public string Label { get; set; }          // The name of the box shown in the View
         public double Height { get; set; }
         public double Width { get; set; }
         public int Number { get; set; }

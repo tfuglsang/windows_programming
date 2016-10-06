@@ -1,4 +1,12 @@
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Data;
+using System.Windows.Input;
+using ClassDiagram.Model;
+using ClassDiagram.ViewModel.ElementViewModels;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace ClassDiagram.ViewModel
 {
@@ -16,11 +24,42 @@ namespace ClassDiagram.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
+        public ICommand MouseLeftClick => new RelayCommand<MouseButtonEventArgs>(handleMouseClick);
+
+        public List<BoxViewModel> Boxes { get; }
+        public List<LineViewModel> Lines { get; }
+        public CompositeCollection Elements { get; } = new CompositeCollection();
+        
+        private bool _isAddingBox;
+
+        public bool IsAddingBox
+        {
+            get
+            {
+                return _isAddingBox;
+            }
+            set
+            {
+               
+                Debug.WriteLine("The button was clicked");
+                _isAddingBox = value;
+                RaisePropertyChanged();
+            }
+        }
+
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel()
         {
+            Boxes = new List<BoxViewModel>();
+            Lines = new List<LineViewModel>();
+            Boxes.Add(new BoxViewModel(new Box()));
+
+            Elements.Add(new CollectionContainer() { Collection = Boxes });
+            Elements.Add(new CollectionContainer() { Collection = Lines });
+
+
             ////if (IsInDesignMode)
             ////{
             ////    // Code runs in Blend --> create design time data.
@@ -29,6 +68,12 @@ namespace ClassDiagram.ViewModel
             ////{
             ////    // Code runs "for real"
             ////}
+        }
+
+        private void handleMouseClick(MouseButtonEventArgs args)
+        {
+            
+
         }
     }
 }

@@ -5,7 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClassDiagram.View.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="100" d:DesignWidth="100">
+             d:DesignHeight="100" d:DesignWidth="100"
+             >
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="15"/>
@@ -24,4 +26,5 @@
             </ListBoxItem>
         </ListBox>
     </Grid>
+
 </UserControl>

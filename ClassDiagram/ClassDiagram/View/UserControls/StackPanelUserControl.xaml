@@ -17,9 +17,9 @@
                     <RowDefinition Height="1*"></RowDefinition>
                     <RowDefinition Height="1*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <ToggleButton Content="Class" Grid.Row="0" Grid.Column="0"  Height="40" Width="80"/>
-                <ToggleButton Content="Interface" Grid.Row="0" Grid.Column="1" Height="40" Width="80"/>
-                <ToggleButton Content="Abstract Class" Grid.Row="1" Grid.Column="0" Height="40" Width="80"/>
+                <ToggleButton x:Name="Class" IsChecked="{Binding IsAddingBox}" Content="Class" Grid.Row="0" Grid.Column="0"  Height="40" Width="80"/>
+                <ToggleButton x:Name="Interface" Content="Interface" Grid.Row="0" Grid.Column="1" Height="40" Width="80"/>
+                <ToggleButton x:Name="AbstractClass" Content="Abstract Class" Grid.Row="1" Grid.Column="0" Height="40" Width="80"/>
                 
             </Grid>
         </GroupBox>

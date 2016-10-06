@@ -75,6 +75,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="View\Selectors\CustomDataTemplateSelector.cs" />
+    <Compile Include="View\Selectors\CustomStyleSelector.cs" />
     <Compile Include="View\UserControls\AddLineUserControl.xaml.cs">
       <DependentUpon>AddLineUserControl.xaml</DependentUpon>
     </Compile>
@@ -116,13 +118,21 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="View\Resources\DataTemplateDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Resources\StyleDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\UserControls\AddLineUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\UserControls\LineUserControl.xaml">
-    	<SubType>Designer</SubType>
-	<Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\UserControls\BoxUserControl.xaml">
       <SubType>Designer</SubType>

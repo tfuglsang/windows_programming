@@ -53,11 +53,7 @@ namespace ClassDiagram.ViewModel
             Boxes = new List<BoxViewModel>();
             Lines = new List<LineViewModel>();
             Boxes.Add(new BoxViewModel(new Box()));
-
-            Elements.Add(new CollectionContainer() { Collection = Boxes });
-            Elements.Add(new CollectionContainer() { Collection = Lines });
-
-
+            
             ////if (IsInDesignMode)
             ////{
             ////    // Code runs in Blend --> create design time data.

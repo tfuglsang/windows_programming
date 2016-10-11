@@ -22,5 +22,7 @@ namespace ClassDiagram.Model
         public double X { get; set; }
         public double Y { get; set; }
         public EBox Type { get; set; }
+        public List<String> FieldsList { get; set; }
+        public List<String> MethodList { get; set; }
     }
 }

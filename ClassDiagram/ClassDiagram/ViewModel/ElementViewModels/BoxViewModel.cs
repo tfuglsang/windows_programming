@@ -67,11 +67,43 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
+        public List<String> FieldsList
+        {
+            get { return _box.FieldsList; }
+            set
+            {
+                _box.FieldsList = value;
+                RaisePropertyChanged();
+            }
+        }
+
+        public List<String> MethodList
+        {
+            get { return _box.MethodList; }
+            set
+            {
+                _box.MethodList = value;
+                RaisePropertyChanged();
+            }
+        }
+
         #endregion
 
         public BoxViewModel(IBox box)
         {
             _box = box;
+
+            _box.FieldsList = new List<string>();
+            _box.MethodList = new List<string>();
+
+            // For test purposes
+            _box.FieldsList.Add("int Alpha");
+            _box.FieldsList.Add("float Bravo");
+            _box.FieldsList.Add("double Caesar");
+            _box.MethodList.Add("int getAlpha()");
+            _box.MethodList.Add("float getBravo()");
+            _box.MethodList.Add("double getCaesar()");
+
         }
     }
 }

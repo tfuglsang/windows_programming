@@ -7,7 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="100"
              >
-    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="15"/>
@@ -15,15 +14,19 @@
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <TextBox Grid.Row="0" Text="ClassName" TextAlignment="Center"/>
-        <ListBox Grid.Row="1" BorderThickness="1,1,1,0" BorderBrush="Black">
-            <ListBoxItem>
-                <TextBox>Fields</TextBox>
-            </ListBoxItem>
+        <ListBox x:Name="FieldListBox" ItemsSource="{Binding FieldsList}" Grid.Row="1" BorderThickness="1,1,1,0" BorderBrush="Black">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBox Text="{Binding Path=.}" BorderThickness="0"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox Grid.Row="2" BorderThickness="1" BorderBrush="Black">
-            <ListBoxItem>
-                <TextBox>Methods</TextBox>
-            </ListBoxItem>
+        <ListBox x:Name="MethodListBox"  ItemsSource="{Binding MethodList}" Grid.Row="2" BorderThickness="1" BorderBrush="Black">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBox Text="{Binding Path=.}" BorderThickness="0"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
     </Grid>
 

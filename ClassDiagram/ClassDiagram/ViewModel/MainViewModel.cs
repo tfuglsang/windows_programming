@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
@@ -29,7 +30,7 @@ namespace ClassDiagram.ViewModel
         public List<BoxViewModel> Boxes { get; }
         public List<LineViewModel> Lines { get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
-        
+
         private bool _isAddingBox;
 
         public bool IsAddingBox
@@ -53,7 +54,8 @@ namespace ClassDiagram.ViewModel
             Boxes = new List<BoxViewModel>();
             Lines = new List<LineViewModel>();
             Boxes.Add(new BoxViewModel(new Box()));
-            
+            Elements.Add(new CollectionContainer() {Collection = Boxes});
+            Elements.Add(new CollectionContainer() { Collection = Lines });
             ////if (IsInDesignMode)
             ////{
             ////    // Code runs in Blend --> create design time data.

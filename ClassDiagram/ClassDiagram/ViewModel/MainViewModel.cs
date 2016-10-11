@@ -40,8 +40,6 @@ namespace ClassDiagram.ViewModel
             }
             set
             {
-               
-                Debug.WriteLine("The button was clicked");
                 _isAddingBox = value;
                 RaisePropertyChanged();
             }

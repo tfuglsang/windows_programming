@@ -103,6 +103,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             _box.MethodList.Add("int getAlpha()");
             _box.MethodList.Add("float getBravo()");
             _box.MethodList.Add("double getCaesar()");
+            _box.Label = "phoneticTranscription()";
 
         }
     }

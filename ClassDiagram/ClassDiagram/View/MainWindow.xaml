@@ -10,7 +10,7 @@
         xmlns:local="clr-namespace:ClassDiagram"
         xmlns:View="clr-namespace:ClassDiagram.View"
         xmlns:ViewModels="clr-namespace:ClassDiagram.ViewModel"
-        xmlns:selectors="clr-namespace:ClassDiagram.View.Selectors"
+        xmlns:selectors="clr-namespace:ClassDiagram.View.Selectors"        
         mc:Ignorable="d"
         Title="ClassDiagram" Height="600" Width="800">
     <Window.DataContext>
@@ -19,32 +19,41 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="Resources/StyleDictionary.xaml"></ResourceDictionary>
-                <ResourceDictionary Source ="Resources/DataTemplateDictionary.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Resources/ShapesStyleDictionary.xaml"></ResourceDictionary>
+                <ResourceDictionary Source ="Resources/DataTemplateDictionary.xaml"></ResourceDictionary>                
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     
 
     <DockPanel>
+
+
         
         <UserControls:ToolbarUserControl DockPanel.Dock="Top"/>
         <UserControls:StatusBarUserControl DockPanel.Dock="Bottom" Height="10"/>
         <UserControls:StackPanelUserControl  DockPanel.Dock="Left" Width="220" Height="Auto"/>
-        <Grid>
+        <Grid Background="LightGray" Name="diagramCanvas">
+          
+            
             <ItemsControl ItemsSource="{Binding Elements}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <Canvas/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
+                
                 <ItemsControl.ItemContainerStyleSelector>
-                    <selectors:CustomStyleSelector BoxStyle="{StaticResource BoxStyle}"
-                                              LineStyle="{StaticResource LineStyle}"/>
+                    <selectors:CustomStyleSelector 
+                        BoxStyle="{StaticResource BoxStyle}"
+                        LineStyle="{StaticResource LineStyle}"/>
                 </ItemsControl.ItemContainerStyleSelector>
+                
                 <ItemsControl.ItemTemplateSelector>
-                    <selectors:CustomDataTemplateSelector BoxTemplate="{StaticResource boxDataTemplate}"
-                                                     LineTemplate="{StaticResource lineDataTemplate}"></selectors:CustomDataTemplateSelector>
+                    <selectors:CustomDataTemplateSelector 
+                        BoxTemplate="{StaticResource boxDataTemplate}"
+                        LineTemplate="{StaticResource lineDataTemplate}">
+                    </selectors:CustomDataTemplateSelector>
                 </ItemsControl.ItemTemplateSelector>
             </ItemsControl>
         </Grid>

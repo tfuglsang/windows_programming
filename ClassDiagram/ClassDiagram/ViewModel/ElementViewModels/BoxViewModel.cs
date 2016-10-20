@@ -6,11 +6,64 @@ using System.Threading.Tasks;
 using System.Windows;
 using GalaSoft.MvvmLight;
 using ClassDiagram.Model;
+using System.Windows.Input;
+using GalaSoft.MvvmLight.Command;
+using System.Windows.Media;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
 {
     public class BoxViewModel : ElementViewModel
     {
+        //private bool _isSelected;
+        private Point _initialMousePostion;
+        private bool _isMoving;
+        private Point _initialShapePostion;
+
+
+        public ICommand OnMouseLeftBtnDownCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftBtnDown);
+        public ICommand OnMouseMoveCommand => new RelayCommand<UIElement>(OnMouseMove);
+        public ICommand OnMouseLeftBtnUpCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftUp);
+
+        private void OnMouseLeftBtnDown(MouseButtonEventArgs e)
+        {
+            var visual = e.Source as UIElement;
+            if (visual == null) return;
+            //if (!IsSelected)
+            //{
+            //    IsSelected = true;
+            //    visual.Focus();
+            //    e.Handled = true;
+            //    return;
+            //}
+            //if (!IsSelected && e.MouseDevice.Target.IsMouseCaptured) return;
+            if (e.MouseDevice.Target.IsMouseCaptured) return;
+            e.MouseDevice.Target.CaptureMouse();
+            _initialMousePostion = Mouse.GetPosition(visual);            
+            _initialShapePostion = new Point(Position.X, Position.Y);
+            //_canvas = VisualTreeHelper.GetParent(visual) as UIElement;
+            _isMoving = true;
+        }
+
+
+        private void OnMouseMove(UIElement visual)
+        {
+            if (!_isMoving) return;
+
+            var pos = Mouse.GetPosition(visual);
+            Point currentPoint = new Point(pos.X - _initialMousePostion.X, pos.Y - _initialMousePostion.Y);
+            Position = currentPoint;
+        }
+
+        private void OnMouseLeftUp(MouseButtonEventArgs e)
+        {
+            if (!_isMoving) return;
+            //UndoRedoController.AddAndExecute(new MoveShapeCommand(this, _initialShapePostion, new Point(X, Y)));
+            _isMoving = false;
+            Mouse.Capture(null);
+            e.Handled = true;
+
+        }
+
         private IBox _box;
 
         #region properties
@@ -67,7 +120,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
-        public List<String> FieldsList
+        public string FieldsList
         {
             get { return _box.FieldsList; }
             set
@@ -77,7 +130,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
-        public List<String> MethodList
+        public string MethodList
         {
             get { return _box.MethodList; }
             set
@@ -87,23 +140,45 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
+        //public List<String> FieldsList
+        //{
+        //    get { return _box.FieldsList; }
+        //    set
+        //    {
+        //        _box.FieldsList = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+
+        //public List<String> MethodList
+        //{
+        //    get { return _box.MethodList; }
+        //    set
+        //    {
+        //        _box.MethodList = value;
+        //        RaisePropertyChanged();
+        //    }
+        //}
+
         #endregion
 
         public BoxViewModel(IBox box)
         {
             _box = box;
 
-            _box.FieldsList = new List<string>();
-            _box.MethodList = new List<string>();
+            //_box.FieldsList = new List<string>();
+            //_box.MethodList = new List<string>();
 
             // For test purposes
-            _box.FieldsList.Add("int Alpha");
-            _box.FieldsList.Add("float Bravo");
-            _box.FieldsList.Add("double Caesar");
-            _box.MethodList.Add("int getAlpha()");
-            _box.MethodList.Add("float getBravo()");
-            _box.MethodList.Add("double getCaesar()");
-            _box.Label = "phoneticTranscription()";
+            //_box.FieldsList.Add("int Alpha");
+            //_box.FieldsList.Add("float Bravo");
+            //_box.FieldsList.Add("double Caesar");
+            //_box.MethodList.Add("int getAlpha()");
+            //_box.MethodList.Add("float getBravo()");
+            //_box.MethodList.Add("double getCaesar()");
+            _box.FieldsList = "int Alpha";
+            _box.MethodList = "float Bravo";
+            _box.Label      = "phoneticTranscription()";
 
         }
     }

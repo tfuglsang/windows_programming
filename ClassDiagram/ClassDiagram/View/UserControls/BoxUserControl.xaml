@@ -12,7 +12,7 @@
 
 
     <UserControl.Resources>
-        <ResourceDictionary Source="../Resources/ShapesStyleDictionary.xaml"/>
+        <ResourceDictionary Source="../Resources/StyleDictionary.xaml"/>
     </UserControl.Resources>
 
     <i:Interaction.Triggers>

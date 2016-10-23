@@ -5,10 +5,11 @@
                     >
     <Style x:Key="BoxStyle">
         <Setter Property="Canvas.Left" Value="{Binding Position.X}"/>
-        <Setter Property="Canvas.Top" Value="{Binding Position.Y}"/>        
+        <Setter Property="Canvas.Top" Value="{Binding Position.Y}"/>
+        <Setter Property="Canvas.ZIndex" Value ="1"></Setter>
     </Style>
     <Style x:Key="LineStyle">
-        <Setter Property="Canvas.Top" Value =" 100"></Setter>
+        <Setter Property="Canvas.ZIndex" Value =" 0"></Setter>
     </Style>
     
 </ResourceDictionary>

@@ -19,6 +19,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         private bool _isMoving;
         private Point _initialShapePostion;
 
+        
 
         public ICommand OnMouseLeftBtnDownCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftBtnDown);
         public ICommand OnMouseMoveCommand => new RelayCommand<UIElement>(OnMouseMove);

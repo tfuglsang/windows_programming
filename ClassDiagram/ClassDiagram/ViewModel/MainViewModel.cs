@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Xml;
 using ClassDiagram.Model;
 using ClassDiagram.ViewModel.ElementViewModels;
 using GalaSoft.MvvmLight;
@@ -107,11 +108,18 @@ namespace ClassDiagram.ViewModel
             Lines = new ObservableCollection<LineViewModel>();
 
             Box boxbox = new Box() { Width = 800, X = 400, Y = 400 };
-            Boxes.Add(new BoxViewModel(boxbox));
+            var boxboxViewModel = new BoxViewModel(boxbox);
+            Box secondBox = new Box() { Width = 800, X = 200, Y = 200 };
+            var secondBoxViewModel = new BoxViewModel(secondBox);
+            LineViewModel newLine = new LineViewModel(new Line());
 
-            boxbox = new Box() { Width = 800, X = 200, Y = 200 };
-            Boxes.Add(new BoxViewModel(boxbox));
+            newLine.From = boxboxViewModel;
+            newLine.To = secondBoxViewModel;
 
+            Boxes.Add(boxboxViewModel);
+            Boxes.Add(secondBoxViewModel);
+            
+            Lines.Add(newLine);
 
             Elements.Add(new CollectionContainer() { Collection = Boxes });
             Elements.Add(new CollectionContainer() { Collection = Lines });
@@ -120,13 +128,33 @@ namespace ClassDiagram.ViewModel
 
         private void CanvasClicked(Point point)
         {
-            Debug.Print($"{point.X},{point.Y}");
-            if (_isAddingClass)
+            Debug.Print($"{point.X},{point.Y}"); // debug information
+            if (IsAddingClass || IsAddingAbstractClass || IsAddingInterface)
             {
                 Box newBox = new Box() {Width = 800, X = point.X, Y=point.Y };
+
+                if (IsAddingClass)
+                { 
+                    newBox.Type = EBox.Class;
+                    IsAddingClass = false;
+                }
+                else if (IsAddingAbstractClass)
+                {
+                    newBox.Type = EBox.Abstract;
+                    IsAddingAbstractClass = false;
+                }
+                else if (IsAddingInterface)
+                {
+                    newBox.Type = EBox.Interface;
+                    IsAddingInterface = false;
+                }
+
                 Boxes.Add(new BoxViewModel(newBox));
                 
-                IsAddingClass = false;
+            } else if (IsAddingAssosiation || IsAddingDirAssosiation || IsAddingAggregation || IsAddingComposition ||
+                       IsAddingInheritance || IsAddingRealization)
+            {
+                   
             }
         }
         

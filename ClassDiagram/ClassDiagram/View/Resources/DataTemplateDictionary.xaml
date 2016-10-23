@@ -9,7 +9,7 @@
     </DataTemplate>
     
     <DataTemplate x:Key="lineDataTemplate">
-        <userControls:BoxUserControl></userControls:BoxUserControl>
+        <userControls:LineUserControl></userControls:LineUserControl>
     </DataTemplate>
     
 </ResourceDictionary>

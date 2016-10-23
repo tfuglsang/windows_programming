@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows;
@@ -26,8 +27,13 @@ namespace ClassDiagram.ViewModel
     {
         public ICommand ClassClicked => new RelayCommand<MouseButtonEventArgs>(AddBox);
 
-        public List<BoxViewModel> Boxes { get; }
-        public List<LineViewModel> Lines { get; }
+        //public List<BoxViewModel> BoxesList { get; }
+        //public List<LineViewModel> LinesList { get; }
+        //public CollectionContainer Boxes { get; }
+        //public CollectionContainer Lines { get; }
+
+        public List<BoxViewModel> Boxes{ get; }
+        public List<LineViewModel> Lines{ get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
         
         private bool _isAddingClass;
@@ -39,6 +45,7 @@ namespace ClassDiagram.ViewModel
         private bool _isAddingComposition;
         private bool _isAddingInheritance;
         private bool _isAddingRealization;
+
 
         public bool IsAddingClass
         {
@@ -94,11 +101,36 @@ namespace ClassDiagram.ViewModel
         /// </summary>
         public MainViewModel()
         {
+            //BoxesList = new List<BoxViewModel>();
+            //LinesList = new List<LineViewModel>();
+
+            //Box boxbox = new Box() { Width = 300, X = 400, Y = 400 };
+            //BoxesList.Add(new BoxViewModel(boxbox));
+            //Box _box = new Box();
+            //_box.X = 400;
+            //_box.Y = 200;
+            //_box.Width = 300;
+            //BoxesList.Add(new BoxViewModel(_box));
+
+            //Boxes = new CollectionContainer() { Collection = BoxesList };
+            //Lines = new CollectionContainer() { Collection = LinesList };
+
+
+
+
+
             Boxes = new List<BoxViewModel>();
             Lines = new List<LineViewModel>();
-            Boxes.Add(new BoxViewModel(new Box()));
-            
-            
+
+            Box boxbox = new Box() { Width = 800, X = 400, Y = 400 };
+            Boxes.Add(new BoxViewModel(boxbox));
+
+            boxbox = new Box() { Width = 800, X = 200, Y = 200 };
+            Boxes.Add(new BoxViewModel(boxbox));
+
+
+            Elements.Add(new CollectionContainer() { Collection = Boxes });
+            Elements.Add(new CollectionContainer() { Collection = Lines });
 
             ////if (IsInDesignMode)
             ////{

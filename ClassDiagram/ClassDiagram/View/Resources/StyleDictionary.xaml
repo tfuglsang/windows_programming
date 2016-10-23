@@ -1,12 +1,14 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:command="http://www.galasoft.ch/mvvmlight"
+                    xmlns:uc="clr-namespace:ClassDiagram.View.UserControls"
+                    >
     <Style x:Key="BoxStyle">
-        <!-- TODO Implement propper box style with bindings-->
-        <Setter Property="Canvas.Left" Value =" 100"></Setter>
+        <Setter Property="Canvas.Left" Value="{Binding Position.X}"/>
+        <Setter Property="Canvas.Top" Value="{Binding Position.Y}"/>        
     </Style>
     <Style x:Key="LineStyle">
-        <!-- TODO Implement propper line style with bindings -->
         <Setter Property="Canvas.Top" Value =" 100"></Setter>
     </Style>
+    
 </ResourceDictionary>

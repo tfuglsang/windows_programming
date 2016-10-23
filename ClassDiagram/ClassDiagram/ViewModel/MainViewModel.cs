@@ -35,7 +35,8 @@ namespace ClassDiagram.ViewModel
         public List<BoxViewModel> Boxes{ get; }
         public List<LineViewModel> Lines{ get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
-        
+
+        #region propertiesForTheButtons
         private bool _isAddingClass;
         private bool _isAddingInterface;
         private bool _isAddingAbstractClass;
@@ -45,8 +46,7 @@ namespace ClassDiagram.ViewModel
         private bool _isAddingComposition;
         private bool _isAddingInheritance;
         private bool _isAddingRealization;
-
-
+        
         public bool IsAddingClass
         {
             get { return _isAddingClass; }
@@ -96,29 +96,13 @@ namespace ClassDiagram.ViewModel
             set { Set(ref _isAddingRealization, !_isAddingRealization && value); }
         }
 
+        #endregion
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel()
         {
-            //BoxesList = new List<BoxViewModel>();
-            //LinesList = new List<LineViewModel>();
-
-            //Box boxbox = new Box() { Width = 300, X = 400, Y = 400 };
-            //BoxesList.Add(new BoxViewModel(boxbox));
-            //Box _box = new Box();
-            //_box.X = 400;
-            //_box.Y = 200;
-            //_box.Width = 300;
-            //BoxesList.Add(new BoxViewModel(_box));
-
-            //Boxes = new CollectionContainer() { Collection = BoxesList };
-            //Lines = new CollectionContainer() { Collection = LinesList };
-
-
-
-
-
+          
             Boxes = new List<BoxViewModel>();
             Lines = new List<LineViewModel>();
 
@@ -132,14 +116,6 @@ namespace ClassDiagram.ViewModel
             Elements.Add(new CollectionContainer() { Collection = Boxes });
             Elements.Add(new CollectionContainer() { Collection = Lines });
 
-            ////if (IsInDesignMode)
-            ////{
-            ////    // Code runs in Blend --> create design time data.
-            ////}
-            ////else
-            ////{
-            ////    // Code runs "for real"
-            ////}
         }
 
         private void AddBox(MouseButtonEventArgs args)

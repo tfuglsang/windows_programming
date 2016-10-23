@@ -24,25 +24,69 @@ namespace ClassDiagram.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        public ICommand MouseLeftClick => new RelayCommand<MouseButtonEventArgs>(handleMouseClick);
+        public ICommand ClassClicked => new RelayCommand<MouseButtonEventArgs>(AddBox);
 
         public List<BoxViewModel> Boxes { get; }
         public List<LineViewModel> Lines { get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
         
-        private bool _isAddingBox;
+        private bool _isAddingClass;
+        private bool _isAddingInterface;
+        private bool _isAddingAbstractClass;
+        private bool _isAddingAssosiation;
+        private bool _isAddingDirAssosiation;
+        private bool _isAddingAggregation;
+        private bool _isAddingComposition;
+        private bool _isAddingInheritance;
+        private bool _isAddingRealization;
 
-        public bool IsAddingBox
+        public bool IsAddingClass
         {
-            get
-            {
-                return _isAddingBox;
-            }
-            set
-            {
-                _isAddingBox = value;
-                RaisePropertyChanged();
-            }
+            get { return _isAddingClass; }
+            set { Set(ref _isAddingClass, !_isAddingClass && value); }
+        }
+
+        public bool IsAddingInterface
+        {
+            get { return _isAddingInterface; }
+            set { Set(ref _isAddingInterface, !_isAddingInterface && value); }
+        }
+
+        public bool IsAddingAbstractClass
+        {
+            get { return _isAddingAbstractClass; }
+            set { Set(ref _isAddingAbstractClass, !_isAddingAbstractClass && value); }
+        }
+
+        public bool IsAddingAssosiation
+        {
+            get { return _isAddingAssosiation; }
+            set { Set(ref _isAddingAssosiation, !_isAddingAssosiation && value); }
+        }
+        public bool IsAddingDirAssosiation
+        {
+            get { return _isAddingDirAssosiation; }
+            set { Set(ref _isAddingDirAssosiation, !_isAddingDirAssosiation && value); }
+        }
+        public bool IsAddingAggregation
+        {
+            get { return _isAddingAggregation; }
+            set { Set(ref _isAddingAggregation, !_isAddingAggregation && value); }
+        }
+        public bool IsAddingComposition
+        {
+            get { return _isAddingComposition; }
+            set { Set(ref _isAddingComposition, !_isAddingComposition && value); }
+        }
+        public bool IsAddingInheritance
+        {
+            get { return _isAddingInheritance; }
+            set { Set(ref _isAddingInheritance, !_isAddingInheritance && value); }
+        }
+        public bool IsAddingRealization
+        {
+            get { return _isAddingRealization; }
+            set { Set(ref _isAddingRealization, !_isAddingRealization && value); }
         }
 
         /// <summary>
@@ -54,6 +98,8 @@ namespace ClassDiagram.ViewModel
             Lines = new List<LineViewModel>();
             Boxes.Add(new BoxViewModel(new Box()));
             
+            
+
             ////if (IsInDesignMode)
             ////{
             ////    // Code runs in Blend --> create design time data.
@@ -64,10 +110,10 @@ namespace ClassDiagram.ViewModel
             ////}
         }
 
-        private void handleMouseClick(MouseButtonEventArgs args)
+        private void AddBox(MouseButtonEventArgs args)
         {
             
-
         }
+        
     }
 }

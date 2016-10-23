@@ -4,9 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClassDiagram.View.UserControls"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d"
              Height="500" Width="220">
     <StackPanel>
+        
         <GroupBox Header="Classes/Interfaces" Height="140">
             <Grid>
                 <Grid.ColumnDefinitions>
@@ -17,10 +20,9 @@
                     <RowDefinition Height="1*"></RowDefinition>
                     <RowDefinition Height="1*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <ToggleButton x:Name="Class" IsChecked="{Binding IsAddingBox}" Content="Class" Grid.Row="0" Grid.Column="0"  Height="40" Width="80"/>
-                <ToggleButton x:Name="Interface" Content="Interface" Grid.Row="0" Grid.Column="1" Height="40" Width="80"/>
-                <ToggleButton x:Name="AbstractClass" Content="Abstract Class" Grid.Row="1" Grid.Column="0" Height="40" Width="80"/>
-                
+                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" IsChecked="{Binding IsAddingClass}" GroupName="AddButtons" Grid.Row="0" Grid.Column="0" Height="40" Width="80" Content="Class"/>
+                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" IsChecked="{Binding IsAddingInterface}" GroupName="AddButtons" Grid.Row="0" Grid.Column="1" Height="40" Width="80" Content="Interface"/>
+                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" IsChecked="{Binding IsAddingAbstractClass}" GroupName="AddButtons" Grid.Row="1" Grid.Column="0" Height="40" Width="80" Content="Abstract Class"/>
             </Grid>
         </GroupBox>
         <GroupBox Header="Connectors" Height="210">
@@ -34,12 +36,12 @@
                     <RowDefinition Height="1*"></RowDefinition>
                     <RowDefinition Height="1*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <ToggleButton Content="Association" Grid.Row="0" Grid.Column="0" Height="40" Width="80"/>
-                <ToggleButton Content="Directed Asso." Grid.Row="0" Grid.Column="1" Height="40" Width="80"/>
-                <ToggleButton Content="Aggregation" Grid.Row="1" Grid.Column="0" Height="40" Width="80"/>
-                <ToggleButton Content="Composition" Grid.Row="1" Grid.Column="1" Height="40" Width="80"/>
-                <ToggleButton Content="Inheritance" Grid.Row="2" Grid.Column="0" Height="40" Width="80"/>
-                <ToggleButton Content="Realization" Grid.Row="2" Grid.Column="1" Height="40" Width="80"/>
+                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="AddButtons" Grid.Row="0" Grid.Column="0" Height="40" Width="80" Content="Association"/>
+                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="AddButtons" Grid.Row="0" Grid.Column="1" Height="40" Width="80" Content="Directed Asso."/>
+                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="AddButtons" Grid.Row="1" Grid.Column="0" Height="40" Width="80" Content="Aggregation"/>
+                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="AddButtons" Grid.Row="1" Grid.Column="1" Height="40" Width="80" Content="Composition"/>
+                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="AddButtons" Grid.Row="2" Grid.Column="0" Height="40" Width="80" Content="Inheritance"/>
+                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" GroupName="AddButtons" Grid.Row="2" Grid.Column="1" Height="40" Width="80" Content="Realization"/>
             </Grid>
         </GroupBox>
     </StackPanel>

@@ -67,6 +67,9 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         private IBox _box;
 
+        public bool IsPointInBox(Point pointToCheck) => (pointToCheck.X > Position.X && pointToCheck.X < Position.X + Width && pointToCheck.Y > Position.Y &&
+                                                         pointToCheck.Y < Position.Y + Height);
+
         #region properties
 
         public double Height

@@ -38,6 +38,8 @@ namespace ClassDiagram.ViewModel
         public ObservableCollection<LineViewModel> Lines{ get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
 
+        private BoxViewModel fromBox;
+
         #region propertiesForTheButtons
         private bool _isAddingClass;
         private bool _isAddingInterface;
@@ -111,16 +113,10 @@ namespace ClassDiagram.ViewModel
             var boxboxViewModel = new BoxViewModel(boxbox);
             Box secondBox = new Box() { Width = 800, X = 200, Y = 200 };
             var secondBoxViewModel = new BoxViewModel(secondBox);
-            LineViewModel newLine = new LineViewModel(new Line());
-
-            newLine.From = boxboxViewModel;
-            newLine.To = secondBoxViewModel;
 
             Boxes.Add(boxboxViewModel);
             Boxes.Add(secondBoxViewModel);
             
-            Lines.Add(newLine);
-
             Elements.Add(new CollectionContainer() { Collection = Boxes });
             Elements.Add(new CollectionContainer() { Collection = Lines });
 
@@ -154,7 +150,61 @@ namespace ClassDiagram.ViewModel
             } else if (IsAddingAssosiation || IsAddingDirAssosiation || IsAddingAggregation || IsAddingComposition ||
                        IsAddingInheritance || IsAddingRealization)
             {
-                   
+                if (fromBox == null)
+                {
+                    foreach (var boxViewModel in Boxes)
+                    {
+                        if (boxViewModel.IsPointInBox(point))
+                        {
+                            Debug.Print("Set from box");
+                            fromBox = boxViewModel;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var boxViewModel in Boxes)
+                    {
+                        if (boxViewModel.IsPointInBox(point))
+                        {
+                            var lineViewModel = new LineViewModel(new Line());
+                            lineViewModel.From = fromBox;
+                            lineViewModel.To = boxViewModel;
+
+                            if (IsAddingAssosiation)
+                            {
+                                lineViewModel.Type = ELine.Association;
+                                IsAddingAssosiation = false;
+                            }
+                            else if(IsAddingDirAssosiation)
+                            {
+                                lineViewModel.Type = ELine.DirectedAssociation;
+                                IsAddingDirAssosiation = false;
+                            } else if (IsAddingAggregation)
+                            {
+                                lineViewModel.Type = ELine.Aggregation;
+                                IsAddingAggregation = false;
+                            } else if (IsAddingComposition)
+                            {
+                                lineViewModel.Type = ELine.Composition;
+                                IsAddingComposition = false;
+                            } else if (IsAddingInheritance)
+                            {
+                                lineViewModel.Type = ELine.Inheritance;
+                                IsAddingInterface = false;
+                            } else if (IsAddingRealization)
+                            {
+                                lineViewModel.Type = ELine.Realization;
+                                IsAddingRealization = false;
+                            }
+
+                            Lines.Add(lineViewModel);
+                            fromBox = null;
+                            break;
+                        }
+                    }
+                }
             }
         }
         

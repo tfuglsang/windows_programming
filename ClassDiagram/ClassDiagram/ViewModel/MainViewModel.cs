@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
@@ -25,15 +26,15 @@ namespace ClassDiagram.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        public ICommand ClassClicked => new RelayCommand<MouseButtonEventArgs>(AddBox);
+        public ICommand CanvasClickedCommand => new RelayCommand<Point>(CanvasClicked);
 
         //public List<BoxViewModel> BoxesList { get; }
         //public List<LineViewModel> LinesList { get; }
         //public CollectionContainer Boxes { get; }
         //public CollectionContainer Lines { get; }
 
-        public List<BoxViewModel> Boxes{ get; }
-        public List<LineViewModel> Lines{ get; }
+        public ObservableCollection<BoxViewModel> Boxes{ get; }
+        public ObservableCollection<LineViewModel> Lines{ get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
 
         #region propertiesForTheButtons
@@ -102,9 +103,8 @@ namespace ClassDiagram.ViewModel
         /// </summary>
         public MainViewModel()
         {
-          
-            Boxes = new List<BoxViewModel>();
-            Lines = new List<LineViewModel>();
+            Boxes = new ObservableCollection<BoxViewModel>();
+            Lines = new ObservableCollection<LineViewModel>();
 
             Box boxbox = new Box() { Width = 800, X = 400, Y = 400 };
             Boxes.Add(new BoxViewModel(boxbox));
@@ -118,9 +118,16 @@ namespace ClassDiagram.ViewModel
 
         }
 
-        private void AddBox(MouseButtonEventArgs args)
+        private void CanvasClicked(Point point)
         {
-            
+            Debug.Print($"{point.X},{point.Y}");
+            if (_isAddingClass)
+            {
+                Box newBox = new Box() {Width = 800, X = point.X, Y=point.Y };
+                Boxes.Add(new BoxViewModel(newBox));
+                
+                IsAddingClass = false;
+            }
         }
         
     }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,6 +18,24 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         private BoxViewModel _from;
         private BoxViewModel _to;
 
+        public LineViewModel(ILine line, BoxViewModel from, BoxViewModel to)
+        {
+            _line = line;
+            From = from;
+            To = to;
+            From.PropertyChanged += BoxPropertyChanged;
+            To.PropertyChanged += BoxPropertyChanged;
+        }
+
+        private void BoxPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Position")
+            {
+                RaisePropertyChanged("FromPoint");
+                RaisePropertyChanged("ToPoint");
+            }
+        }
+
         #region properties
         public bool IsConnectingBoxes
         {
@@ -30,13 +50,29 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         public BoxViewModel From
         {
             get { return _from; }
-            set { Set(ref _from, value); }
+            set
+            {
+                Set(ref _from, value);
+            }
+        }
+
+        public Point FromPoint
+        {
+            get { return _from.Position; }
         }
 
         public BoxViewModel To
         {
             get { return _to; }
-            set { Set(ref _to, value); }
+            set
+            {
+                Set(ref _to, value); 
+            }
+        }
+
+        public Point ToPoint
+        {
+            get { return _to.Position; }
         }
 
         public int ToNumber => _line.ToNumber;

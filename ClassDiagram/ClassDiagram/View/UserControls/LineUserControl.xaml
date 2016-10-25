@@ -7,6 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="100">
     <Grid>
-        <Line Stroke="Black" X1="{Binding From.Position.X}" Y1="{Binding From.Position.Y}" X2="{Binding To.Position.X}" Y2="{Binding To.Position.Y}" StrokeThickness="1" />
+        <Line Stroke="Black" X1="{Binding FromPoint.X}" Y1="{Binding FromPoint.Y}" X2="{Binding ToPoint.X}" Y2="{Binding ToPoint.Y}" StrokeThickness="1" />
     </Grid>
 </UserControl>

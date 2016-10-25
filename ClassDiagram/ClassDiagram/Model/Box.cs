@@ -17,7 +17,8 @@ namespace ClassDiagram.Model
             X = 300;
             Y = 300;
         }
-        public RelayCommand addTextBoxCommand { get; set; }
+        public RelayCommand AddFieldsTextBoxCommand { get; set; }
+        public RelayCommand AddMethodTextBoxCommand { get; set; }
         public string Label { get; set; }          // The name of the box shown in the View
         public ObservableCollection<String> FieldsList { get; set; }          // The name of the box shown in the View
         public ObservableCollection<String> MethodList { get; set; }          // The name of the box shown in the View

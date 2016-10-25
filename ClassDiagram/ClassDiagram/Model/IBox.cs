@@ -11,7 +11,8 @@ namespace ClassDiagram.Model
 {
     public interface IBox
     {
-        RelayCommand addTextBoxCommand { get; set; }
+        RelayCommand AddFieldsTextBoxCommand { get; set; }
+        RelayCommand AddMethodTextBoxCommand { get; set; }
         ObservableCollection<String> FieldsList { get; set; }   // List of fields in the box
         ObservableCollection<String> MethodList { get; set; }   // List of methods in the box
         string Label { get; set; }  // The name of the box shown in the View

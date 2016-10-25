@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace ClassDiagram.Model
 {
@@ -15,6 +16,7 @@ namespace ClassDiagram.Model
             X = 100;
             Y = 100;
         }
+        public RelayCommand addTextBoxCommand { get; set; }
         public string Label { get; set; }          // The name of the box shown in the View
         public double Height { get; set; }
         public double Width { get; set; }

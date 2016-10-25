@@ -4,14 +4,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using ClassDiagram.Model;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
 {
     public class BoxViewModel : ElementViewModel
     {
         private IBox _box;
+
+        //
+
+        public RelayCommand addTextBoxCommand { get; private set; }
+
+        public void addTextbox()
+        {
+            _box.FieldsList.Add("test");
+        }
+
+        //
+
 
         #region properties
 
@@ -97,13 +111,12 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             _box.MethodList = new List<string>();
 
             // For test purposes
-            _box.FieldsList.Add("int Alpha");
-            _box.FieldsList.Add("float Bravo");
-            _box.FieldsList.Add("double Caesar");
-            _box.MethodList.Add("int getAlpha()");
-            _box.MethodList.Add("float getBravo()");
-            _box.MethodList.Add("double getCaesar()");
-            _box.Label = "phoneticTranscription()";
+            
+            _box.FieldsList.Add("Insert Fields");
+            _box.MethodList.Add("Insert Method");
+            _box.Label = "ClassName";
+
+            addTextBoxCommand = new RelayCommand(addTextbox);
 
         }
     }

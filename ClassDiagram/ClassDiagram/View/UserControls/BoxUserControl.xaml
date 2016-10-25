@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClassDiagram.View.UserControls"
+             xmlns:elementViewModels="clr-namespace:ClassDiagram.ViewModel.ElementViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="100"
+             MinWidth="100" MinHeight="50"
              >
     <Grid>
         <Grid.RowDefinitions>
@@ -13,18 +15,28 @@
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" Text="{Binding Label}" TextAlignment="Center" BorderThickness="0"/>
-        <ListBox x:Name="FieldListBox" ItemsSource="{Binding FieldsList}" Grid.Row="1" BorderThickness="1,1,1,0" BorderBrush="Black">
+        <TextBox x:Name="LabelText" Grid.Row="0" Text="{Binding Label, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" BorderThickness="0"/>
+        <ListBox x:Name="FieldListBox" ItemsSource="{Binding FieldsList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" BorderThickness="1,1,1,0" BorderBrush="Black">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBox Text="{Binding Path=.}" BorderThickness="0"/>
+                    <TextBox Text="{Binding Path=., Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding Path=addTextBoxCommand}" Key="Return" />
+                            <KeyBinding Command="{Binding Path=addTextBoxCommand}" Key="Enter" />
+                        </TextBox.InputBindings>
+                    </TextBox>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <ListBox x:Name="MethodListBox"  ItemsSource="{Binding MethodList}" Grid.Row="2" BorderThickness="1" BorderBrush="Black">
+        <ListBox x:Name="MethodListBox"  ItemsSource="{Binding MethodList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" BorderThickness="1" BorderBrush="Black">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBox Text="{Binding Path=.}" BorderThickness="0"/>
+                    <TextBox Text="{Binding Path=., Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0">
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding Path=AddMethod}" Key="Return" />
+                            <KeyBinding Command="{Binding Path=AddMethod}" Key="Enter" />
+                        </TextBox.InputBindings>
+                    </TextBox>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

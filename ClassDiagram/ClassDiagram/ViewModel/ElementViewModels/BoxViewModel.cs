@@ -10,9 +10,8 @@ using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using ClassDiagram.Model;
 using System.Windows.Input;
+using ClassDiagram.Model;
 using GalaSoft.MvvmLight.Command;
-using System.Windows.Media;
-using GalaSoft.MvvmLight.Messaging;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
 {
@@ -23,7 +22,6 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         private bool _isMoving;
         private Point _initialShapePostion;
 
-        
 
         public ICommand OnMouseLeftBtnDownCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftBtnDown);
         public ICommand OnMouseMoveCommand => new RelayCommand<UIElement>(OnMouseMove);
@@ -43,7 +41,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             //if (!IsSelected && e.MouseDevice.Target.IsMouseCaptured) return;
             if (e.MouseDevice.Target.IsMouseCaptured) return;
             e.MouseDevice.Target.CaptureMouse();
-            _initialMousePostion = Mouse.GetPosition(visual);            
+            _initialMousePostion = Mouse.GetPosition(visual);
             _initialShapePostion = new Point(Position.X, Position.Y);
             //_canvas = VisualTreeHelper.GetParent(visual) as UIElement;
             _isMoving = true;
@@ -55,7 +53,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             if (!_isMoving) return;
 
             var pos = Mouse.GetPosition(visual);
-            Point currentPoint = new Point(pos.X - _initialMousePostion.X, pos.Y - _initialMousePostion.Y);
+            var currentPoint = new Point(pos.X - _initialMousePostion.X, pos.Y - _initialMousePostion.Y);
             Position = currentPoint;
         }
 
@@ -68,7 +66,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             e.Handled = true;
         }
 
-        private IBox _box;
+        private readonly IBox _box;
 
         //
 
@@ -113,8 +111,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         public Point Position
         {
-            get { return new Point(_box.X, _box.Y); 
-            }
+            get { return new Point(_box.X, _box.Y); }
             set
             {
                 _box.X = value.X;
@@ -125,10 +122,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         public Point CenterPoint
         {
-            get
-            {
-                return new Point(_box.X+(Width/2), _box.Y+(Height/2));
-            }
+            get { return new Point(_box.X + Width/2, _box.Y + Height/2); }
         }
 
         public EBox Type

@@ -28,12 +28,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    
-
     <DockPanel>
-
-
-        
         <UserControls:ToolbarUserControl DockPanel.Dock="Top"/>
         <UserControls:StatusBarUserControl DockPanel.Dock="Bottom" Height="10"/>
         <UserControls:StackPanelUserControl  DockPanel.Dock="Left" Width="220" Height="Auto"/>
@@ -70,7 +65,6 @@
             </ItemsControl>
         </Grid>
     </DockPanel>
-
 </Window>
 
 

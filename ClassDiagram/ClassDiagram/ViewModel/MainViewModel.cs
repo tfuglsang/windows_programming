@@ -120,6 +120,7 @@ namespace ClassDiagram.ViewModel
             Elements.Add(new CollectionContainer() { Collection = Boxes });
             Elements.Add(new CollectionContainer() { Collection = Lines });
 
+
         }
 
         private void CanvasClicked(Point point)
@@ -168,9 +169,7 @@ namespace ClassDiagram.ViewModel
                     {
                         if (boxViewModel.IsPointInBox(point))
                         {
-                            var lineViewModel = new LineViewModel(new Line());
-                            lineViewModel.From = fromBox;
-                            lineViewModel.To = boxViewModel;
+                            var lineViewModel = new LineViewModel(new Line(), fromBox, boxViewModel);
 
                             if (IsAddingAssosiation)
                             {

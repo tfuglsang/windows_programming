@@ -82,7 +82,8 @@
     <Compile Include="UndoRedo\AddandRemove\RemoveBox.cs" />
     <Compile Include="UndoRedo\AddandRemove\RemoveLine.cs" />
     <Compile Include="UndoRedo\IURCommand.cs" />
-    <Compile Include="UndoRedo\URController.cs" />
+<Compile Include="Helpers\MouseButtonEventArgsToPointConverter.cs" />
+<Compile Include="UndoRedo\URController.cs" />
     <Compile Include="View\Selectors\CustomDataTemplateSelector.cs" />
     <Compile Include="View\Selectors\CustomStyleSelector.cs" />
     <Compile Include="View\UserControls\AddLineUserControl.xaml.cs">
@@ -131,8 +132,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\Resources\StyleDictionary.xaml">
-      <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\UserControls\AddLineUserControl.xaml">
       <SubType>Designer</SubType>

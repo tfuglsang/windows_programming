@@ -20,7 +20,7 @@ namespace ClassDiagram.UndoRedo.AddandRemove
             boxes = _boxes;
             lines = _lines;
             removeBoxes = _removeBoxes;
-            removeLines = _lines.Where(x => _removeBoxes.Any(y => y.Number == x.fromNumber || y.Number == x.toNumber)).ToList();
+            removeLines = _lines.Where(x => _removeBoxes.Any(y => y.Number == x.From.Number || y.Number == x.To.Number)).ToList();
         }
 
         public void Execute()

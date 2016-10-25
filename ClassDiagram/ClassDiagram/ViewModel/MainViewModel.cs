@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Xml;
 using ClassDiagram.Model;
 using ClassDiagram.ViewModel.ElementViewModels;
 using GalaSoft.MvvmLight;
@@ -24,50 +27,186 @@ namespace ClassDiagram.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        public ICommand MouseLeftClick => new RelayCommand<MouseButtonEventArgs>(handleMouseClick);
+        public ICommand CanvasClickedCommand => new RelayCommand<Point>(CanvasClicked);
 
-        public List<BoxViewModel> Boxes { get; }
-        public List<LineViewModel> Lines { get; }
+        //public List<BoxViewModel> BoxesList { get; }
+        //public List<LineViewModel> LinesList { get; }
+        //public CollectionContainer Boxes { get; }
+        //public CollectionContainer Lines { get; }
+
+        public ObservableCollection<BoxViewModel> Boxes{ get; }
+        public ObservableCollection<LineViewModel> Lines{ get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
-        
-        private bool _isAddingBox;
 
-        public bool IsAddingBox
+        private BoxViewModel fromBox;
+
+        #region propertiesForTheButtons
+        private bool _isAddingClass;
+        private bool _isAddingInterface;
+        private bool _isAddingAbstractClass;
+        private bool _isAddingAssosiation;
+        private bool _isAddingDirAssosiation;
+        private bool _isAddingAggregation;
+        private bool _isAddingComposition;
+        private bool _isAddingInheritance;
+        private bool _isAddingRealization;
+        
+        public bool IsAddingClass
         {
-            get
-            {
-                return _isAddingBox;
-            }
-            set
-            {
-                _isAddingBox = value;
-                RaisePropertyChanged();
-            }
+            get { return _isAddingClass; }
+            set { Set(ref _isAddingClass, !_isAddingClass && value); }
         }
 
+        public bool IsAddingInterface
+        {
+            get { return _isAddingInterface; }
+            set { Set(ref _isAddingInterface, !_isAddingInterface && value); }
+        }
+
+        public bool IsAddingAbstractClass
+        {
+            get { return _isAddingAbstractClass; }
+            set { Set(ref _isAddingAbstractClass, !_isAddingAbstractClass && value); }
+        }
+
+        public bool IsAddingAssosiation
+        {
+            get { return _isAddingAssosiation; }
+            set { Set(ref _isAddingAssosiation, !_isAddingAssosiation && value); }
+        }
+        public bool IsAddingDirAssosiation
+        {
+            get { return _isAddingDirAssosiation; }
+            set { Set(ref _isAddingDirAssosiation, !_isAddingDirAssosiation && value); }
+        }
+        public bool IsAddingAggregation
+        {
+            get { return _isAddingAggregation; }
+            set { Set(ref _isAddingAggregation, !_isAddingAggregation && value); }
+        }
+        public bool IsAddingComposition
+        {
+            get { return _isAddingComposition; }
+            set { Set(ref _isAddingComposition, !_isAddingComposition && value); }
+        }
+        public bool IsAddingInheritance
+        {
+            get { return _isAddingInheritance; }
+            set { Set(ref _isAddingInheritance, !_isAddingInheritance && value); }
+        }
+        public bool IsAddingRealization
+        {
+            get { return _isAddingRealization; }
+            set { Set(ref _isAddingRealization, !_isAddingRealization && value); }
+        }
+
+        #endregion
         /// <summary>
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel()
         {
-            Boxes = new List<BoxViewModel>();
-            Lines = new List<LineViewModel>();
-            Boxes.Add(new BoxViewModel(new Box()));
+            Boxes = new ObservableCollection<BoxViewModel>();
+            Lines = new ObservableCollection<LineViewModel>();
+
+            Box boxbox = new Box() { Width = 800, X = 400, Y = 400 };
+            var boxboxViewModel = new BoxViewModel(boxbox);
+            Box secondBox = new Box() { Width = 800, X = 200, Y = 200 };
+            var secondBoxViewModel = new BoxViewModel(secondBox);
+
+            Boxes.Add(boxboxViewModel);
+            Boxes.Add(secondBoxViewModel);
             
-            ////if (IsInDesignMode)
-            ////{
-            ////    // Code runs in Blend --> create design time data.
-            ////}
-            ////else
-            ////{
-            ////    // Code runs "for real"
-            ////}
+            Elements.Add(new CollectionContainer() { Collection = Boxes });
+            Elements.Add(new CollectionContainer() { Collection = Lines });
+
         }
 
-        private void handleMouseClick(MouseButtonEventArgs args)
+        private void CanvasClicked(Point point)
         {
-            
+            Debug.Print($"{point.X},{point.Y}"); // debug information
+            if (IsAddingClass || IsAddingAbstractClass || IsAddingInterface)
+            {
+                Box newBox = new Box() {Width = 800, X = point.X, Y=point.Y };
 
+                if (IsAddingClass)
+                { 
+                    newBox.Type = EBox.Class;
+                    IsAddingClass = false;
+                }
+                else if (IsAddingAbstractClass)
+                {
+                    newBox.Type = EBox.Abstract;
+                    IsAddingAbstractClass = false;
+                }
+                else if (IsAddingInterface)
+                {
+                    newBox.Type = EBox.Interface;
+                    IsAddingInterface = false;
+                }
+
+                Boxes.Add(new BoxViewModel(newBox));
+                
+            } else if (IsAddingAssosiation || IsAddingDirAssosiation || IsAddingAggregation || IsAddingComposition ||
+                       IsAddingInheritance || IsAddingRealization)
+            {
+                if (fromBox == null)
+                {
+                    foreach (var boxViewModel in Boxes)
+                    {
+                        if (boxViewModel.IsPointInBox(point))
+                        {
+                            Debug.Print("Set from box");
+                            fromBox = boxViewModel;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var boxViewModel in Boxes)
+                    {
+                        if (boxViewModel.IsPointInBox(point))
+                        {
+                            var lineViewModel = new LineViewModel(new Line());
+                            lineViewModel.From = fromBox;
+                            lineViewModel.To = boxViewModel;
+
+                            if (IsAddingAssosiation)
+                            {
+                                lineViewModel.Type = ELine.Association;
+                                IsAddingAssosiation = false;
+                            }
+                            else if(IsAddingDirAssosiation)
+                            {
+                                lineViewModel.Type = ELine.DirectedAssociation;
+                                IsAddingDirAssosiation = false;
+                            } else if (IsAddingAggregation)
+                            {
+                                lineViewModel.Type = ELine.Aggregation;
+                                IsAddingAggregation = false;
+                            } else if (IsAddingComposition)
+                            {
+                                lineViewModel.Type = ELine.Composition;
+                                IsAddingComposition = false;
+                            } else if (IsAddingInheritance)
+                            {
+                                lineViewModel.Type = ELine.Inheritance;
+                                IsAddingInterface = false;
+                            } else if (IsAddingRealization)
+                            {
+                                lineViewModel.Type = ELine.Realization;
+                                IsAddingRealization = false;
+                            }
+
+                            Lines.Add(lineViewModel);
+                            fromBox = null;
+                            break;
+                        }
+                    }
+                }
+            }
         }
+        
     }
 }

@@ -1,10 +1,15 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:userControls="clr-namespace:ClassDiagram.View.UserControls">
+    
     <DataTemplate x:Key="boxDataTemplate">
-        <userControls:BoxUserControl></userControls:BoxUserControl>
+        <userControls:BoxUserControl>
+            
+        </userControls:BoxUserControl>
     </DataTemplate>
+    
     <DataTemplate x:Key="lineDataTemplate">
-        <userControls:BoxUserControl></userControls:BoxUserControl>
+        <userControls:LineUserControl></userControls:LineUserControl>
     </DataTemplate>
+    
 </ResourceDictionary>

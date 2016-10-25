@@ -13,6 +13,8 @@ namespace ClassDiagram.ViewModel.ElementViewModels
     {
         private ILine _line;
         private bool _isConnectingBoxes;
+        private BoxViewModel _from;
+        private BoxViewModel _to;
 
         #region properties
         public bool IsConnectingBoxes
@@ -25,12 +27,21 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
-        public int toNumber
+        public BoxViewModel From
         {
-            get { return _line.ToNumber; }
+            get { return _from; }
+            set { Set(ref _from, value); }
         }
 
-        public int fromNumber { get { return _line.FromNumber; } }
+        public BoxViewModel To
+        {
+            get { return _to; }
+            set { Set(ref _to, value); }
+        }
+
+        public int ToNumber => _line.ToNumber;
+
+        public int FromNumber => _line.FromNumber;
 
 
         public ELine Type

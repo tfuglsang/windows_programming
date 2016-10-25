@@ -168,9 +168,7 @@ namespace ClassDiagram.ViewModel
                     {
                         if (boxViewModel.IsPointInBox(point))
                         {
-                            var lineViewModel = new LineViewModel(new Line());
-                            lineViewModel.From = fromBox;
-                            lineViewModel.To = boxViewModel;
+                            var lineViewModel = new LineViewModel(new Line(), fromBox, boxViewModel);
 
                             if (IsAddingAssosiation)
                             {

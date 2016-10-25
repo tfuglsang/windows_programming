@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.ExceptionServices;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -16,6 +20,24 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         private BoxViewModel _from;
         private BoxViewModel _to;
 
+        public LineViewModel(ILine line, BoxViewModel from, BoxViewModel to)
+        {
+            _line = line;
+            From = from;
+            To = to;
+            From.PropertyChanged += BoxPropertyChanged;
+            To.PropertyChanged += BoxPropertyChanged;
+        }
+
+        private void BoxPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Position")
+            {
+                RaisePropertyChanged("FromPoint");
+                RaisePropertyChanged("ToPoint");
+            }
+        }
+
         #region properties
         public bool IsConnectingBoxes
         {
@@ -30,13 +52,50 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         public BoxViewModel From
         {
             get { return _from; }
-            set { Set(ref _from, value); }
+            set
+            {
+                Set(ref _from, value);
+            }
+        }
+
+        public Point FromPoint
+        {
+            get
+            {
+                // This should not run on Position but rather on center position
+                double deltaX = _from.Position.X - _to.Position.X;
+                double deltaY = _from.Position.X - _to.Position.Y;
+                double angle = Math.Atan2(deltaY, deltaX);
+                if (0 < angle && angle < Math.PI/2)
+                {
+                    Debug.Print("First Quadrant");
+                }
+                else if(Math.PI/2 < angle && angle < Math.PI)
+                {
+                    Debug.Print("Second Quadrant");
+                } else if (-Math.PI < angle && angle < -Math.PI/2)
+                {
+                    Debug.Print("Third Quadrant");
+                } else if (-Math.PI/2 < angle && angle < 0)
+                {
+                    Debug.Print("Fourth Quadrant");
+                }
+                return _from.Position;
+            }
         }
 
         public BoxViewModel To
         {
             get { return _to; }
-            set { Set(ref _to, value); }
+            set
+            {
+                Set(ref _to, value); 
+            }
+        }
+
+        public Point ToPoint
+        {
+            get { return _to.Position; }
         }
 
         public int ToNumber => _line.ToNumber;

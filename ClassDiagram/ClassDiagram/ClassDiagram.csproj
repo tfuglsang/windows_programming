@@ -76,6 +76,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\MouseButtonEventArgsToPointConverter.cs" />
+    <Compile Include="Helpers\MyCustomAdorner.cs" />
     <Compile Include="View\Selectors\CustomDataTemplateSelector.cs" />
     <Compile Include="View\Selectors\CustomStyleSelector.cs" />
     <Compile Include="View\UserControls\AddLineUserControl.xaml.cs">

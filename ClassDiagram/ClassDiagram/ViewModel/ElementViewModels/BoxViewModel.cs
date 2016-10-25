@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,10 @@ using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using ClassDiagram.Model;
+using System.Windows.Input;
 using GalaSoft.MvvmLight.Command;
 using System.Windows.Media;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
 {
@@ -63,7 +66,6 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             _isMoving = false;
             Mouse.Capture(null);
             e.Handled = true;
-
         }
 
         private IBox _box;
@@ -118,6 +120,14 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                 _box.X = value.X;
                 _box.Y = value.Y;
                 RaisePropertyChanged();
+            }
+        }
+
+        public Point CenterPoint
+        {
+            get
+            {
+                return new Point(_box.X+(Width/2), _box.Y+(Height/2));
             }
         }
 

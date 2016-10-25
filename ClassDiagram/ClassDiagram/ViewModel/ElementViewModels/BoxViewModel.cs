@@ -12,6 +12,8 @@ namespace ClassDiagram.ViewModel.ElementViewModels
     public class BoxViewModel : ElementViewModel
     {
         private IBox _box;
+        private Box Box { get; }
+        public int Number => Box.Number;
 
         #region properties
 

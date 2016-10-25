@@ -120,6 +120,7 @@ namespace ClassDiagram.ViewModel
             Elements.Add(new CollectionContainer() { Collection = Boxes });
             Elements.Add(new CollectionContainer() { Collection = Lines });
 
+
         }
 
         private void CanvasClicked(Point point)

@@ -105,6 +105,14 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
+        public Point CenterPoint
+        {
+            get
+            {
+                return new Point(_box.X+(Width/2), _box.Y+(Height/2));
+            }
+        }
+
         public EBox Type
         {
             get { return _box.Type; }

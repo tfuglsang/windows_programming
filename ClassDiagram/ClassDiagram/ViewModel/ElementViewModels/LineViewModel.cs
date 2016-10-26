@@ -53,19 +53,23 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         {
             get
             {
-                // This should not run on Position but rather on center position
                 var deltaX = _from.CenterPoint.X - _to.CenterPoint.X;
                 var deltaY = _from.CenterPoint.X - _to.CenterPoint.Y;
-                var angle = Math.Atan2(deltaY, deltaX);
-                if ((0 < angle) && (angle < Math.PI/2))
-                    Debug.Print("First Quadrant");
-                else if ((Math.PI/2 < angle) && (angle < Math.PI))
-                    Debug.Print("Second Quadrant");
-                else if ((-Math.PI < angle) && (angle < -Math.PI/2))
-                    Debug.Print("Third Quadrant");
-                else if ((-Math.PI/2 < angle) && (angle < 0))
-                    Debug.Print("Fourth Quadrant");
-                return _from.CenterPoint;
+                var angleRadians = Math.Atan2(deltaY, deltaX);
+                var angleDegrees = angleRadians*(180.0/Math.PI);
+
+                var pointToConnect = _from.CenterPoint;
+                
+                if (45 < angleDegrees && angleDegrees < 135)
+                    pointToConnect.Y = pointToConnect.Y - (_from.Height/2);
+                else if (135 < angleDegrees || angleDegrees < -135)
+                    pointToConnect.X = pointToConnect.X + (_from.Width/2);
+                else if (-135 < angleDegrees && angleDegrees < -45)
+                    pointToConnect.Y = pointToConnect.Y + (_from.Height/2);
+                else if (-45 < angleDegrees && angleDegrees < 45)
+                    pointToConnect.X = pointToConnect.X - (_from.Width/2);
+
+                return pointToConnect;
             }
         }
 
@@ -77,7 +81,26 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         public Point ToPoint
         {
-            get { return _to.CenterPoint; }
+            get
+            {
+                var deltaX = _to.CenterPoint.X - _from.CenterPoint.X;
+                var deltaY = _to.CenterPoint.X - _from.CenterPoint.Y;
+                var angleRadians = Math.Atan2(deltaY, deltaX);
+                var angleDegrees = angleRadians * (180.0 / Math.PI);
+
+                var pointToConnect = _to.CenterPoint;
+
+                if (45 < angleDegrees && angleDegrees < 135)
+                    pointToConnect.Y = pointToConnect.Y - (_to.Height / 2);
+                else if (135 < angleDegrees || angleDegrees < -135)
+                    pointToConnect.X = pointToConnect.X + (_to.Width / 2);
+                else if (-135 < angleDegrees && angleDegrees < -45)
+                    pointToConnect.Y = pointToConnect.Y + (_to.Height / 2);
+                else if (-45 < angleDegrees && angleDegrees < 45)
+                    pointToConnect.X = pointToConnect.X - (_to.Width / 2);
+
+                return pointToConnect;
+            }
         }
 
         public int ToNumber => _line.ToNumber;

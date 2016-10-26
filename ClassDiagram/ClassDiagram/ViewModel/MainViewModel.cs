@@ -109,9 +109,9 @@ namespace ClassDiagram.ViewModel
             Boxes = new ObservableCollection<BoxViewModel>();
             Lines = new ObservableCollection<LineViewModel>();
 
-            Box boxbox = new Box() { Width = 800, X = 400, Y = 400 };
+            Box boxbox = new Box() { X = 400, Y = 400 };
             var boxboxViewModel = new BoxViewModel(boxbox);
-            Box secondBox = new Box() { Width = 800, X = 200, Y = 200 };
+            Box secondBox = new Box() { X = 200, Y = 200 };
             var secondBoxViewModel = new BoxViewModel(secondBox);
 
             Boxes.Add(boxboxViewModel);
@@ -128,7 +128,7 @@ namespace ClassDiagram.ViewModel
             Debug.Print($"{point.X},{point.Y}"); // debug information
             if (IsAddingClass || IsAddingAbstractClass || IsAddingInterface)
             {
-                Box newBox = new Box() {Width = 800, X = point.X, Y=point.Y };
+                Box newBox = new Box() {X = point.X, Y=point.Y };
 
                 if (IsAddingClass)
                 { 

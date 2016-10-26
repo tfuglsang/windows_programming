@@ -8,6 +8,7 @@ using System.Windows.Documents;
 
 namespace ClassDiagram.Helpers
 {
+    // CURRENTLY UNUSED!!!
     public class AttachedAdorner
     {
         public static readonly DependencyProperty AdornerProperty =

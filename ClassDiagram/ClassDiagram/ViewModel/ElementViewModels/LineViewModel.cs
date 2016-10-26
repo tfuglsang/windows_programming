@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using ClassDiagram.Model;
 
@@ -9,8 +8,8 @@ namespace ClassDiagram.ViewModel.ElementViewModels
     public class LineViewModel : ElementViewModel
     {
         private readonly ILine _line;
-        private bool _isConnectingBoxes;
         private BoxViewModel _from;
+        private bool _isConnectingBoxes;
         private BoxViewModel _to;
 
         public LineViewModel(ILine line, BoxViewModel from, BoxViewModel to)
@@ -22,12 +21,18 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             To.PropertyChanged += BoxPropertyChanged;
         }
 
+        public LineViewModel(ILine line)
+        {
+            _line = line;
+        }
+
         private void BoxPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(BoxViewModel.Position))
             {
                 RaisePropertyChanged(nameof(FromPoint));
                 RaisePropertyChanged(nameof(ToPoint));
+                RaisePropertyChanged(nameof(ArrowHeadPoints));
             }
         }
 
@@ -53,10 +58,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         {
             get
             {
-                var deltaX = _from.CenterPoint.X - _to.CenterPoint.X;
-                var deltaY = _from.CenterPoint.X - _to.CenterPoint.Y;
-                var angleRadians = Math.Atan2(deltaY, deltaX);
-                var angleDegrees = angleRadians*(180.0/Math.PI);
+                var angleDegrees = GetAngleBetweenPoints(_from.CenterPoint, _to.CenterPoint);
 
                 var pointToConnect = _from.CenterPoint;
 
@@ -73,6 +75,54 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
+        private double GetAngleBetweenPoints(Point from, Point to)
+        {
+            var deltaX = from.X - to.X;
+            var deltaY = from.Y - to.Y;
+            var angleRadians = Math.Atan2(deltaY, deltaX);
+            var angleDegrees = angleRadians*(180.0/Math.PI);
+
+            return angleDegrees;
+        }
+
+        private double DegreesToRadians(double degrees) => degrees*(Math.PI/180);
+
+        private Point RotatePointAroundPoint(Point pointToRotate, Point pointToRotateAround, double degrees)
+        {
+            // Keep degrees between 0-360 instead of -180-180
+            if (degrees < 0)
+                degrees = 360 + degrees;
+
+            var returnPoint = new Point();
+
+            // Rotate point X
+            returnPoint.X = pointToRotateAround.X +
+                            (pointToRotate.X - pointToRotateAround.X)*Math.Cos(DegreesToRadians(degrees)) -
+                            (pointToRotate.Y - pointToRotateAround.Y)*Math.Sin(DegreesToRadians(degrees));
+            // Rotate point Y
+            returnPoint.Y = pointToRotateAround.Y +
+                            (pointToRotate.X - pointToRotateAround.X)*Math.Sin(DegreesToRadians(degrees)) +
+                            (pointToRotate.Y - pointToRotateAround.Y)*Math.Cos(DegreesToRadians(degrees));
+
+            return returnPoint;
+        }
+
+        public string ArrowHeadPoints
+        {
+            get
+            {
+                if (Type == ELine.Association)
+                    return "";
+                var startPoint = ToPoint;
+                var firstCornerPoint = RotatePointAroundPoint(new Point(startPoint.X + 10, startPoint.Y + 5), startPoint,
+                    GetAngleBetweenPoints(FromPoint, ToPoint));
+                var secondCornerPoint = RotatePointAroundPoint(new Point(startPoint.X + 10, startPoint.Y - 5),
+                    startPoint, GetAngleBetweenPoints(FromPoint, ToPoint));
+                return
+                    $"{startPoint.X},{startPoint.Y} {firstCornerPoint.X},{firstCornerPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y} {startPoint.X},{startPoint.Y}";
+            }
+        }
+
         public BoxViewModel To
         {
             get { return _to; }
@@ -83,12 +133,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         {
             get
             {
-                var deltaX = _to.CenterPoint.X - _from.CenterPoint.X;
-                var deltaY = _to.CenterPoint.Y - _from.CenterPoint.Y;
-                var angleRadians = Math.Atan2(deltaY, deltaX);
-                var angleDegrees = angleRadians*(180.0/Math.PI);
-
-                Debug.Print($"{angleDegrees}");
+                var angleDegrees = GetAngleBetweenPoints(_to.CenterPoint, _from.CenterPoint);
 
                 var pointToConnect = _to.CenterPoint;
 
@@ -121,10 +166,5 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         }
 
         #endregion
-
-        public LineViewModel(ILine line)
-        {
-            _line = line;
-        }
     }
 }

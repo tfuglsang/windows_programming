@@ -155,14 +155,17 @@ namespace ClassDiagram.ViewModel
             {
                 if (fromBox == null)
                     foreach (var boxViewModel in Boxes)
+                    {
                         if (boxViewModel.IsPointInBox(point))
                         {
                             Debug.Print("Set from box");
                             fromBox = boxViewModel;
                             break;
                         }
+                    }
                 else
                     foreach (var boxViewModel in Boxes)
+                    {
                         if (boxViewModel.IsPointInBox(point))
                         {
                             var lineViewModel = new LineViewModel(new Line(), fromBox, boxViewModel);
@@ -202,6 +205,7 @@ namespace ClassDiagram.ViewModel
                             fromBox = null;
                             break;
                         }
+                    }
             }
         }
     }

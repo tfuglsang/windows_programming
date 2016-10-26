@@ -24,10 +24,10 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         private void BoxPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == "Position")
+            if (e.PropertyName == nameof(BoxViewModel.Position))
             {
-                RaisePropertyChanged("FromPoint");
-                RaisePropertyChanged("ToPoint");
+                RaisePropertyChanged(nameof(FromPoint));
+                RaisePropertyChanged(nameof(ToPoint));
             }
         }
 

@@ -9,8 +9,6 @@ using System.Windows;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using ClassDiagram.Model;
-using System.Windows.Input;
-using ClassDiagram.Model;
 using GalaSoft.MvvmLight.Command;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
@@ -70,16 +68,24 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         //
 
-        public RelayCommand addTextBoxCommand
-        {
-            get; private set;
-        }
+        public RelayCommand AddFieldsTextBoxCommand{ get; private set; }
+        public RelayCommand AddMethodTextBoxCommand { get; private set; }
 
-        public void addTextbox()
+        public void AddFieldsTextbox()
         {
             _box.FieldsList.Add("");
-            Height += 25;
+            Height += 20;
         }
+        public void AddMethodTextbox()
+        {
+            _box.MethodList.Add("");
+            Height += 20;
+        }
+
+
+        //private IBox _box;
+        private Box Box { get; }
+        public int Number => Box.Number;
 
         //
 
@@ -175,7 +181,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             _box.MethodList = new ObservableCollection<string>();
 
             // For test purposes
-            _box.Height = 125;
+            _box.Height = 100;//84;
             _box.Width = 150;
             _box.FieldsList.Add("Insert Fields1");
             //_box.FieldsList.Add("Insert Fields2");
@@ -186,7 +192,8 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
             _box.Label = "ClassName";
 
-            addTextBoxCommand = new RelayCommand(addTextbox);
+            AddFieldsTextBoxCommand = new RelayCommand(AddFieldsTextbox);
+            AddMethodTextBoxCommand = new RelayCommand(AddMethodTextbox);
 
         }
     }

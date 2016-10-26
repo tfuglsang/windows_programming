@@ -54,8 +54,8 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             get
             {
                 // This should not run on Position but rather on center position
-                var deltaX = _from.Position.X - _to.Position.X;
-                var deltaY = _from.Position.X - _to.Position.Y;
+                var deltaX = _from.CenterPoint.X - _to.CenterPoint.X;
+                var deltaY = _from.CenterPoint.X - _to.CenterPoint.Y;
                 var angle = Math.Atan2(deltaY, deltaX);
                 if ((0 < angle) && (angle < Math.PI/2))
                     Debug.Print("First Quadrant");
@@ -65,7 +65,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                     Debug.Print("Third Quadrant");
                 else if ((-Math.PI/2 < angle) && (angle < 0))
                     Debug.Print("Fourth Quadrant");
-                return _from.Position;
+                return _from.CenterPoint;
             }
         }
 
@@ -77,7 +77,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         public Point ToPoint
         {
-            get { return _to.Position; }
+            get { return _to.CenterPoint; }
         }
 
         public int ToNumber => _line.ToNumber;

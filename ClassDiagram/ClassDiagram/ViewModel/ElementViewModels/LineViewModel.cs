@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using ClassDiagram.Model;
 
@@ -83,9 +84,11 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             get
             {
                 var deltaX = _to.CenterPoint.X - _from.CenterPoint.X;
-                var deltaY = _to.CenterPoint.X - _from.CenterPoint.Y;
+                var deltaY = _to.CenterPoint.Y - _from.CenterPoint.Y;
                 var angleRadians = Math.Atan2(deltaY, deltaX);
                 var angleDegrees = angleRadians*(180.0/Math.PI);
+
+                Debug.Print($"{angleDegrees}");
 
                 var pointToConnect = _to.CenterPoint;
 

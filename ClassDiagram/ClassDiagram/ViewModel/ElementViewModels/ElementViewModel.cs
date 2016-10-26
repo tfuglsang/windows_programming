@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
 {
@@ -13,14 +8,11 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         public bool IsSelected
         {
-            get
-            {
-              return _isSelected;  
-            }
+            get { return _isSelected; }
             set
             {
                 _isSelected = value;
-                RaisePropertyChanged(propertyName: nameof(IsSelected));
+                RaisePropertyChanged(nameof(IsSelected));
             }
         }
     }

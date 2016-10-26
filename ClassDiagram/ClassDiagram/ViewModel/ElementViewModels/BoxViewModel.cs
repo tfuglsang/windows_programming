@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Input;
-using GalaSoft.MvvmLight;
 using ClassDiagram.Model;
 using GalaSoft.MvvmLight.Command;
 
@@ -68,7 +61,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         //
 
-        public RelayCommand AddFieldsTextBoxCommand{ get; private set; }
+        public RelayCommand AddFieldsTextBoxCommand { get; private set; }
         public RelayCommand AddMethodTextBoxCommand { get; private set; }
 
         public void AddFieldsTextbox()
@@ -76,6 +69,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             _box.FieldsList.Add("");
             Height += 20;
         }
+
         public void AddMethodTextbox()
         {
             _box.MethodList.Add("");
@@ -90,8 +84,10 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         //
 
 
-        public bool IsPointInBox(Point pointToCheck) => (pointToCheck.X > Position.X && pointToCheck.X < Position.X + Width && pointToCheck.Y > Position.Y &&
-                                                         pointToCheck.Y < Position.Y + Height);
+        public bool IsPointInBox(Point pointToCheck)
+            =>
+            (pointToCheck.X > Position.X) && (pointToCheck.X < Position.X + Width) && (pointToCheck.Y > Position.Y) &&
+            (pointToCheck.Y < Position.Y + Height);
 
         #region properties
 
@@ -151,7 +147,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
-        public ObservableCollection<String> FieldsList
+        public ObservableCollection<string> FieldsList
         {
             get { return _box.FieldsList; }
             set
@@ -161,7 +157,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
-        public ObservableCollection<String> MethodList
+        public ObservableCollection<string> MethodList
         {
             get { return _box.MethodList; }
             set
@@ -181,7 +177,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             _box.MethodList = new ObservableCollection<string>();
 
             // For test purposes
-            _box.Height = 100;//84;
+            _box.Height = 100; //84;
             _box.Width = 150;
             _box.FieldsList.Add("Insert Fields1");
             //_box.FieldsList.Add("Insert Fields2");
@@ -194,7 +190,6 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
             AddFieldsTextBoxCommand = new RelayCommand(AddFieldsTextbox);
             AddMethodTextBoxCommand = new RelayCommand(AddMethodTextbox);
-
         }
     }
 }

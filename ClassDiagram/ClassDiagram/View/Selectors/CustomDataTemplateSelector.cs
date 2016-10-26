@@ -6,20 +6,9 @@ namespace ClassDiagram.View.Selectors
 {
     public class CustomDataTemplateSelector : DataTemplateSelector
     {
-        private DataTemplate _boxTemplate;
-        private DataTemplate _lineTemplate;
+        public DataTemplate BoxTemplate { get; set; }
 
-        public DataTemplate BoxTemplate
-        {
-            get { return _boxTemplate; }
-            set { _boxTemplate = value; }
-        }
-
-        public DataTemplate LineTemplate
-        {
-            get { return _lineTemplate; }
-            set { _lineTemplate = value; }
-        }
+        public DataTemplate LineTemplate { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {

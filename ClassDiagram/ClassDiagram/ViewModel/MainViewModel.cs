@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Xml;
 using ClassDiagram.Model;
 using ClassDiagram.ViewModel.ElementViewModels;
 using GalaSoft.MvvmLight;
@@ -14,16 +11,16 @@ using GalaSoft.MvvmLight.CommandWpf;
 namespace ClassDiagram.ViewModel
 {
     /// <summary>
-    /// This class contains properties that the main View can data bind to.
-    /// <para>
-    /// Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
-    /// </para>
-    /// <para>
-    /// You can also use Blend to data bind with the tool's support.
-    /// </para>
-    /// <para>
-    /// See http://www.galasoft.ch/mvvm
-    /// </para>
+    ///     This class contains properties that the main View can data bind to.
+    ///     <para>
+    ///         Use the <strong>mvvminpc</strong> snippet to add bindable properties to this ViewModel.
+    ///     </para>
+    ///     <para>
+    ///         You can also use Blend to data bind with the tool's support.
+    ///     </para>
+    ///     <para>
+    ///         See http://www.galasoft.ch/mvvm
+    ///     </para>
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
@@ -34,13 +31,14 @@ namespace ClassDiagram.ViewModel
         //public CollectionContainer Boxes { get; }
         //public CollectionContainer Lines { get; }
 
-        public ObservableCollection<BoxViewModel> Boxes{ get; }
-        public ObservableCollection<LineViewModel> Lines{ get; }
+        public ObservableCollection<BoxViewModel> Boxes { get; }
+        public ObservableCollection<LineViewModel> Lines { get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
 
         private BoxViewModel fromBox;
 
         #region propertiesForTheButtons
+
         private bool _isAddingClass;
         private bool _isAddingInterface;
         private bool _isAddingAbstractClass;
@@ -50,7 +48,7 @@ namespace ClassDiagram.ViewModel
         private bool _isAddingComposition;
         private bool _isAddingInheritance;
         private bool _isAddingRealization;
-        
+
         public bool IsAddingClass
         {
             get { return _isAddingClass; }
@@ -74,26 +72,31 @@ namespace ClassDiagram.ViewModel
             get { return _isAddingAssosiation; }
             set { Set(ref _isAddingAssosiation, !_isAddingAssosiation && value); }
         }
+
         public bool IsAddingDirAssosiation
         {
             get { return _isAddingDirAssosiation; }
             set { Set(ref _isAddingDirAssosiation, !_isAddingDirAssosiation && value); }
         }
+
         public bool IsAddingAggregation
         {
             get { return _isAddingAggregation; }
             set { Set(ref _isAddingAggregation, !_isAddingAggregation && value); }
         }
+
         public bool IsAddingComposition
         {
             get { return _isAddingComposition; }
             set { Set(ref _isAddingComposition, !_isAddingComposition && value); }
         }
+
         public bool IsAddingInheritance
         {
             get { return _isAddingInheritance; }
             set { Set(ref _isAddingInheritance, !_isAddingInheritance && value); }
         }
+
         public bool IsAddingRealization
         {
             get { return _isAddingRealization; }
@@ -101,26 +104,25 @@ namespace ClassDiagram.ViewModel
         }
 
         #endregion
+
         /// <summary>
-        /// Initializes a new instance of the MainViewModel class.
+        ///     Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel()
         {
             Boxes = new ObservableCollection<BoxViewModel>();
             Lines = new ObservableCollection<LineViewModel>();
 
-            Box boxbox = new Box() { X = 400, Y = 400 };
+            var boxbox = new Box {X = 400, Y = 400};
             var boxboxViewModel = new BoxViewModel(boxbox);
-            Box secondBox = new Box() { X = 200, Y = 200 };
+            var secondBox = new Box {X = 200, Y = 200};
             var secondBoxViewModel = new BoxViewModel(secondBox);
 
             Boxes.Add(boxboxViewModel);
             Boxes.Add(secondBoxViewModel);
-            
-            Elements.Add(new CollectionContainer() { Collection = Boxes });
-            Elements.Add(new CollectionContainer() { Collection = Lines });
 
-
+            Elements.Add(new CollectionContainer {Collection = Boxes});
+            Elements.Add(new CollectionContainer {Collection = Lines});
         }
 
         private void CanvasClicked(Point point)
@@ -128,10 +130,10 @@ namespace ClassDiagram.ViewModel
             Debug.Print($"{point.X},{point.Y}"); // debug information
             if (IsAddingClass || IsAddingAbstractClass || IsAddingInterface)
             {
-                Box newBox = new Box() {X = point.X, Y=point.Y };
+                var newBox = new Box {X = point.X, Y = point.Y};
 
                 if (IsAddingClass)
-                { 
+                {
                     newBox.Type = EBox.Class;
                     IsAddingClass = false;
                 }
@@ -147,26 +149,20 @@ namespace ClassDiagram.ViewModel
                 }
 
                 Boxes.Add(new BoxViewModel(newBox));
-                
-            } else if (IsAddingAssosiation || IsAddingDirAssosiation || IsAddingAggregation || IsAddingComposition ||
-                       IsAddingInheritance || IsAddingRealization)
+            }
+            else if (IsAddingAssosiation || IsAddingDirAssosiation || IsAddingAggregation || IsAddingComposition ||
+                     IsAddingInheritance || IsAddingRealization)
             {
                 if (fromBox == null)
-                {
                     foreach (var boxViewModel in Boxes)
-                    {
                         if (boxViewModel.IsPointInBox(point))
                         {
                             Debug.Print("Set from box");
                             fromBox = boxViewModel;
                             break;
                         }
-                    }
-                }
                 else
-                {
                     foreach (var boxViewModel in Boxes)
-                    {
                         if (boxViewModel.IsPointInBox(point))
                         {
                             var lineViewModel = new LineViewModel(new Line(), fromBox, boxViewModel);
@@ -176,23 +172,27 @@ namespace ClassDiagram.ViewModel
                                 lineViewModel.Type = ELine.Association;
                                 IsAddingAssosiation = false;
                             }
-                            else if(IsAddingDirAssosiation)
+                            else if (IsAddingDirAssosiation)
                             {
                                 lineViewModel.Type = ELine.DirectedAssociation;
                                 IsAddingDirAssosiation = false;
-                            } else if (IsAddingAggregation)
+                            }
+                            else if (IsAddingAggregation)
                             {
                                 lineViewModel.Type = ELine.Aggregation;
                                 IsAddingAggregation = false;
-                            } else if (IsAddingComposition)
+                            }
+                            else if (IsAddingComposition)
                             {
                                 lineViewModel.Type = ELine.Composition;
                                 IsAddingComposition = false;
-                            } else if (IsAddingInheritance)
+                            }
+                            else if (IsAddingInheritance)
                             {
                                 lineViewModel.Type = ELine.Inheritance;
                                 IsAddingInterface = false;
-                            } else if (IsAddingRealization)
+                            }
+                            else if (IsAddingRealization)
                             {
                                 lineViewModel.Type = ELine.Realization;
                                 IsAddingRealization = false;
@@ -202,10 +202,7 @@ namespace ClassDiagram.ViewModel
                             fromBox = null;
                             break;
                         }
-                    }
-                }
             }
         }
-        
     }
 }

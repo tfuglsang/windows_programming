@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using ClassDiagram.Model;
 
@@ -59,15 +58,15 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                 var angleDegrees = angleRadians*(180.0/Math.PI);
 
                 var pointToConnect = _from.CenterPoint;
-                
-                if (45 < angleDegrees && angleDegrees < 135)
-                    pointToConnect.Y = pointToConnect.Y - (_from.Height/2);
-                else if (135 < angleDegrees || angleDegrees < -135)
-                    pointToConnect.X = pointToConnect.X + (_from.Width/2);
-                else if (-135 < angleDegrees && angleDegrees < -45)
-                    pointToConnect.Y = pointToConnect.Y + (_from.Height/2);
-                else if (-45 < angleDegrees && angleDegrees < 45)
-                    pointToConnect.X = pointToConnect.X - (_from.Width/2);
+
+                if ((45 < angleDegrees) && (angleDegrees < 135))
+                    pointToConnect.Y = pointToConnect.Y - _from.Height/2;
+                else if ((135 < angleDegrees) || (angleDegrees < -135))
+                    pointToConnect.X = pointToConnect.X + _from.Width/2;
+                else if ((-135 < angleDegrees) && (angleDegrees < -45))
+                    pointToConnect.Y = pointToConnect.Y + _from.Height/2;
+                else if ((-45 < angleDegrees) && (angleDegrees < 45))
+                    pointToConnect.X = pointToConnect.X - _from.Width/2;
 
                 return pointToConnect;
             }
@@ -86,18 +85,18 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                 var deltaX = _to.CenterPoint.X - _from.CenterPoint.X;
                 var deltaY = _to.CenterPoint.X - _from.CenterPoint.Y;
                 var angleRadians = Math.Atan2(deltaY, deltaX);
-                var angleDegrees = angleRadians * (180.0 / Math.PI);
+                var angleDegrees = angleRadians*(180.0/Math.PI);
 
                 var pointToConnect = _to.CenterPoint;
 
-                if (45 < angleDegrees && angleDegrees < 135)
-                    pointToConnect.Y = pointToConnect.Y - (_to.Height / 2);
-                else if (135 < angleDegrees || angleDegrees < -135)
-                    pointToConnect.X = pointToConnect.X + (_to.Width / 2);
-                else if (-135 < angleDegrees && angleDegrees < -45)
-                    pointToConnect.Y = pointToConnect.Y + (_to.Height / 2);
-                else if (-45 < angleDegrees && angleDegrees < 45)
-                    pointToConnect.X = pointToConnect.X - (_to.Width / 2);
+                if ((45 < angleDegrees) && (angleDegrees < 135))
+                    pointToConnect.Y = pointToConnect.Y - _to.Height/2;
+                else if ((135 < angleDegrees) || (angleDegrees < -135))
+                    pointToConnect.X = pointToConnect.X + _to.Width/2;
+                else if ((-135 < angleDegrees) && (angleDegrees < -45))
+                    pointToConnect.Y = pointToConnect.Y + _to.Height/2;
+                else if ((-45 < angleDegrees) && (angleDegrees < 45))
+                    pointToConnect.X = pointToConnect.X - _to.Width/2;
 
                 return pointToConnect;
             }

@@ -93,16 +93,18 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             if (degrees < 0)
                 degrees = 360 + degrees;
 
-            var returnPoint = new Point();
+            var returnPoint = new Point
+            {
+                X = pointToRotateAround.X +
+                    (pointToRotate.X - pointToRotateAround.X)*Math.Cos(DegreesToRadians(degrees)) -
+                    (pointToRotate.Y - pointToRotateAround.Y)*Math.Sin(DegreesToRadians(degrees)),
+                Y = pointToRotateAround.Y +
+                    (pointToRotate.X - pointToRotateAround.X)*Math.Sin(DegreesToRadians(degrees)) +
+                    (pointToRotate.Y - pointToRotateAround.Y)*Math.Cos(DegreesToRadians(degrees))
+            };
 
             // Rotate point X
-            returnPoint.X = pointToRotateAround.X +
-                            (pointToRotate.X - pointToRotateAround.X)*Math.Cos(DegreesToRadians(degrees)) -
-                            (pointToRotate.Y - pointToRotateAround.Y)*Math.Sin(DegreesToRadians(degrees));
             // Rotate point Y
-            returnPoint.Y = pointToRotateAround.Y +
-                            (pointToRotate.X - pointToRotateAround.X)*Math.Sin(DegreesToRadians(degrees)) +
-                            (pointToRotate.Y - pointToRotateAround.Y)*Math.Cos(DegreesToRadians(degrees));
 
             return returnPoint;
         }
@@ -118,16 +120,22 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                     startPoint, GetAngleBetweenPoints(FromPoint, ToPoint));
                 var opositeStartPoint = RotatePointAroundPoint(new Point(startPoint.X + 20, startPoint.Y), startPoint,
                     GetAngleBetweenPoints(FromPoint, ToPoint));
-                if (Type == ELine.Association || Type == ELine.Dependency)
-                    return $"{firstCornerPoint.X},{firstCornerPoint.Y} {startPoint.X},{startPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y} {startPoint.X},{startPoint.Y}";
-                else if (Type == ELine.Inheritance || Type == ELine.Realization)
-                    return
-                        $"{startPoint.X},{startPoint.Y} {firstCornerPoint.X},{firstCornerPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y}";
-                else if (Type == ELine.Aggregation || Type == ELine.Composition)
-                    return
-                        $"{startPoint.X},{startPoint.Y} {firstCornerPoint.X},{firstCornerPoint.Y} {opositeStartPoint.X},{opositeStartPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y}";
-
-                return "";
+                switch (Type)
+                {
+                    case ELine.Association:
+                    case ELine.Dependency:
+                        return $"{firstCornerPoint.X},{firstCornerPoint.Y} {startPoint.X},{startPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y} {startPoint.X},{startPoint.Y}";
+                    case ELine.Inheritance:
+                    case ELine.Realization:
+                        return
+                            $"{startPoint.X},{startPoint.Y} {firstCornerPoint.X},{firstCornerPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y}";
+                    case ELine.Aggregation:
+                    case ELine.Composition:
+                        return
+                            $"{startPoint.X},{startPoint.Y} {firstCornerPoint.X},{firstCornerPoint.Y} {opositeStartPoint.X},{opositeStartPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y}";
+                    default:
+                        return "";
+                }
             }
         }
 
@@ -135,12 +143,17 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         {
             get
             {
-                if (Type == ELine.Inheritance || Type == ELine.Realization || Type == ELine.Aggregation)
-                    return "White";
-                else if(Type == ELine.Composition)
-                    return "Black";
-
-                return "";
+                switch (Type)
+                {
+                    case ELine.Inheritance:
+                    case ELine.Realization:
+                    case ELine.Aggregation:
+                        return "White";
+                    case ELine.Composition:
+                        return "Black";
+                    default:
+                        return "";
+                }
             }
         }
 

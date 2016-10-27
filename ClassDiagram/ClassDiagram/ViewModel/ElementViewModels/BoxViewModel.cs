@@ -75,15 +75,9 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             _box.MethodList.Add("");
             Height += 20;
         }
-
-
-        //private IBox _box;
-        private Box Box { get; }
-        public int Number => Box.Number;
-
-        //
-
-
+        
+        public int Number => _box.Number;
+        
         public bool IsPointInBox(Point pointToCheck)
             =>
             (pointToCheck.X > Position.X) && (pointToCheck.X < Position.X + Width) && (pointToCheck.Y > Position.Y) &&

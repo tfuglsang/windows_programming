@@ -35,8 +35,8 @@ namespace ClassDiagram.ViewModel
         public ObservableCollection<LineViewModel> Lines { get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
 
-        private BoxViewModel fromBox;
-
+        private BoxViewModel _fromBox;
+        private int _boxCounter = 1;
         #region propertiesForTheButtons
 
         private bool _isAddingClass;
@@ -113,9 +113,9 @@ namespace ClassDiagram.ViewModel
             Boxes = new ObservableCollection<BoxViewModel>();
             Lines = new ObservableCollection<LineViewModel>();
 
-            var boxbox = new Box {X = 400, Y = 400};
+            var boxbox = new Box {X = 400, Y = 400, Number = _boxCounter++};
             var boxboxViewModel = new BoxViewModel(boxbox);
-            var secondBox = new Box {X = 200, Y = 200};
+            var secondBox = new Box {X = 200, Y = 200, Number = _boxCounter++};
             var secondBoxViewModel = new BoxViewModel(secondBox);
 
             Boxes.Add(boxboxViewModel);
@@ -130,7 +130,12 @@ namespace ClassDiagram.ViewModel
             Debug.Print($"{point.X},{point.Y}"); // debug information
             if (IsAddingClass || IsAddingAbstractClass || IsAddingInterface)
             {
-                var newBox = new Box {X = point.X, Y = point.Y};
+                var newBox = new Box
+                {
+                    X = point.X,
+                    Y = point.Y,
+                    Number = _boxCounter++
+                };
 
                 if (IsAddingClass)
                 {
@@ -153,13 +158,13 @@ namespace ClassDiagram.ViewModel
             else if (IsAddingAssosiation || IsAddingDependency || IsAddingAggregation || IsAddingComposition ||
                      IsAddingInheritance || IsAddingRealization)
             {
-                if (fromBox == null)
+                if (_fromBox == null)
                     foreach (var boxViewModel in Boxes)
                     {
                         if (boxViewModel.IsPointInBox(point))
                         {
                             Debug.Print("Set from box");
-                            fromBox = boxViewModel;
+                            _fromBox = boxViewModel;
                             break;
                         }
                     }
@@ -168,7 +173,7 @@ namespace ClassDiagram.ViewModel
                     {
                         if (boxViewModel.IsPointInBox(point))
                         {
-                            var lineViewModel = new LineViewModel(new Line(), fromBox, boxViewModel);
+                            var lineViewModel = new LineViewModel(new Line(), _fromBox, boxViewModel);
 
                             if (IsAddingAssosiation)
                             {
@@ -201,8 +206,13 @@ namespace ClassDiagram.ViewModel
                                 IsAddingRealization = false;
                             }
 
+                            foreach (var line in Lines)
+                            {
+                                if ((line.FromNumber == _fromBox.Number && line.ToNumber == boxViewModel.Number) || (line.FromNumber == boxViewModel.Number && line.ToNumber == _fromBox.Number))
+                                    return; // TODO Let the user know that the action is not allowed instead of just ignoring the action!!
+                            }
                             Lines.Add(lineViewModel);
-                            fromBox = null;
+                            _fromBox = null;
                             break;
                         }
                     }

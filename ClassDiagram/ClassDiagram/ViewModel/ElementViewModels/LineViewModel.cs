@@ -124,7 +124,8 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                 {
                     case ELine.Association:
                     case ELine.Dependency:
-                        return $"{firstCornerPoint.X},{firstCornerPoint.Y} {startPoint.X},{startPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y} {startPoint.X},{startPoint.Y}";
+                        return
+                            $"{firstCornerPoint.X},{firstCornerPoint.Y} {startPoint.X},{startPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y} {startPoint.X},{startPoint.Y}";
                     case ELine.Inheritance:
                     case ELine.Realization:
                         return
@@ -162,7 +163,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             get
             {
                 // Figure out which lines should be dashed
-                if (Type == ELine.Dependency || Type == ELine.Realization)
+                if ((Type == ELine.Dependency) || (Type == ELine.Realization))
                     return "3,3";
 
                 return "3,0";
@@ -196,9 +197,9 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
-        public int ToNumber => _line.ToNumber;
+        public int ToNumber => To.Number;
 
-        public int FromNumber => _line.FromNumber;
+        public int FromNumber => From.Number;
 
 
         public ELine Type

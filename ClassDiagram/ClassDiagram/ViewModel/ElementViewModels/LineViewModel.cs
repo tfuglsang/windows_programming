@@ -111,15 +111,34 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         {
             get
             {
-                if (Type == ELine.Association)
-                    return "";
+
+
                 var startPoint = ToPoint;
                 var firstCornerPoint = RotatePointAroundPoint(new Point(startPoint.X + 10, startPoint.Y + 5), startPoint,
                     GetAngleBetweenPoints(FromPoint, ToPoint));
                 var secondCornerPoint = RotatePointAroundPoint(new Point(startPoint.X + 10, startPoint.Y - 5),
                     startPoint, GetAngleBetweenPoints(FromPoint, ToPoint));
-                return
-                    $"{startPoint.X},{startPoint.Y} {firstCornerPoint.X},{firstCornerPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y} {startPoint.X},{startPoint.Y}";
+
+                if (Type == ELine.Association)
+                    return $"{firstCornerPoint.X},{firstCornerPoint.Y} {startPoint.X},{startPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y} {startPoint.X},{startPoint.Y}";
+                if (Type == ELine.DirectedAssociation || Type == ELine.Inheritance || Type == ELine.Realization)
+                    return
+                        $"{startPoint.X},{startPoint.Y} {firstCornerPoint.X},{firstCornerPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y}";
+
+                return "";
+            }
+        }
+
+        public string ArrowHeadFill
+        {
+            get
+            {
+                if (Type == ELine.DirectedAssociation || Type == ELine.Composition)
+                    return "Black";
+                else if (Type == ELine.Inheritance || Type == ELine.Realization)
+                    return "White";
+                else
+                    return "";
             }
         }
 

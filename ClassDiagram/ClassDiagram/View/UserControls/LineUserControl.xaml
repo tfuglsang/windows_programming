@@ -15,7 +15,7 @@
              Stroke="Black" 
              StrokeThickness="1">
             <Polygon.Fill>
-                <SolidColorBrush Color="Black"/>
+                <SolidColorBrush Color="{Binding ArrowHeadFill}"/>
             </Polygon.Fill>
         </Polygon>
 

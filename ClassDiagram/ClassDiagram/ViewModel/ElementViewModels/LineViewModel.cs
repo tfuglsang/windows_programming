@@ -111,19 +111,21 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         {
             get
             {
-
-
                 var startPoint = ToPoint;
                 var firstCornerPoint = RotatePointAroundPoint(new Point(startPoint.X + 10, startPoint.Y + 5), startPoint,
                     GetAngleBetweenPoints(FromPoint, ToPoint));
                 var secondCornerPoint = RotatePointAroundPoint(new Point(startPoint.X + 10, startPoint.Y - 5),
                     startPoint, GetAngleBetweenPoints(FromPoint, ToPoint));
-
-                if (Type == ELine.Association)
+                var opositeStartPoint = RotatePointAroundPoint(new Point(startPoint.X + 20, startPoint.Y), startPoint,
+                    GetAngleBetweenPoints(FromPoint, ToPoint));
+                if (Type == ELine.Association || Type == ELine.Dependency)
                     return $"{firstCornerPoint.X},{firstCornerPoint.Y} {startPoint.X},{startPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y} {startPoint.X},{startPoint.Y}";
-                if (Type == ELine.DirectedAssociation || Type == ELine.Inheritance || Type == ELine.Realization)
+                else if (Type == ELine.Inheritance || Type == ELine.Realization)
                     return
                         $"{startPoint.X},{startPoint.Y} {firstCornerPoint.X},{firstCornerPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y}";
+                else if (Type == ELine.Aggregation || Type == ELine.Composition)
+                    return
+                        $"{startPoint.X},{startPoint.Y} {firstCornerPoint.X},{firstCornerPoint.Y} {opositeStartPoint.X},{opositeStartPoint.Y} {secondCornerPoint.X},{secondCornerPoint.Y}";
 
                 return "";
             }
@@ -133,12 +135,24 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         {
             get
             {
-                if (Type == ELine.DirectedAssociation || Type == ELine.Composition)
-                    return "Black";
-                else if (Type == ELine.Inheritance || Type == ELine.Realization)
+                if (Type == ELine.Inheritance || Type == ELine.Realization || Type == ELine.Aggregation)
                     return "White";
-                else
-                    return "";
+                else if(Type == ELine.Composition)
+                    return "Black";
+
+                return "";
+            }
+        }
+
+        public string LineDashed
+        {
+            get
+            {
+                // Figure out which lines should be dashed
+                if (Type == ELine.Dependency || Type == ELine.Realization)
+                    return "3,3";
+
+                return "3,0";
             }
         }
 

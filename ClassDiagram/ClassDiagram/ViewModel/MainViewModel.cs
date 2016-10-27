@@ -43,7 +43,7 @@ namespace ClassDiagram.ViewModel
         private bool _isAddingInterface;
         private bool _isAddingAbstractClass;
         private bool _isAddingAssosiation;
-        private bool _isAddingDirAssosiation;
+        private bool _isAddingDependency;
         private bool _isAddingAggregation;
         private bool _isAddingComposition;
         private bool _isAddingInheritance;
@@ -73,10 +73,10 @@ namespace ClassDiagram.ViewModel
             set { Set(ref _isAddingAssosiation, !_isAddingAssosiation && value); }
         }
 
-        public bool IsAddingDirAssosiation
+        public bool IsAddingDependency
         {
-            get { return _isAddingDirAssosiation; }
-            set { Set(ref _isAddingDirAssosiation, !_isAddingDirAssosiation && value); }
+            get { return _isAddingDependency; }
+            set { Set(ref _isAddingDependency, !_isAddingDependency && value); }
         }
 
         public bool IsAddingAggregation
@@ -150,7 +150,7 @@ namespace ClassDiagram.ViewModel
 
                 Boxes.Add(new BoxViewModel(newBox));
             }
-            else if (IsAddingAssosiation || IsAddingDirAssosiation || IsAddingAggregation || IsAddingComposition ||
+            else if (IsAddingAssosiation || IsAddingDependency || IsAddingAggregation || IsAddingComposition ||
                      IsAddingInheritance || IsAddingRealization)
             {
                 if (fromBox == null)
@@ -175,10 +175,10 @@ namespace ClassDiagram.ViewModel
                                 lineViewModel.Type = ELine.Association;
                                 IsAddingAssosiation = false;
                             }
-                            else if (IsAddingDirAssosiation)
+                            else if (IsAddingDependency)
                             {
-                                lineViewModel.Type = ELine.DirectedAssociation;
-                                IsAddingDirAssosiation = false;
+                                lineViewModel.Type = ELine.Dependency;
+                                IsAddingDependency = false;
                             }
                             else if (IsAddingAggregation)
                             {

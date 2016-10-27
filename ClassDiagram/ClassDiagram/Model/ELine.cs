@@ -4,7 +4,7 @@
     {
         // Line types
         Association,
-        DirectedAssociation,
+        Dependency,
         Aggregation,
         Composition,
         Inheritance,

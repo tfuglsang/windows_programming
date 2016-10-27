@@ -9,11 +9,12 @@
              d:DesignHeight="100" d:DesignWidth="100"
              d:DataContext="{d:DesignInstance Type=vm:LineViewModel, IsDesignTimeCreatable=True}">
     <Grid>
-        <Line Stroke="Black" X1="{Binding FromPoint.X}" Y1="{Binding FromPoint.Y}" X2="{Binding ToPoint.X}" Y2="{Binding ToPoint.Y}" StrokeThickness="1" />
+        <Line Stroke="Black" X1="{Binding FromPoint.X}" Y1="{Binding FromPoint.Y}" X2="{Binding ToPoint.X}" Y2="{Binding ToPoint.Y}" StrokeThickness="1"  StrokeDashArray="{Binding LineDashed}"/>
         <Polygon
              Points="{Binding ArrowHeadPoints}"
              Stroke="Black" 
-             StrokeThickness="1">
+             StrokeThickness="1"
+           >
             <Polygon.Fill>
                 <SolidColorBrush Color="{Binding ArrowHeadFill}"/>
             </Polygon.Fill>

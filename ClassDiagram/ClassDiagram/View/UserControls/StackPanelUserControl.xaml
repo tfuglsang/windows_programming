@@ -37,7 +37,7 @@
                     <RowDefinition Height="1*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <RadioButton Style="{StaticResource {x:Type ToggleButton}}" IsChecked="{Binding IsAddingAssosiation}" GroupName="AddButtons" Grid.Row="0" Grid.Column="0" Height="40" Width="80" Content="Association"/>
-                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" IsChecked="{Binding IsAddingDirAssosiation}" GroupName="AddButtons" Grid.Row="0" Grid.Column="1" Height="40" Width="80" Content="Directed Asso."/>
+                <RadioButton Style="{StaticResource {x:Type ToggleButton}}" IsChecked="{Binding IsAddingDependency}" GroupName="AddButtons" Grid.Row="0" Grid.Column="1" Height="40" Width="80" Content="Dependency"/>
                 <RadioButton Style="{StaticResource {x:Type ToggleButton}}" IsChecked="{Binding IsAddingAggregation}" GroupName="AddButtons" Grid.Row="1" Grid.Column="0" Height="40" Width="80" Content="Aggregation"/>
                 <RadioButton Style="{StaticResource {x:Type ToggleButton}}" IsChecked="{Binding IsAddingComposition}" GroupName="AddButtons" Grid.Row="1" Grid.Column="1" Height="40" Width="80" Content="Composition"/>
                 <RadioButton Style="{StaticResource {x:Type ToggleButton}}" IsChecked="{Binding IsAddingInheritance}" GroupName="AddButtons" Grid.Row="2" Grid.Column="0" Height="40" Width="80" Content="Inheritance"/>

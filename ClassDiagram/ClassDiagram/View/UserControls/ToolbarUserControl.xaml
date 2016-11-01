@@ -10,14 +10,14 @@
     <ToolBar>
         <Button>
             <Button.Background>Aqua</Button.Background>
-        </Button>
+        </Button >
         <Button>
             <Button.Background>Aquamarine</Button.Background>
         </Button>
-        <Button>
+        <Button Name="Undo" Command="{Binding UndoCommand}">
             <Button.Background>DarkCyan</Button.Background>
         </Button>
-        <Button>
+        <Button Name="Redo" Command="{Binding RedoCommand}">
             <Button.Background>Brown</Button.Background>
         </Button>
     </ToolBar>

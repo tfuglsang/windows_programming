@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -27,8 +28,7 @@ namespace ClassDiagram.ViewModel
     public class MainViewModel : ViewModelBase
     {
         public ICommand CanvasClickedCommand => new RelayCommand<Point>(CanvasClicked);
-        public ICommand DeleteCommand => new RelayCommand(deleteCommand);
-
+        public ICommand DeleteCommand => new RelayCommand(DeleteSelected);
         public ICommand DeselectAllCommand => new RelayCommand(DeselectAll);
         public ICommand UndoCommand { get; }
         public ICommand RedoCommand { get; }
@@ -244,18 +244,20 @@ namespace ClassDiagram.ViewModel
             }
         }
 
-        private void deleteCommand()
+        private void DeleteSelected()
         {
             foreach (var line in Lines.Reverse())
             {
                 if (line.IsSelected)
-                    Lines.Remove(line);
+                    UndoRedo.AddExecute(new RemoveLine(Lines, line));
+
             }
 
             foreach (var box in Boxes.Reverse())
             {
                 if (box.IsSelected)
-                    Boxes.Remove(box);
+                    UndoRedo.AddExecute(new RemoveBox(Boxes, Lines, box));
+
             }
         }
     }

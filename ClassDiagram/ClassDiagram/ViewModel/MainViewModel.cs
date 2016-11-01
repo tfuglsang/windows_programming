@@ -8,6 +8,7 @@ using ClassDiagram.Model;
 using ClassDiagram.ViewModel.ElementViewModels;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using ClassDiagram.UndoRedo.AddandRemove;
 
 namespace ClassDiagram.ViewModel
 {
@@ -29,6 +30,8 @@ namespace ClassDiagram.ViewModel
         public ICommand DeleteCommand => new RelayCommand(deleteCommand);
 
         public ICommand DeselectAllCommand => new RelayCommand(DeselectAll);
+        public ICommand UndoCommand { get; }
+        public ICommand RedoCommand { get; }
         //public List<BoxViewModel> BoxesList { get; }
         //public List<LineViewModel> LinesList { get; }
         //public CollectionContainer Boxes { get; }
@@ -37,7 +40,7 @@ namespace ClassDiagram.ViewModel
         public ObservableCollection<BoxViewModel> Boxes { get; }
         public ObservableCollection<LineViewModel> Lines { get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
-
+        private UndoRedo.URController UndoRedo {get;}
         private BoxViewModel _fromBox;
         private int _boxCounter = 1;
         #region propertiesForTheButtons
@@ -115,14 +118,17 @@ namespace ClassDiagram.ViewModel
         {
             Boxes = new ObservableCollection<BoxViewModel>();
             Lines = new ObservableCollection<LineViewModel>();
+            UndoRedo = ClassDiagram.UndoRedo.URController.Instance;
+            UndoCommand = UndoRedo.UndoC;
+            RedoCommand = UndoRedo.RedoC;
 
-            var boxbox = new Box {X = 400, Y = 400, Number = _boxCounter++};
-            var boxboxViewModel = new BoxViewModel(boxbox);
-            var secondBox = new Box {X = 200, Y = 200, Number = _boxCounter++};
-            var secondBoxViewModel = new BoxViewModel(secondBox);
+            //var boxbox = new Box {X = 400, Y = 400, Number = _boxCounter++};
+            //var boxboxViewModel = new BoxViewModel(boxbox);
+            //var secondBox = new Box {X = 200, Y = 200, Number = _boxCounter++};
+            //var secondBoxViewModel = new BoxViewModel(secondBox);
 
-            Boxes.Add(boxboxViewModel);
-            Boxes.Add(secondBoxViewModel);
+            //Boxes.Add(boxboxViewModel);
+            //Boxes.Add(secondBoxViewModel);
 
             Elements.Add(new CollectionContainer {Collection = Boxes});
             Elements.Add(new CollectionContainer {Collection = Lines});
@@ -170,7 +176,8 @@ namespace ClassDiagram.ViewModel
                     IsAddingInterface = false;
                 }
 
-                Boxes.Add(new BoxViewModel(newBox));
+                //Boxes.Add(new BoxViewModel(newBox));
+                UndoRedo.AddExecute(new AddBox(Boxes, new BoxViewModel(newBox)));
             }
             else if (IsAddingAssosiation || IsAddingDependency || IsAddingAggregation || IsAddingComposition ||
                      IsAddingInheritance || IsAddingRealization)
@@ -228,7 +235,8 @@ namespace ClassDiagram.ViewModel
                             {
                                 return; // TODO Let the user know that the action is not allowed instead of just ignoring the action!!
                             }
-                            Lines.Add(lineViewModel);
+                            //Lines.Add(lineViewModel);
+                            UndoRedo.AddExecute(new AddLine(Lines, lineViewModel));
                             _fromBox = null;
                             break;
                         }

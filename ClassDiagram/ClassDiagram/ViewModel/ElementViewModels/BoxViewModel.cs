@@ -1,8 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using ClassDiagram.Model;
-using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.CommandWpf;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
 {
@@ -12,7 +13,6 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         private Point _initialMousePostion;
         private bool _isMoving;
         private Point _initialShapePostion;
-
 
         public ICommand OnMouseLeftBtnDownCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftBtnDown);
         public ICommand OnMouseMoveCommand => new RelayCommand<UIElement>(OnMouseMove);

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows;
+using System.Windows.Input;
 using ClassDiagram.Model;
+using GalaSoft.MvvmLight.Command;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
 {
@@ -11,6 +13,14 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         private BoxViewModel _from;
         private bool _isConnectingBoxes;
         private BoxViewModel _to;
+
+        public ICommand SelectLineCommand => new RelayCommand<MouseButtonEventArgs>(SelectLine);
+
+        private void SelectLine(MouseButtonEventArgs e)
+        {
+            IsSelected = true;
+            e.Handled = true;
+        }
 
         public LineViewModel(ILine line, BoxViewModel from, BoxViewModel to)
         {
@@ -102,10 +112,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                     (pointToRotate.X - pointToRotateAround.X)*Math.Sin(DegreesToRadians(degrees)) +
                     (pointToRotate.Y - pointToRotateAround.Y)*Math.Cos(DegreesToRadians(degrees))
             };
-
-            // Rotate point X
-            // Rotate point Y
-
+            
             return returnPoint;
         }
 
@@ -162,7 +169,6 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         {
             get
             {
-                // Figure out which lines should be dashed
                 if ((Type == ELine.Dependency) || (Type == ELine.Realization))
                     return "3,3";
 

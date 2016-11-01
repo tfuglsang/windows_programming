@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -128,6 +129,12 @@ namespace ClassDiagram.ViewModel
         private void CanvasClicked(Point point)
         {
             Debug.Print($"{point.X},{point.Y}"); // debug information
+
+            foreach (var line in Lines)
+            {
+                line.IsSelected = false;
+            }
+
             if (IsAddingClass || IsAddingAbstractClass || IsAddingInterface)
             {
                 var newBox = new Box
@@ -206,10 +213,9 @@ namespace ClassDiagram.ViewModel
                                 IsAddingRealization = false;
                             }
 
-                            foreach (var line in Lines)
+                            if (Lines.Any(line => (line.FromNumber == _fromBox.Number && line.ToNumber == boxViewModel.Number) || (line.FromNumber == boxViewModel.Number && line.ToNumber == _fromBox.Number)))
                             {
-                                if ((line.FromNumber == _fromBox.Number && line.ToNumber == boxViewModel.Number) || (line.FromNumber == boxViewModel.Number && line.ToNumber == _fromBox.Number))
-                                    return; // TODO Let the user know that the action is not allowed instead of just ignoring the action!!
+                                return; // TODO Let the user know that the action is not allowed instead of just ignoring the action!!
                             }
                             Lines.Add(lineViewModel);
                             _fromBox = null;

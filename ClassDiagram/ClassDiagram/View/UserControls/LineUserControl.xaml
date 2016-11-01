@@ -16,10 +16,10 @@
                 <command:EventToCommand Command="{Binding SelectLineCommand}" PassEventArgsToCommand="True" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
-        <Line Stroke="Black" X1="{Binding FromPoint.X}" Y1="{Binding FromPoint.Y}" X2="{Binding ToPoint.X}" Y2="{Binding ToPoint.Y}" StrokeThickness="1"  StrokeDashArray="{Binding LineDashed}"/>
-        <Polygon
+        <Line Stroke="{Binding SelectedColor}" X1="{Binding FromPoint.X}" Y1="{Binding FromPoint.Y}" X2="{Binding ToPoint.X}" Y2="{Binding ToPoint.Y}" StrokeThickness="2"  StrokeDashArray="{Binding LineDashed}"/>
+            <Polygon
              Points="{Binding ArrowHeadPoints}"
-             Stroke="Black" 
+             Stroke="{Binding SelectedColor}" 
              StrokeThickness="1"
            >
             <Polygon.Fill>

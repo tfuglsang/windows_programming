@@ -34,6 +34,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             e.MouseDevice.Target.CaptureMouse();
             _initialMousePostion = Mouse.GetPosition(visual);
             _initialShapePostion = new Point(Position.X, Position.Y);
+            e.Handled = true;
             //_canvas = VisualTreeHelper.GetParent(visual) as UIElement;
             _isMoving = true;
         }
@@ -52,6 +53,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         {
             if (!_isMoving) return;
             //UndoRedoController.AddAndExecute(new MoveShapeCommand(this, _initialShapePostion, new Point(X, Y)));
+            IsSelected = true;
             _isMoving = false;
             Mouse.Capture(null);
             e.Handled = true;

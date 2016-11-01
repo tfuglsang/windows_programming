@@ -160,7 +160,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                     case ELine.Composition:
                         return "Black";
                     default:
-                        return "";
+                        return "Transparent";
                 }
             }
         }

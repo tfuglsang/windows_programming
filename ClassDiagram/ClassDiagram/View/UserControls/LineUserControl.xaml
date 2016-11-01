@@ -19,7 +19,7 @@
         <Line Stroke="Black" X1="{Binding FromPoint.X}" Y1="{Binding FromPoint.Y}" X2="{Binding ToPoint.X}" Y2="{Binding ToPoint.Y}" StrokeThickness="1"  StrokeDashArray="{Binding LineDashed}"/>
         <Polygon
              Points="{Binding ArrowHeadPoints}"
-             Stroke="{Binding LineColor}" 
+             Stroke="Black" 
              StrokeThickness="1"
            >
             <Polygon.Fill>

@@ -13,13 +13,13 @@
     </Style>
     <Style x:Key="TextBoxLabel">
         <Style.Triggers>
-            <DataTrigger Binding="{Binding IsAddingClass}" Value="True">
+            <DataTrigger Binding="{Binding Type}" Value="Class">
                 <Setter Property="TextBox.FontStyle" Value="Normal"></Setter>
             </DataTrigger>
-            <DataTrigger Binding="{Binding IsAddingAbstractClass}" Value="True">
+            <DataTrigger Binding="{Binding Type}" Value="Abstract">
                 <Setter Property="TextBox.TextDecorations" Value="Underline"></Setter>
             </DataTrigger>
-            <DataTrigger Binding="{Binding IsAddingInterface}" Value="True">
+            <DataTrigger Binding="{Binding Type}" Value="Interface">
                 <Setter Property="TextBox.FontStyle" Value="Italic"></Setter>
             </DataTrigger>
         </Style.Triggers>

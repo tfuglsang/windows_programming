@@ -78,6 +78,7 @@
     <Compile Include="Helpers\AttachedArdorner.cs" />
     <Compile Include="Helpers\MouseButtonEventArgsToPointConverter.cs" />
     <Compile Include="Helpers\MyCustomAdorner.cs" />
+    <Compile Include="Serializer\Serializer.cs" />
     <Compile Include="UndoRedo\AddandRemove\AddLine.cs" />
     <Compile Include="UndoRedo\AddandRemove\AddBox.cs" />
     <Compile Include="UndoRedo\AddandRemove\MoveBox.cs" />
@@ -193,6 +194,20 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Open.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Redo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Save.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\Undo.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

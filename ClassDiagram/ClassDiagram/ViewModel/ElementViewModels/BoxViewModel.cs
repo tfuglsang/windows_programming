@@ -47,6 +47,27 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
             var pos = Mouse.GetPosition(visual);
             var currentPoint = new Point(pos.X - _initialMousePostion.X, pos.Y - _initialMousePostion.Y);
+
+            // Ensure that box is within the canvas limits
+            Size grid_size = visual.RenderSize;            
+            
+            if (currentPoint.X > grid_size.Width - Width)
+            {
+                currentPoint.X = grid_size.Width - Width;
+            }
+            if (currentPoint.Y > grid_size.Height - Height)
+            {
+                currentPoint.Y = grid_size.Height - Height;
+            }
+            if (currentPoint.X < 0 )
+            {
+                currentPoint.X = 0 ;
+            }
+            if (currentPoint.Y < 0 )
+            {
+                currentPoint.Y = 0 ;
+            }
+
             Position = currentPoint;
             _hasMoved = true;
         }
@@ -177,7 +198,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             _box.MethodList = new ObservableCollection<string>();
 
             // For test purposes
-            _box.Height = 100; //84;
+            _box.Height = 100; 
             _box.Width = 150;
             _box.FieldsList.Add("Insert Fields1");
             //_box.FieldsList.Add("Insert Fields2");

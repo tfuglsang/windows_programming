@@ -34,7 +34,7 @@
     </i:Interaction.Triggers>
 
     <DockPanel VerticalAlignment="Stretch" Height="Auto">
-        <TextBox x:Name="LabelList" DockPanel.Dock="Top" Text="{Binding Label}" TextAlignment="Center" MinHeight="18" MinWidth="120" BorderThickness="0,0,0,1" BorderBrush="Black"/>
+        <TextBox x:Name="LabelList" DockPanel.Dock="Top" Text="{Binding Label}" TextAlignment="Center" Style="{StaticResource TextBoxLabel}" MinHeight="18" MinWidth="120" BorderThickness="0,0,0,1" BorderBrush="Black"/>
         <ListBox x:Name="FieldListBox" DockPanel.Dock="Top" ItemsSource="{Binding FieldsList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListBoxItemStyle}" HorizontalContentAlignment="Stretch" MinHeight="18" MinWidth="120" BorderThickness="0,0,0,1" BorderBrush="Black">
             <ListBox.ItemTemplate>
                 <DataTemplate>

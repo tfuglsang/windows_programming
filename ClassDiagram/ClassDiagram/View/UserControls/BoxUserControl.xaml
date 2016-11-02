@@ -13,8 +13,9 @@
              Padding="15"
              Width="{Binding Width}" 
              Height="{Binding Height}"
+             BorderThickness="2"
+             BorderBrush="{Binding SelectedBorder}"
              >
-
     <UserControl.Resources>
         <ResourceDictionary Source="../Resources/StyleDictionary.xaml"/>
     </UserControl.Resources>
@@ -33,41 +34,12 @@
         </i:EventTrigger>
     </i:Interaction.Triggers>
 
-    <!--<stackpanel minwidth="120" minheight="54">
-        <textbox x:name="labellist" text="{binding label}" textalignment="center" minheight="18" minwidth="120" borderthickness="0,0,0,1" borderbrush="black"/>
-        <listbox x:name="fieldlistbox" itemssource="{binding fieldslist, mode=twoway, updatesourcetrigger=propertychanged}" minheight="18" minwidth="120" borderthickness="0,0,0,1" borderbrush="black">
-            <listbox.itemtemplate>
-                <datatemplate>
-                    <textbox text="{binding path=., mode=twoway, updatesourcetrigger=propertychanged}" borderthickness="0">
-                        <textbox.inputbindings>
-                            <keybinding command="{binding elementname=boxusercontrolname, path=datacontext.addfieldstextboxcommand}" key="return" />
-                            <keybinding command="{binding elementname=boxusercontrolname, path=datacontext.addfieldstextboxcommand}" key="enter" />
-                        </textbox.inputbindings>
-                    </textbox>
-                </datatemplate>
-            </listbox.itemtemplate>
-        </listbox>
-        <listbox x:name="methodlistbox"  itemssource="{binding methodlist, mode=twoway, updatesourcetrigger=propertychanged}" borderthickness="0">
-            <listbox.itemtemplate>
-                <datatemplate>
-                    <textbox text="{binding path=., mode=twoway, updatesourcetrigger=propertychanged}" borderthickness="0">
-                        <textbox.inputbindings>
-                            <keybinding command="{binding elementname=boxusercontrolname, path=datacontext.addmethodtextboxcommand}" key="return" />
-                            <keybinding command="{binding elementname=boxusercontrolname, path=datacontext.addmethodtextboxcommand}" key="enter" />
-                        </textbox.inputbindings>
-                    </textbox>
-                </datatemplate>
-            </listbox.itemtemplate>
-        </listbox>
-
-    </stackpanel>-->
-
     <DockPanel VerticalAlignment="Stretch" Height="Auto">
-        <TextBox x:Name="LabelList" DockPanel.Dock="Top" Text="{Binding Label}" TextAlignment="Center" MinHeight="18" MinWidth="120" BorderThickness="0,0,0,1" BorderBrush="Black"/>
+        <TextBox x:Name="LabelList" DockPanel.Dock="Top" Text="{Binding Label}" TextAlignment="Center" Style="{StaticResource TextBoxLabel}" MinHeight="18" MinWidth="120" BorderThickness="0,0,0,1" BorderBrush="Black"/>
         <ListBox x:Name="FieldListBox" DockPanel.Dock="Top" ItemsSource="{Binding FieldsList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListBoxItemStyle}" HorizontalContentAlignment="Stretch" MinHeight="18" MinWidth="120" BorderThickness="0,0,0,1" BorderBrush="Black">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBox Text="{Binding Path=., Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0">
+                    <TextBox Text="{Binding Path=., Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Style="{StaticResource TextBoxFocus}">
                         <TextBox.InputBindings>
                             <KeyBinding Command="{Binding ElementName=BoxUserControlName, Path=DataContext.AddFieldsTextBoxCommand}" Key="Return" />
                             <KeyBinding Command="{Binding ElementName=BoxUserControlName, Path=DataContext.AddFieldsTextBoxCommand}" Key="Enter" />
@@ -79,7 +51,7 @@
         <ListBox x:Name="MethodListBox" DockPanel.Dock="Top" ItemsSource="{Binding MethodList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListBoxItemStyle}" HorizontalContentAlignment="Stretch" MinHeight="18" MinWidth="120" BorderThickness="0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBox Text="{Binding Path=., Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0">
+                    <TextBox Text="{Binding Path=., Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Style="{StaticResource TextBoxFocus}">
                         <TextBox.InputBindings>
                             <KeyBinding Command="{Binding ElementName=BoxUserControlName, Path=DataContext.AddMethodTextBoxCommand}" Key="Return" />
                             <KeyBinding Command="{Binding ElementName=BoxUserControlName, Path=DataContext.AddMethodTextBoxCommand}" Key="Enter" />

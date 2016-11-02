@@ -19,6 +19,13 @@ namespace ClassDiagram.UndoRedo.AddandRemove
             removeLines = _removeLines;
         }
 
+        public RemoveLine(ObservableCollection<LineViewModel> _lines, LineViewModel _removeLine)
+        {
+            lines = _lines;
+            removeLines = new List<LineViewModel>();
+            removeLines.Add(_removeLine);
+        }
+
         public void Execute()
         {
             removeLines.ForEach(x => lines.Remove(x));

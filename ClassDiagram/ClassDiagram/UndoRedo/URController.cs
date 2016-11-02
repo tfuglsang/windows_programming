@@ -16,12 +16,14 @@ namespace ClassDiagram.UndoRedo
 
         private URController() : base()
         {
+            UndoC = new RelayCommand(Undo, CanUndo);
+            RedoC = new RelayCommand(Redo, CanRedo);
         }
 
         public static URController Instance => _here;
 
-        public RelayCommand UndoC => new RelayCommand(Undo, CanUndo);
-        public RelayCommand RedoC => new RelayCommand(Redo, CanRedo);
+        public RelayCommand UndoC { get; } 
+        public RelayCommand RedoC { get; }
 
         private void UpdateCommandStatus()
         {

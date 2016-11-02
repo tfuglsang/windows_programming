@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
@@ -7,6 +9,7 @@ using ClassDiagram.Model;
 using ClassDiagram.ViewModel.ElementViewModels;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using ClassDiagram.UndoRedo.AddandRemove;
 
 namespace ClassDiagram.ViewModel
 {
@@ -25,15 +28,20 @@ namespace ClassDiagram.ViewModel
     public class MainViewModel : ViewModelBase
     {
         public ICommand CanvasClickedCommand => new RelayCommand<Point>(CanvasClicked);
-        public ICommand SaveDiagram => new RelayCommand(SaveDiagramClicked);
-        public ICommand LoadDiagram => new RelayCommand(LoadDiagramClicked);        
+        public ICommand DeleteCommand => new RelayCommand(DeleteSelected);
+        public ICommand DeselectAllCommand => new RelayCommand(DeselectAll);
+        public ICommand UndoCommand { get; }
+        public ICommand RedoCommand { get; 
+	    public ICommand SaveDiagram => new RelayCommand(SaveDiagramClicked);
+        public ICommand LoadDiagram => new RelayCommand(LoadDiagramClicked); }
+
 
         public ObservableCollection<BoxViewModel> Boxes { get; }
         public ObservableCollection<LineViewModel> Lines { get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
 
         public Diagram Diagram = new Diagram();
-
+        private UndoRedo.URController UndoRedo {get;}
         private BoxViewModel _fromBox;
         private int _boxCounter = 1;
         #region propertiesForTheButtons
@@ -111,6 +119,10 @@ namespace ClassDiagram.ViewModel
         {
             Boxes = new ObservableCollection<BoxViewModel>();
             Lines = new ObservableCollection<LineViewModel>();
+            UndoRedo = ClassDiagram.UndoRedo.URController.Instance;
+            UndoCommand = UndoRedo.UndoC;
+            RedoCommand = UndoRedo.RedoC;
+
 
             Diagram.Boxes = new System.Collections.Generic.List<Box>();            
             Diagram.Lines = new System.Collections.Generic.List<Line>();
@@ -199,9 +211,23 @@ namespace ClassDiagram.ViewModel
             Serializer.Serializer.Instance.AsyncSerializeToFile(Diagram, "C:\\temp/serial.xml");
         }
 
+        private void DeselectAll()
+        {
+            foreach (var line in Lines)
+            {
+                line.IsSelected = false;
+            }
+
+            foreach (var box in Boxes)
+            {
+                box.IsSelected = false;
+            }
+        }
+
         private void CanvasClicked(Point point)
         {
             Debug.Print($"{point.X},{point.Y}"); // debug information
+            
             if (IsAddingClass || IsAddingAbstractClass || IsAddingInterface)
             {
                 var newBox = new Box
@@ -215,7 +241,6 @@ namespace ClassDiagram.ViewModel
                 {
                     newBox.Type = EBox.Class;
                     IsAddingClass = false;
-                    
                 }
                 else if (IsAddingAbstractClass)
                 {
@@ -228,7 +253,8 @@ namespace ClassDiagram.ViewModel
                     IsAddingInterface = false;
                 }
 
-                Boxes.Add(new BoxViewModel(newBox));
+                //Boxes.Add(new BoxViewModel(newBox));
+                UndoRedo.AddExecute(new AddBox(Boxes, new BoxViewModel(newBox)));
             }
             else if (IsAddingAssosiation || IsAddingDependency || IsAddingAggregation || IsAddingComposition ||
                      IsAddingInheritance || IsAddingRealization)
@@ -240,6 +266,7 @@ namespace ClassDiagram.ViewModel
                         {
                             Debug.Print("Set from box");
                             _fromBox = boxViewModel;
+                            _fromBox.IsSelected = false;
                             break;
                         }
                     }
@@ -249,7 +276,7 @@ namespace ClassDiagram.ViewModel
                         if (boxViewModel.IsPointInBox(point))
                         {
                             var lineViewModel = new LineViewModel(new Line(), _fromBox, boxViewModel);
-
+                            boxViewModel.IsSelected = false;
                             if (IsAddingAssosiation)
                             {
                                 lineViewModel.Type = ELine.Association;
@@ -281,16 +308,33 @@ namespace ClassDiagram.ViewModel
                                 IsAddingRealization = false;
                             }
 
-                            foreach (var line in Lines)
+                            if (Lines.Any(line => (line.FromNumber == _fromBox.Number && line.ToNumber == boxViewModel.Number) || (line.FromNumber == boxViewModel.Number && line.ToNumber == _fromBox.Number)))
                             {
-                                if ((line.FromNumber == _fromBox.Number && line.ToNumber == boxViewModel.Number) || (line.FromNumber == boxViewModel.Number && line.ToNumber == _fromBox.Number))
-                                    return; // TODO Let the user know that the action is not allowed instead of just ignoring the action!!
+                                return; // TODO Let the user know that the action is not allowed instead of just ignoring the action!!
                             }
-                            Lines.Add(lineViewModel);
+                            //Lines.Add(lineViewModel);
+                            UndoRedo.AddExecute(new AddLine(Lines, lineViewModel));
                             _fromBox = null;
                             break;
                         }
                     }
+            }
+        }
+
+        private void DeleteSelected()
+        {
+            foreach (var line in Lines.Reverse())
+            {
+                if (line.IsSelected)
+                    UndoRedo.AddExecute(new RemoveLine(Lines, line));
+
+            }
+
+            foreach (var box in Boxes.Reverse())
+            {
+                if (box.IsSelected)
+                    UndoRedo.AddExecute(new RemoveBox(Boxes, Lines, box));
+
             }
         }
     }

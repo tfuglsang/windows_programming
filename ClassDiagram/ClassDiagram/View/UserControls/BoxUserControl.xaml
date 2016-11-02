@@ -13,8 +13,9 @@
              Padding="15"
              Width="{Binding Width}" 
              Height="{Binding Height}"
+             BorderThickness="2"
+             BorderBrush="{Binding SelectedBorder}"
              >
-
     <UserControl.Resources>
         <ResourceDictionary Source="../Resources/StyleDictionary.xaml"/>
     </UserControl.Resources>

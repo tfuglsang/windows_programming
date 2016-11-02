@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -27,6 +28,8 @@ namespace ClassDiagram.ViewModel
     public class MainViewModel : ViewModelBase
     {
         public ICommand CanvasClickedCommand => new RelayCommand<Point>(CanvasClicked);
+        public ICommand DeleteCommand => new RelayCommand(DeleteSelected);
+        public ICommand DeselectAllCommand => new RelayCommand(DeselectAll);
         public ICommand UndoCommand { get; }
         public ICommand RedoCommand { get; }
         //public List<BoxViewModel> BoxesList { get; }
@@ -131,15 +134,23 @@ namespace ClassDiagram.ViewModel
             Elements.Add(new CollectionContainer {Collection = Lines});
         }
 
-        private void CanvasClicked(Point point)
+        private void DeselectAll()
         {
-            Debug.Print($"{point.X},{point.Y}"); // debug information
-
             foreach (var line in Lines)
             {
                 line.IsSelected = false;
             }
 
+            foreach (var box in Boxes)
+            {
+                box.IsSelected = false;
+            }
+        }
+
+        private void CanvasClicked(Point point)
+        {
+            Debug.Print($"{point.X},{point.Y}"); // debug information
+            
             if (IsAddingClass || IsAddingAbstractClass || IsAddingInterface)
             {
                 var newBox = new Box
@@ -178,6 +189,7 @@ namespace ClassDiagram.ViewModel
                         {
                             Debug.Print("Set from box");
                             _fromBox = boxViewModel;
+                            _fromBox.IsSelected = false;
                             break;
                         }
                     }
@@ -187,7 +199,7 @@ namespace ClassDiagram.ViewModel
                         if (boxViewModel.IsPointInBox(point))
                         {
                             var lineViewModel = new LineViewModel(new Line(), _fromBox, boxViewModel);
-
+                            boxViewModel.IsSelected = false;
                             if (IsAddingAssosiation)
                             {
                                 lineViewModel.Type = ELine.Association;
@@ -229,6 +241,23 @@ namespace ClassDiagram.ViewModel
                             break;
                         }
                     }
+            }
+        }
+
+        private void DeleteSelected()
+        {
+            foreach (var line in Lines.Reverse())
+            {
+                if (line.IsSelected)
+                    UndoRedo.AddExecute(new RemoveLine(Lines, line));
+
+            }
+
+            foreach (var box in Boxes.Reverse())
+            {
+                if (box.IsSelected)
+                    UndoRedo.AddExecute(new RemoveBox(Boxes, Lines, box));
+
             }
         }
     }

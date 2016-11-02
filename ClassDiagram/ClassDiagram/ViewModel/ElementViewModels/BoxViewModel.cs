@@ -12,6 +12,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         //private bool _isSelected;
         private Point _initialMousePostion;
         private bool _isMoving;
+        private bool _hasMoved;
         private Point _initialShapePostion;
 
         public ICommand OnMouseLeftBtnDownCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftBtnDown);
@@ -34,6 +35,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             e.MouseDevice.Target.CaptureMouse();
             _initialMousePostion = Mouse.GetPosition(visual);
             _initialShapePostion = new Point(Position.X, Position.Y);
+            e.Handled = true;
             //_canvas = VisualTreeHelper.GetParent(visual) as UIElement;
             _isMoving = true;
         }
@@ -46,12 +48,16 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             var pos = Mouse.GetPosition(visual);
             var currentPoint = new Point(pos.X - _initialMousePostion.X, pos.Y - _initialMousePostion.Y);
             Position = currentPoint;
+            _hasMoved = true;
         }
 
         private void OnMouseLeftUp(MouseButtonEventArgs e)
         {
             if (!_isMoving) return;
             //UndoRedoController.AddAndExecute(new MoveShapeCommand(this, _initialShapePostion, new Point(X, Y)));
+            if (!_hasMoved)
+                IsSelected = true;
+            _hasMoved = false;
             _isMoving = false;
             Mouse.Capture(null);
             e.Handled = true;

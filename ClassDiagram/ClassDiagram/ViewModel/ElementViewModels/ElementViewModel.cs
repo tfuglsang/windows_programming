@@ -11,9 +11,13 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             get { return _isSelected; }
             set
             {
-                _isSelected = value;
-                RaisePropertyChanged(nameof(IsSelected));
+                Set(ref _isSelected, value);
+                RaisePropertyChanged(nameof(SelectedColor));
+                RaisePropertyChanged(nameof(SelectedBorder));
             }
         }
+
+        public string SelectedColor => _isSelected ? "Red" : "Black";
+        public string SelectedBorder => _isSelected ? "Red" : "Transparent";
     }
 }

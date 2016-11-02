@@ -31,9 +31,9 @@ namespace ClassDiagram.ViewModel
         public ICommand DeleteCommand => new RelayCommand(DeleteSelected);
         public ICommand DeselectAllCommand => new RelayCommand(DeselectAll);
         public ICommand UndoCommand { get; }
-        public ICommand RedoCommand { get; 
-	    public ICommand SaveDiagram => new RelayCommand(SaveDiagramClicked);
-        public ICommand LoadDiagram => new RelayCommand(LoadDiagramClicked); }
+        public ICommand RedoCommand { get; }
+        public ICommand SaveDiagram => new RelayCommand(SaveDiagramClicked);    
+        public ICommand LoadDiagram => new RelayCommand(LoadDiagramClicked); 
 
 
         public ObservableCollection<BoxViewModel> Boxes { get; }

@@ -44,8 +44,21 @@
                         EventArgsConverterParameter="{Binding ElementName=diagramCanvas}"
                         PassEventArgsToCommand="True" />
                 </i:EventTrigger>
+
+                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                    <cmd:EventToCommand Command="{Binding CanvasPreviewOnMouseLeftBtnUpCommand}" PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+                
                 <i:EventTrigger EventName="MouseLeftButtonDown">
-                    <cmd:EventToCommand Command="{Binding DeselectAllCommand}"/>
+                    <cmd:EventToCommand Command="{Binding CanvasOnMouseLeftBtnDownCommand}" PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+
+                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
+                    <cmd:EventToCommand Command="{Binding CanvasOnMouseLeftBtnUpCommand}" PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+
+                <i:EventTrigger EventName="MouseMove">
+                    <cmd:EventToCommand Command="{Binding CanvasOnMouseMoveCommand}" CommandParameter="{Binding ElementName=diagramCanvas, Mode=OneWay}" ></cmd:EventToCommand>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             

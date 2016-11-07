@@ -10,6 +10,7 @@ using ClassDiagram.ViewModel.ElementViewModels;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using ClassDiagram.UndoRedo.AddandRemove;
+using ClassDiagram.View.UserControls;
 
 namespace ClassDiagram.ViewModel
 {
@@ -29,7 +30,10 @@ namespace ClassDiagram.ViewModel
     {
         public ICommand CanvasClickedCommand => new RelayCommand<Point>(CanvasClicked);
         public ICommand DeleteCommand => new RelayCommand(DeleteSelected);
-        public ICommand DeselectAllCommand => new RelayCommand(DeselectAll);
+        public ICommand CanvasOnMouseLeftBtnDownCommand
+            => new RelayCommand<MouseButtonEventArgs>(CanvasOnMouseLeftBtnDown);
+        public ICommand CanvasOnMouseMoveCommand => new RelayCommand<UIElement>(CanvasOnMouseMove);
+        public ICommand CanvasOnMouseLeftBtnUpCommand => new RelayCommand<MouseButtonEventArgs>(CanvasOnMouseLeftUp);
         public ICommand UndoCommand { get; }
         public ICommand RedoCommand { get; }
         public ICommand SaveDiagram => new RelayCommand(SaveDiagramClicked);    
@@ -44,6 +48,11 @@ namespace ClassDiagram.ViewModel
         private UndoRedo.URController UndoRedo {get;}
         private BoxViewModel _fromBox;
         private int _boxCounter = 1;
+        private Point? _initialMousePosition = null;
+        private Point _startingOffset;
+        private bool _hasMoved;
+        private bool _isMoving;
+        private BoxViewModel _clickedBox;
         #region propertiesForTheButtons
 
         private bool _isAddingClass;
@@ -209,6 +218,82 @@ namespace ClassDiagram.ViewModel
             // Serialize and save to .xml file                
             System.IO.Directory.CreateDirectory("C:\\temp");
             Serializer.Serializer.Instance.AsyncSerializeToFile(Diagram, "C:\\temp/serial.xml");
+        }
+
+        private void CanvasOnMouseLeftBtnDown(MouseButtonEventArgs e)
+        {
+            var visual = e.Source as UIElement;
+            if (visual == null) return;
+
+            if (e.MouseDevice.Target.IsMouseCaptured) return;
+
+            //e.MouseDevice.Target.CaptureMouse();
+
+            var point = Mouse.GetPosition(visual);
+            
+
+            _clickedBox = null;
+
+            foreach (var box in Boxes)
+            {
+                if (box.IsPointInBox(point))
+                    _clickedBox = box;
+                if (box.IsSelected)
+                    box.StartingOffset = point;
+            }
+
+            if (_clickedBox != null)
+            {
+                _initialMousePosition = point;
+                _startingOffset = new Point(point.X - _clickedBox.Position.X, point.Y - _clickedBox.Position.Y);
+
+                _isMoving = true;
+            }
+            else
+            {
+                DeselectAll();
+            }
+
+        }
+
+        private void CanvasOnMouseMove(UIElement visual)
+        {
+            if (!_isMoving || _clickedBox == null || _initialMousePosition == null) return;
+
+            var pos = Mouse.GetPosition(visual);
+
+            if (_clickedBox.IsSelected)
+            {
+                foreach (var box in Boxes)
+                {
+                    if (box.IsSelected && box.StartingOffset.HasValue)
+                        box.Position = new Point(pos.X - box.StartingOffset.Value.X , pos.Y - box.StartingOffset.Value.Y);
+                }
+            }
+            else
+            {
+                _clickedBox.Position = new Point(pos.X - _startingOffset.X, pos.Y - _startingOffset.Y);
+            }
+
+            _hasMoved = true;
+        }
+
+        private void CanvasOnMouseLeftUp(MouseButtonEventArgs e)
+        {
+            //if (!_isMoving) return;
+            
+            foreach (var box in Boxes)
+            {
+                if (box.StartingOffset.HasValue)
+                    box.StartingOffset = null;
+            }
+
+            if (_hasMoved)
+                e.Handled = true;
+
+            //Mouse.Capture(null);
+            _isMoving = false;
+            _hasMoved = false;
         }
 
         private void DeselectAll()

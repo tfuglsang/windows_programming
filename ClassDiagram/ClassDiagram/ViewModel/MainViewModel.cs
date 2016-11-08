@@ -302,7 +302,26 @@ namespace ClassDiagram.ViewModel
             }
             else
             {
-                _clickedBox.Position = new Point(pos.X - _startingOffset.X, pos.Y - _startingOffset.Y);
+                var currentPoint = new Point(pos.X - _startingOffset.X, pos.Y - _startingOffset.Y);
+
+                if (currentPoint.X > gridSize.Width - _clickedBox.Width)
+                {
+                    currentPoint.X = gridSize.Width - _clickedBox.Width;
+                }
+                if (currentPoint.Y > gridSize.Height - _clickedBox.Height)
+                {
+                    currentPoint.Y = gridSize.Height - _clickedBox.Height;
+                }
+                if (currentPoint.X < 0)
+                {
+                    currentPoint.X = 0;
+                }
+                if (currentPoint.Y < 0)
+                {
+                    currentPoint.Y = 0;
+                }
+
+                _clickedBox.Position = currentPoint;
             }
 
             _hasMoved = true;
@@ -322,7 +341,7 @@ namespace ClassDiagram.ViewModel
                 UndoRedo.Add(new MoveBox(_clickedBox, _startingPosition, _clickedBox.Position));
             }
 
-            List<BoxViewModel> movedBoxes = new List<BoxViewModel>();
+            var movedBoxes = new List<BoxViewModel>();
             foreach (var box in Boxes)
             {
                 if (box.StartingOffset.HasValue)

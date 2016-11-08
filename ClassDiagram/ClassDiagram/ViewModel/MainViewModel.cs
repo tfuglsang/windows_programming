@@ -42,6 +42,7 @@ namespace ClassDiagram.ViewModel
         public ICommand SaveDiagram => new RelayCommand(SaveDiagramClicked);    
         public ICommand LoadDiagram => new RelayCommand(LoadDiagramClicked); 
 
+        public ICommand SelectAllCommand => new RelayCommand(SelectAll);
 
         public ObservableCollection<BoxViewModel> Boxes { get; }
         public ObservableCollection<LineViewModel> Lines { get; }
@@ -366,7 +367,21 @@ namespace ClassDiagram.ViewModel
             _isMoving = false;
             _hasMoved = false;
         }
+        /// <summary>
+        /// This method selects all of the selected lines and boxes on the diagram
+        /// </summary>
+        private void SelectAll()
+        {
+            foreach (var line in Lines)
+            {
+                line.IsSelected = true;
+            }
 
+            foreach (var box in Boxes)
+            {
+                box.IsSelected = true;
+            }
+        }
         /// <summary>
         /// This method deselects all of the selected lines and boxes on the diagram
         /// </summary>
@@ -496,7 +511,7 @@ namespace ClassDiagram.ViewModel
 
             }
         }
-
+        
         /// <summary>
         /// This method changes focus to the specified UIElement.
         /// </summary>

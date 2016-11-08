@@ -31,6 +31,15 @@
     <Window.InputBindings>
         <MouseBinding Command="{Binding WindowOnMouseLeftBtnDown}" MouseAction="LeftClick" CommandParameter="{Binding ElementName=diagramCanvas, Mode=OneWay}"></MouseBinding>
         <KeyBinding Command="{Binding DeleteCommand}" Key="Back" />
+        <KeyBinding Command="{Binding SelectAllCommand}" Key="A" Modifiers="Control"/>
+        <!--Save / Load keys-->
+        <KeyBinding Command="{Binding SaveDiagram}" Key="S" Modifiers="Control"/>
+        <KeyBinding Command="{Binding LoadDiagram}" Key="O" Modifiers="Control"/>
+        <!--Undo / Redo-->
+        <KeyBinding Command="{Binding UndoCommand}" Key="Z" Modifiers="Control"/>
+        <KeyBinding Command="{Binding RedoCommand}" Key="Z" Modifiers="Control+Shift"/>
+        <KeyBinding Command="{Binding RedoCommand}" Key="Y" Modifiers="Control"/>
+
     </Window.InputBindings>
     <DockPanel>
         <UserControls:ToolbarUserControl DockPanel.Dock="Top" />

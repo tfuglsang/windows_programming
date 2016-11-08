@@ -76,7 +76,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\AttachedArdorner.cs" />
-    <Compile Include="Helpers\MouseButtonEventArgsToPointConverter.cs" />
+    <Compile Include="Helpers\CustomClickArgs.cs" />
+    <Compile Include="Helpers\MouseButtonEventArgsToCustomClickConverter.cs" />
     <Compile Include="Helpers\MyCustomAdorner.cs" />
     <Compile Include="Serializer\Serializer.cs" />
     <Compile Include="UndoRedo\AddandRemove\AddLine.cs" />

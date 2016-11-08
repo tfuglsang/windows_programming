@@ -23,7 +23,7 @@
                 <ResourceDictionary Source="Resources/StyleDictionary.xaml" />
                 <ResourceDictionary Source="Resources/DataTemplateDictionary.xaml" />
                 <ResourceDictionary>
-                    <helpers:MouseButtonEventArgsToPointConverter x:Key="MouseButtonEventArgsToPointConverter" />
+                    <helpers:MouseButtonEventArgsToCustomClickConverter x:Key="MouseButtonEventArgsToPointConverter" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

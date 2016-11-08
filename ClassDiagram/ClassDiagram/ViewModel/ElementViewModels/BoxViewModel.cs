@@ -40,27 +40,17 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         private void OnMouseLeftBtnDown(MouseButtonEventArgs e)
         {
-            //var visual = e.Source as UIElement;
-            //if (visual == null) return;
-            //if (!IsSelected)
-            //{
-            //    IsSelected = true;
-            //    visual.Focus();
-            //    e.Handled = true;
-            //    return;
-            //}
-            //if (!IsSelected && e.MouseDevice.Target.IsMouseCaptured) return;
-            //if (e.MouseDevice.Target.IsMouseCaptured) return;
-            //e.MouseDevice.Target.CaptureMouse();
-            // _initialMousePostion = Mouse.GetPosition(visual);
-            //e.Handled = true;
-            //_canvas = VisualTreeHelper.GetParent(visual) as UIElement;
             _wasClicked = true;
         }
 
-
+        /// <summary>
+        /// THIS METHOD IS UNUSED
+        /// </summary>
+        /// <param name="visual"></param>
         private void OnMouseMove(UIElement visual)
         {
+            // THIS METHOD IS UNUSED
+
             if (!_isMoving) return;
 
             var pos = Mouse.GetPosition(visual);
@@ -96,14 +86,6 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                 IsSelected = true;
 
             _wasClicked = false;
-            //if (!_isMoving) return;
-            //UndoRedoController.AddAndExecute(new MoveShapeCommand(this, _initialShapePostion, new Point(X, Y)));
-            //if (!_hasMoved)
-            //    IsSelected = true;
-            //_hasMoved = false;
-            //_isMoving = false;
-            //Mouse.Capture(null);
-            //e.Handled = true;
         }
 
         private readonly IBox _box;

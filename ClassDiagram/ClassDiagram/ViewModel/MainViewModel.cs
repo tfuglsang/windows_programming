@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using ClassDiagram.Helpers;
 using ClassDiagram.Model;
 using ClassDiagram.ViewModel.ElementViewModels;
 using GalaSoft.MvvmLight;
@@ -28,7 +29,7 @@ namespace ClassDiagram.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        public ICommand CanvasClickedCommand => new RelayCommand<Point>(CanvasClicked);
+        public ICommand CanvasClickedCommand => new RelayCommand<CustomClickArgs>(CanvasClicked);
         public ICommand DeleteCommand => new RelayCommand(DeleteSelected);
         public ICommand CanvasOnMouseLeftBtnDownCommand
             => new RelayCommand<MouseButtonEventArgs>(CanvasOnMouseLeftBtnDown);
@@ -52,6 +53,7 @@ namespace ClassDiagram.ViewModel
         private Point _startingOffset;
         private bool _hasMoved;
         private bool _isMoving;
+        private bool _hasAddedBox;
         private BoxViewModel _clickedBox;
         #region propertiesForTheButtons
 
@@ -309,8 +311,10 @@ namespace ClassDiagram.ViewModel
             }
         }
 
-        private void CanvasClicked(Point point)
+        private void CanvasClicked(CustomClickArgs e)
         {
+            var point = e.ClickedPoint;
+
             Debug.Print($"{point.X},{point.Y}"); // debug information
             
             if (IsAddingClass || IsAddingAbstractClass || IsAddingInterface)
@@ -403,6 +407,7 @@ namespace ClassDiagram.ViewModel
                             break;
                         }
                     }
+                e.EventArgs.Handled = true;
             }
         }
 

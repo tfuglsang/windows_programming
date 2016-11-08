@@ -35,6 +35,7 @@ namespace ClassDiagram.ViewModel
             => new RelayCommand<MouseButtonEventArgs>(CanvasOnMouseLeftBtnDown);
         public ICommand CanvasOnMouseMoveCommand => new RelayCommand<UIElement>(CanvasOnMouseMove);
         public ICommand CanvasOnMouseLeftBtnUpCommand => new RelayCommand<MouseButtonEventArgs>(CanvasOnMouseLeftUp);
+        public ICommand WindowOnMouseLeftBtnDown => new RelayCommand<UIElement>(MoveFocusTo);
         public ICommand UndoCommand { get; }
         public ICommand RedoCommand { get; }
         public ICommand SaveDiagram => new RelayCommand(SaveDiagramClicked);    
@@ -448,6 +449,15 @@ namespace ClassDiagram.ViewModel
                     UndoRedo.AddExecute(new RemoveBox(Boxes, Lines, box));
 
             }
+        }
+
+        /// <summary>
+        /// This method changes focus to the specified UIElement.
+        /// </summary>
+        /// <param name="visualElement">This parameter represents the UIElement which will recieve focus, for this to work the UIElement has to be focusable</param>
+        private void MoveFocusTo(UIElement visualElement)
+        {
+            visualElement.Focus();
         }
     }
 }

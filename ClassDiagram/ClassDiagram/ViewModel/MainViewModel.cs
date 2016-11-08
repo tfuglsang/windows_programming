@@ -12,6 +12,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using ClassDiagram.UndoRedo.AddandRemove;
 using ClassDiagram.View.UserControls;
 using ClassDiagram.Model;
+using System;
 
 namespace ClassDiagram.ViewModel
 {
@@ -41,7 +42,9 @@ namespace ClassDiagram.ViewModel
         public ICommand SaveDiagram => new RelayCommand(SaveDiagramClicked);    
         public ICommand LoadDiagram => new RelayCommand(LoadDiagramClicked); 
 
-
+        public Coordinates statusBarCoordinates { get; set; }
+        public String statusBarMessages { get; set; }
+        
         public ObservableCollection<BoxViewModel> Boxes { get; }
         public ObservableCollection<LineViewModel> Lines { get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
@@ -141,6 +144,9 @@ namespace ClassDiagram.ViewModel
 
             Elements.Add(new CollectionContainer {Collection = Boxes});
             Elements.Add(new CollectionContainer {Collection = Lines});
+
+            statusBarMessages = "This text is set in the constructor";
+            statusBarCoordinates = new Coordinates(175, 20);
         }
 
         private void LoadDiagramClicked()

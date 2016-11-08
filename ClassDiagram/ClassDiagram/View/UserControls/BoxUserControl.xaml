@@ -29,9 +29,9 @@
             <cmd:EventToCommand Command="{Binding OnMouseLeftBtnUpCommand}" PassEventArgsToCommand="True" />
         </i:EventTrigger>
 
-        <i:EventTrigger EventName="MouseMove">
+        <!--<i:EventTrigger EventName="MouseMove">
             <cmd:EventToCommand Command="{Binding OnMouseMoveCommand}" CommandParameter="{Binding ElementName=diagramCanvas, Mode=OneWay}" ></cmd:EventToCommand>
-        </i:EventTrigger>
+        </i:EventTrigger>-->
     </i:Interaction.Triggers>
 
     <DockPanel VerticalAlignment="Stretch" Height="Auto">

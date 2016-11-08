@@ -4,7 +4,7 @@ using GalaSoft.MvvmLight.Command;
 
 namespace ClassDiagram.Helpers
 {
-    internal class MouseButtonEventArgsToPointConverter : IEventArgsConverter
+    internal class MouseButtonEventArgsToCustomClickConverter : IEventArgsConverter
     {
         public object Convert(object value, object parameter)
         {
@@ -12,7 +12,7 @@ namespace ClassDiagram.Helpers
             var element = (FrameworkElement) parameter;
 
             var point = args.GetPosition(element);
-            return point;
+            return new CustomClickArgs(point, args);
         }
     }
 }

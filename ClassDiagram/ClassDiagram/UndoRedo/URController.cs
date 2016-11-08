@@ -57,5 +57,12 @@ namespace ClassDiagram.UndoRedo
             UpdateCommandStatus();
         }
 
+        public void Add(IURCommand instruct)
+        {
+            _uStack.Push(instruct);
+            _rStack.Clear();
+            UpdateCommandStatus();
+        }
+
     }
 }

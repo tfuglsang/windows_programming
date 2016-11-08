@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -13,7 +14,41 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         private Point _initialMousePostion;
         private bool _isMoving;
         private bool _hasMoved;
-        private Point _initialShapePostion;
+        private bool _wasClicked;
+        private Point? _startingOffset = null;
+        private Point? _startingPosition = null;
+
+        public Point? StartingOffset
+        {
+            get { return _startingOffset; }
+            set
+            {
+                if (value == null)
+                {
+                    _startingOffset = null;
+                    return;
+                }
+
+                var point = (Point) value;
+                _startingOffset = new Point(point.X - Position.X, point.Y - Position.Y);
+                Debug.Print($"{_startingOffset.Value.X},{_startingOffset.Value.Y}");
+            }
+        }
+
+        public Point? StartingPosition
+        {
+            get { return _startingOffset; }
+            set
+            {
+                if (value == null)
+                {
+                    _startingOffset = null;
+                    return;
+                }
+
+                _startingPosition = value.Value;
+            }
+        }
 
         public ICommand OnMouseLeftBtnDownCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftBtnDown);
         public ICommand OnMouseMoveCommand => new RelayCommand<UIElement>(OnMouseMove);
@@ -21,28 +56,17 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         private void OnMouseLeftBtnDown(MouseButtonEventArgs e)
         {
-            var visual = e.Source as UIElement;
-            if (visual == null) return;
-            //if (!IsSelected)
-            //{
-            //    IsSelected = true;
-            //    visual.Focus();
-            //    e.Handled = true;
-            //    return;
-            //}
-            //if (!IsSelected && e.MouseDevice.Target.IsMouseCaptured) return;
-            if (e.MouseDevice.Target.IsMouseCaptured) return;
-            e.MouseDevice.Target.CaptureMouse();
-            _initialMousePostion = Mouse.GetPosition(visual);
-            _initialShapePostion = new Point(Position.X, Position.Y);
-            e.Handled = true;
-            //_canvas = VisualTreeHelper.GetParent(visual) as UIElement;
-            _isMoving = true;
+            _wasClicked = true;
         }
 
-
+        /// <summary>
+        /// THIS METHOD IS UNUSED
+        /// </summary>
+        /// <param name="visual"></param>
         private void OnMouseMove(UIElement visual)
         {
+            // THIS METHOD IS UNUSED
+
             if (!_isMoving) return;
 
             var pos = Mouse.GetPosition(visual);
@@ -74,14 +98,10 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         private void OnMouseLeftUp(MouseButtonEventArgs e)
         {
-            if (!_isMoving) return;
-            //UndoRedoController.AddAndExecute(new MoveShapeCommand(this, _initialShapePostion, new Point(X, Y)));
-            if (!_hasMoved)
+            if (_wasClicked)
                 IsSelected = true;
-            _hasMoved = false;
-            _isMoving = false;
-            Mouse.Capture(null);
-            e.Handled = true;
+
+            _wasClicked = false;
         }
 
         private readonly IBox _box;

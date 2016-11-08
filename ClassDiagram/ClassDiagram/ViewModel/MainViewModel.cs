@@ -5,11 +5,13 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
+using ClassDiagram.Helpers;
 using ClassDiagram.Model;
 using ClassDiagram.ViewModel.ElementViewModels;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using ClassDiagram.UndoRedo.AddandRemove;
+using ClassDiagram.View.UserControls;
 
 namespace ClassDiagram.ViewModel
 {
@@ -27,9 +29,12 @@ namespace ClassDiagram.ViewModel
     /// </summary>
     public class MainViewModel : ViewModelBase
     {
-        public ICommand CanvasClickedCommand => new RelayCommand<Point>(CanvasClicked);
+        public ICommand CanvasClickedCommand => new RelayCommand<CustomClickArgs>(CanvasClicked);
         public ICommand DeleteCommand => new RelayCommand(DeleteSelected);
-        public ICommand DeselectAllCommand => new RelayCommand(DeselectAll);
+        public ICommand CanvasOnMouseLeftBtnDownCommand
+            => new RelayCommand<MouseButtonEventArgs>(CanvasOnMouseLeftBtnDown);
+        public ICommand CanvasOnMouseMoveCommand => new RelayCommand<UIElement>(CanvasOnMouseMove);
+        public ICommand CanvasOnMouseLeftBtnUpCommand => new RelayCommand<MouseButtonEventArgs>(CanvasOnMouseLeftUp);
         public ICommand UndoCommand { get; }
         public ICommand RedoCommand { get; }
         public ICommand SaveDiagram => new RelayCommand(SaveDiagramClicked);    
@@ -44,6 +49,12 @@ namespace ClassDiagram.ViewModel
         private UndoRedo.URController UndoRedo {get;}
         private BoxViewModel _fromBox;
         private int _boxCounter = 1;
+        private Point? _initialMousePosition = null;
+        private Point _startingOffset;
+        private Point _startingPosition;
+        private bool _hasMoved;
+        private bool _isMoving;
+        private BoxViewModel _clickedBox;
         #region propertiesForTheButtons
 
         private bool _isAddingClass;
@@ -211,6 +222,107 @@ namespace ClassDiagram.ViewModel
             Serializer.Serializer.Instance.AsyncSerializeToFile(Diagram, "C:\\temp/serial.xml");
         }
 
+        private void CanvasOnMouseLeftBtnDown(MouseButtonEventArgs e)
+        {
+            var visual = e.Source as UIElement;
+            if (visual == null) return;
+            
+            var point = Mouse.GetPosition(visual);
+            
+            _clickedBox = null;
+
+            foreach (var box in Boxes)
+            {
+                if (box.IsPointInBox(point))
+                    _clickedBox = box;
+                if (box.IsSelected)
+                {
+                    box.StartingOffset = point;
+                    box.StartingPosition = box.Position;
+                }
+            }
+
+            if (_clickedBox != null)
+            {
+                _initialMousePosition = point;
+                _startingOffset = new Point(point.X - _clickedBox.Position.X, point.Y - _clickedBox.Position.Y);
+                _startingPosition = _clickedBox.Position;
+                _isMoving = true;
+            }
+            else
+            {
+                DeselectAll();
+            }
+
+        }
+        /// <summary>
+        /// This method is responsible for checking the boxes are currently moving on the canvas
+        /// If the boxes are moving, this method is also responsible for moving all of the boxes.
+        /// </summary>
+        /// <param name="visual">The UI elemnet which the mouse is moving in, this shuold always be the canvas</param>
+        private void CanvasOnMouseMove(UIElement visual)
+        {
+            if (!_isMoving || _clickedBox == null || _initialMousePosition == null) return;
+
+            var pos = Mouse.GetPosition(visual);
+
+            if (_clickedBox.IsSelected)
+            {
+                foreach (var box in Boxes)
+                {
+                    if (box.IsSelected && box.StartingOffset.HasValue)
+                        box.Position = new Point(pos.X - box.StartingOffset.Value.X , pos.Y - box.StartingOffset.Value.Y);
+                }
+            }
+            else
+            {
+                _clickedBox.Position = new Point(pos.X - _startingOffset.X, pos.Y - _startingOffset.Y);
+            }
+
+            _hasMoved = true;
+        }
+
+        /// <summary>
+        /// This method is used to reset the starting offset on boxes if the boxes has been moved.
+        /// Also it is used to make sure that a box which has just been moved is not nessesarily selected afterwords
+        /// </summary>
+        /// <param name="e">MouseButtonEventArgs specifying the even which happend</param>
+        private void CanvasOnMouseLeftUp(MouseButtonEventArgs e)
+        {
+            if (_clickedBox != null && !_clickedBox.IsSelected)
+            {
+                UndoRedo.Add(new MoveBox(_clickedBox, _startingPosition, _clickedBox.Position));
+            }
+
+            List<BoxViewModel> movedBoxes = new List<BoxViewModel>();
+            foreach (var box in Boxes)
+            {
+                if (box.StartingOffset.HasValue)
+                {
+                    if(_hasMoved)
+                        movedBoxes.Add(box);
+                    box.StartingOffset = null;
+                    box.StartingPosition = null;
+                }
+            }
+
+
+            if (_hasMoved)
+            {
+                if (_clickedBox != null && _clickedBox.IsSelected)
+                {
+                    UndoRedo.Add(new MoveMultipleBoxes(movedBoxes, _startingPosition.X - _clickedBox.Position.X, _startingPosition.Y - _clickedBox.Position.Y ));
+                }
+
+                e.Handled = true;
+            }
+            _isMoving = false;
+            _hasMoved = false;
+        }
+
+        /// <summary>
+        /// This method deselects all of the selected lines and boxes on the diagram
+        /// </summary>
         private void DeselectAll()
         {
             foreach (var line in Lines)
@@ -224,8 +336,10 @@ namespace ClassDiagram.ViewModel
             }
         }
 
-        private void CanvasClicked(Point point)
+        private void CanvasClicked(CustomClickArgs e)
         {
+            var point = e.ClickedPoint;
+
             Debug.Print($"{point.X},{point.Y}"); // debug information
             
             if (IsAddingClass || IsAddingAbstractClass || IsAddingInterface)
@@ -253,7 +367,6 @@ namespace ClassDiagram.ViewModel
                     IsAddingInterface = false;
                 }
 
-                //Boxes.Add(new BoxViewModel(newBox));
                 UndoRedo.AddExecute(new AddBox(Boxes, new BoxViewModel(newBox)));
             }
             else if (IsAddingAssosiation || IsAddingDependency || IsAddingAggregation || IsAddingComposition ||
@@ -312,12 +425,12 @@ namespace ClassDiagram.ViewModel
                             {
                                 return; // TODO Let the user know that the action is not allowed instead of just ignoring the action!!
                             }
-                            //Lines.Add(lineViewModel);
                             UndoRedo.AddExecute(new AddLine(Lines, lineViewModel));
                             _fromBox = null;
                             break;
                         }
                     }
+                e.EventArgs.Handled = true;
             }
         }
 

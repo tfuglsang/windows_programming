@@ -30,7 +30,10 @@
     </Window.Resources>
     <Window.InputBindings>
         <MouseBinding Command="{Binding WindowOnMouseLeftBtnDown}" MouseAction="LeftClick" CommandParameter="{Binding ElementName=diagramCanvas, Mode=OneWay}"></MouseBinding>
-        <KeyBinding Command="{Binding DeleteCommand}" Key="Back" />
+        <!--Delete the selected items-->
+        <KeyBinding Command="{Binding DeleteCommand}" Key="Back"/>
+        <KeyBinding Command="{Binding DeleteCommand}" Key="Delete"/>
+        <!--Select all-->
         <KeyBinding Command="{Binding SelectAllCommand}" Key="A" Modifiers="Control"/>
         <!--Save / Load keys-->
         <KeyBinding Command="{Binding SaveDiagram}" Key="S" Modifiers="Control"/>

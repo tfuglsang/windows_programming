@@ -53,7 +53,6 @@ namespace ClassDiagram.ViewModel
         private Point _startingOffset;
         private bool _hasMoved;
         private bool _isMoving;
-        private bool _hasAddedBox;
         private BoxViewModel _clickedBox;
         #region propertiesForTheButtons
 
@@ -226,14 +225,9 @@ namespace ClassDiagram.ViewModel
         {
             var visual = e.Source as UIElement;
             if (visual == null) return;
-
-            if (e.MouseDevice.Target.IsMouseCaptured) return;
-
-            //e.MouseDevice.Target.CaptureMouse();
-
+            
             var point = Mouse.GetPosition(visual);
             
-
             _clickedBox = null;
 
             foreach (var box in Boxes)
@@ -257,7 +251,11 @@ namespace ClassDiagram.ViewModel
             }
 
         }
-
+        /// <summary>
+        /// This method is responsible for checking the boxes are currently moving on the canvas
+        /// If the boxes are moving, this method is also responsible for moving all of the boxes.
+        /// </summary>
+        /// <param name="visual">The UI elemnet which the mouse is moving in, this shuold always be the canvas</param>
         private void CanvasOnMouseMove(UIElement visual)
         {
             if (!_isMoving || _clickedBox == null || _initialMousePosition == null) return;
@@ -280,10 +278,13 @@ namespace ClassDiagram.ViewModel
             _hasMoved = true;
         }
 
+        /// <summary>
+        /// This method is used to reset the starting offset on boxes if the boxes has been moved.
+        /// Also it is used to make sure that a box which has just been moved is not nessesarily selected afterwords
+        /// </summary>
+        /// <param name="e">MouseButtonEventArgs specifying the even which happend</param>
         private void CanvasOnMouseLeftUp(MouseButtonEventArgs e)
         {
-            //if (!_isMoving) return;
-            
             foreach (var box in Boxes)
             {
                 if (box.StartingOffset.HasValue)
@@ -293,11 +294,13 @@ namespace ClassDiagram.ViewModel
             if (_hasMoved)
                 e.Handled = true;
 
-            //Mouse.Capture(null);
             _isMoving = false;
             _hasMoved = false;
         }
 
+        /// <summary>
+        /// This method deselects all of the selected lines and boxes on the diagram
+        /// </summary>
         private void DeselectAll()
         {
             foreach (var line in Lines)
@@ -342,7 +345,6 @@ namespace ClassDiagram.ViewModel
                     IsAddingInterface = false;
                 }
 
-                //Boxes.Add(new BoxViewModel(newBox));
                 UndoRedo.AddExecute(new AddBox(Boxes, new BoxViewModel(newBox)));
             }
             else if (IsAddingAssosiation || IsAddingDependency || IsAddingAggregation || IsAddingComposition ||
@@ -401,7 +403,6 @@ namespace ClassDiagram.ViewModel
                             {
                                 return; // TODO Let the user know that the action is not allowed instead of just ignoring the action!!
                             }
-                            //Lines.Add(lineViewModel);
                             UndoRedo.AddExecute(new AddLine(Lines, lineViewModel));
                             _fromBox = null;
                             break;

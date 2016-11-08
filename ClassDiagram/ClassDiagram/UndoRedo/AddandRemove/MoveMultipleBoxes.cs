@@ -36,11 +36,11 @@ namespace ClassDiagram.UndoRedo.AddandRemove
         public void UnExecute()
         {
             Point coordinates = new Point(0, 0);
-            for (int i = 0; i < boxes.Count; i++)
+            foreach (BoxViewModel box in boxes)
             {
-                coordinates.X = xOffset;
-                coordinates.Y = yOffset;
-                boxes[i].Position = coordinates;
+                coordinates.X = box.Position.X + xOffset;
+                coordinates.Y = box.Position.Y + yOffset;
+                box.Position = coordinates;
             }
         }
 

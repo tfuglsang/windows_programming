@@ -16,6 +16,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         private bool _hasMoved;
         private bool _wasClicked;
         private Point? _startingOffset = null;
+        private Point? _startingPosition = null;
 
         public Point? StartingOffset
         {
@@ -31,6 +32,21 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                 var point = (Point) value;
                 _startingOffset = new Point(point.X - Position.X, point.Y - Position.Y);
                 Debug.Print($"{_startingOffset.Value.X},{_startingOffset.Value.Y}");
+            }
+        }
+
+        public Point? StartingPosition
+        {
+            get { return _startingOffset; }
+            set
+            {
+                if (value == null)
+                {
+                    _startingOffset = null;
+                    return;
+                }
+
+                _startingPosition = value.Value;
             }
         }
 

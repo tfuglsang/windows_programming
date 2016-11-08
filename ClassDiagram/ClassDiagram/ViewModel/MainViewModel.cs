@@ -51,6 +51,7 @@ namespace ClassDiagram.ViewModel
         private int _boxCounter = 1;
         private Point? _initialMousePosition = null;
         private Point _startingOffset;
+        private Point _startingPosition;
         private bool _hasMoved;
         private bool _isMoving;
         private BoxViewModel _clickedBox;
@@ -235,14 +236,17 @@ namespace ClassDiagram.ViewModel
                 if (box.IsPointInBox(point))
                     _clickedBox = box;
                 if (box.IsSelected)
+                {
                     box.StartingOffset = point;
+                    box.StartingPosition = box.Position;
+                }
             }
 
             if (_clickedBox != null)
             {
                 _initialMousePosition = point;
                 _startingOffset = new Point(point.X - _clickedBox.Position.X, point.Y - _clickedBox.Position.Y);
-
+                _startingPosition = _clickedBox.Position;
                 _isMoving = true;
             }
             else
@@ -285,15 +289,33 @@ namespace ClassDiagram.ViewModel
         /// <param name="e">MouseButtonEventArgs specifying the even which happend</param>
         private void CanvasOnMouseLeftUp(MouseButtonEventArgs e)
         {
+            if (_clickedBox != null && !_clickedBox.IsSelected)
+            {
+                UndoRedo.Add(new MoveBox(_clickedBox, _startingPosition, _clickedBox.Position));
+            }
+
+            List<BoxViewModel> movedBoxes = new List<BoxViewModel>();
             foreach (var box in Boxes)
             {
                 if (box.StartingOffset.HasValue)
+                {
+                    if(_hasMoved)
+                        movedBoxes.Add(box);
                     box.StartingOffset = null;
+                    box.StartingPosition = null;
+                }
             }
 
-            if (_hasMoved)
-                e.Handled = true;
 
+            if (_hasMoved)
+            {
+                if (_clickedBox != null && _clickedBox.IsSelected)
+                {
+                    UndoRedo.Add(new MoveMultipleBoxes(movedBoxes, _startingPosition.X - _clickedBox.Position.X, _startingPosition.Y - _clickedBox.Position.Y ));
+                }
+
+                e.Handled = true;
+            }
             _isMoving = false;
             _hasMoved = false;
         }

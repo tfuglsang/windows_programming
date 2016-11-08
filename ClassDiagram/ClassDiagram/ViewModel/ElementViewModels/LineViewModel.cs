@@ -18,7 +18,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         private void SelectLine(MouseButtonEventArgs e)
         {
-            IsSelected = true;
+            IsSelected = !IsSelected;
             e.Handled = true;
         }
 

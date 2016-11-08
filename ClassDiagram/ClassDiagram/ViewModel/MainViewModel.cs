@@ -389,7 +389,6 @@ namespace ClassDiagram.ViewModel
                         if (boxViewModel.IsPointInBox(point))
                         {
                             var lineViewModel = new LineViewModel(new Line(), _fromBox, boxViewModel);
-                            boxViewModel.IsSelected = false;
                             if (IsAddingAssosiation)
                             {
                                 lineViewModel.Type = ELine.Association;

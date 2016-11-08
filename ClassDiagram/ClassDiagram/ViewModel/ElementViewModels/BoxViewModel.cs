@@ -99,7 +99,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         private void OnMouseLeftUp(MouseButtonEventArgs e)
         {
             if (_wasClicked)
-                IsSelected = true;
+                IsSelected = !IsSelected;
 
             _wasClicked = false;
         }

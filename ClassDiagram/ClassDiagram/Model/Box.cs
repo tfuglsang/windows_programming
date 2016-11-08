@@ -25,9 +25,9 @@ namespace ClassDiagram.Model
         public RelayCommand AddMethodTextBoxCommand { get; set; }
         public string Label { get; set; }          // The name of the box shown in the View
         [XmlIgnoreAttribute]
-        public ObservableCollection<String> FieldsList { get; set; }          // The name of the box shown in the View
+        public ObservableCollection<Fields> FieldsList { get; set; }          // The name of the box shown in the View
         [XmlIgnoreAttribute]
-        public ObservableCollection<String> MethodList { get; set; }          // The name of the box shown in the View
+        public ObservableCollection<Methods> MethodList { get; set; }          // The name of the box shown in the View
         public double Height { get; set; }
         public double Width { get; set; }
         public int Number { get; set; }

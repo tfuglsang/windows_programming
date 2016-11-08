@@ -93,13 +93,13 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         public void AddFieldsTextbox()
         {
-            _box.FieldsList.Add("");
+            _box.FieldsList.Add(new Fields(""));
             Height += 20;
         }
 
         public void AddMethodTextbox()
         {
-            _box.MethodList.Add("");
+            _box.MethodList.Add(new Methods(""));
             Height += 20;
         }
         
@@ -168,7 +168,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
-        public ObservableCollection<string> FieldsList
+        public ObservableCollection<Fields> FieldsList
         {
             get { return _box.FieldsList; }
             set
@@ -178,7 +178,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
-        public ObservableCollection<string> MethodList
+        public ObservableCollection<Methods> MethodList
         {
             get { return _box.MethodList; }
             set
@@ -194,16 +194,16 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         {
             _box = box;
 
-            _box.FieldsList = new ObservableCollection<string>();
-            _box.MethodList = new ObservableCollection<string>();
+            _box.FieldsList = new ObservableCollection<Fields>();
+            _box.MethodList = new ObservableCollection<Methods>();
 
             // For test purposes
             _box.Height = 100; 
             _box.Width = 150;
-            _box.FieldsList.Add("Insert Fields1");
+            _box.FieldsList.Add(new Fields("Insert Fields1"));
             //_box.FieldsList.Add("Insert Fields2");
             //_box.FieldsList.Add("Insert Fields3");
-            _box.MethodList.Add("Insert Method1");
+            _box.MethodList.Add(new Methods("Insert Method1"));
             //_box.MethodList.Add("Insert Method2");
             //_box.MethodList.Add("Insert Method3");
 

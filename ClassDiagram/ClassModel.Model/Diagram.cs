@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ClassModel.Model
+namespace ClassDiagram.Model
 {
     /// <summary>
     /// Class for storing information about the lines and boxes drawn in the canvas

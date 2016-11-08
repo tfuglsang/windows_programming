@@ -1,4 +1,4 @@
-﻿namespace ClassModel.Model
+﻿namespace ClassDiagram.Model
 {
     public enum EBox
     {

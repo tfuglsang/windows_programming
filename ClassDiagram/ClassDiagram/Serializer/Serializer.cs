@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
-using ClassModel.Model;
+using ClassDiagram.Model;
 
 namespace ClassDiagram.Serializer
 {

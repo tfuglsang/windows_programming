@@ -11,7 +11,7 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using ClassDiagram.UndoRedo.AddandRemove;
 using ClassDiagram.View.UserControls;
-using ClassModel.Model;
+using ClassDiagram.Model;
 
 namespace ClassDiagram.ViewModel
 {

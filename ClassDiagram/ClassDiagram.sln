@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassDiagram", "ClassDiagram\ClassDiagram.csproj", "{BC95B1A7-E70F-4953-9542-86039FE4FF7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassModel.Model", "ClassModel.Model\ClassModel.Model.csproj", "{4E105963-D3AA-46D4-964F-5EE12895FE9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClassDiagram.Model", "ClassModel.Model\ClassDiagram.Model.csproj", "{4E105963-D3AA-46D4-964F-5EE12895FE9C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

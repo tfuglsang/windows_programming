@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Xml.Serialization;
 
-namespace ClassModel.Model
+namespace ClassDiagram.Model
 {
     public class Box: IBox
     {

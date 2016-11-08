@@ -188,9 +188,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ClassModel.Model\ClassModel.Model.csproj">
+    <ProjectReference Include="..\ClassModel.Model\ClassDiagram.Model.csproj">
       <Project>{4e105963-d3aa-46d4-964f-5ee12895fe9c}</Project>
-      <Name>ClassModel.Model</Name>
+      <Name>ClassDiagram.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

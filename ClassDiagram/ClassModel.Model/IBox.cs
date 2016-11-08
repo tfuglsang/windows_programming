@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace ClassModel.Model
+namespace ClassDiagram.Model
 {
     public interface IBox
     {

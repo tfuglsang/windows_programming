@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ClassModel.Model
+namespace ClassDiagram.Model
 {
     public class Methods
     {

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using ClassDiagram.Helpers;
 using ClassDiagram.ViewModel.ElementViewModels;
@@ -266,14 +267,38 @@ namespace ClassDiagram.ViewModel
             if (!_isMoving || _clickedBox == null || _initialMousePosition == null) return;
 
             var pos = Mouse.GetPosition(visual);
+            var gridSize = visual.RenderSize;
 
             if (_clickedBox.IsSelected)
             {
+                var boxesToUpdate = new List<BoxViewModel>();
+                var updateBoxes = true;
                 foreach (var box in Boxes)
                 {
-                    if (box.IsSelected && box.StartingOffset.HasValue)
-                        box.Position = new Point(pos.X - box.StartingOffset.Value.X , pos.Y - box.StartingOffset.Value.Y);
+                    if (!box.IsSelected || !box.StartingOffset.HasValue) continue;
+
+                    var newPosition = new Point(pos.X - box.StartingOffset.Value.X,
+                        pos.Y - box.StartingOffset.Value.Y);
+                    if (newPosition.X < 0 || newPosition.X > gridSize.Width - box.Width || newPosition.Y < 0 ||
+                        newPosition.Y > gridSize.Height - box.Height)
+                    {
+                        updateBoxes = false;
+                        break;
+                    }
+                    else
+                    {
+                        boxesToUpdate.Add(box);
+                    }
                 }
+
+                if (updateBoxes)
+                {
+                    foreach (var box in boxesToUpdate)
+                    {
+                        box.Position = new Point(pos.X - box.StartingOffset.Value.X, pos.Y - box.StartingOffset.Value.Y);
+                    }
+                }
+                
             }
             else
             {
@@ -282,6 +307,8 @@ namespace ClassDiagram.ViewModel
 
             _hasMoved = true;
         }
+
+        
 
         /// <summary>
         /// This method is used to reset the starting offset on boxes if the boxes has been moved.
@@ -367,7 +394,7 @@ namespace ClassDiagram.ViewModel
                     newBox.Type = EBox.Interface;
                     IsAddingInterface = false;
                 }
-
+                e.EventArgs.Handled = true;
                 UndoRedo.AddExecute(new AddBox(Boxes, new BoxViewModel(newBox)));
             }
             else if (IsAddingAssosiation || IsAddingDependency || IsAddingAggregation || IsAddingComposition ||

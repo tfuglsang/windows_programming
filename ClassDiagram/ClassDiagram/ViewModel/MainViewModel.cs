@@ -6,12 +6,12 @@ using System.Windows;
 using System.Windows.Data;
 using System.Windows.Input;
 using ClassDiagram.Helpers;
-using ClassDiagram.Model;
 using ClassDiagram.ViewModel.ElementViewModels;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using ClassDiagram.UndoRedo.AddandRemove;
 using ClassDiagram.View.UserControls;
+using ClassModel.Model;
 
 namespace ClassDiagram.ViewModel
 {

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ClassDiagram.Model;
 using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
+using ClassModel.Model;
 
 namespace ClassDiagram.Serializer
 {

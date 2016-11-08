@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
+﻿using System.Collections.Generic;
 
-namespace ClassDiagram.Model
+namespace ClassModel.Model
 {
     /// <summary>
     /// Class for storing information about the lines and boxes drawn in the canvas

@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
-using ClassDiagram.Model;
+using ClassModel.Model;
 using GalaSoft.MvvmLight.Command;
 
 namespace ClassDiagram.ViewModel.ElementViewModels

@@ -79,8 +79,6 @@
     <Compile Include="Helpers\CustomClickArgs.cs" />
     <Compile Include="Helpers\MouseButtonEventArgsToCustomClickConverter.cs" />
     <Compile Include="Helpers\MyCustomAdorner.cs" />
-    <Compile Include="Model\Fields.cs" />
-    <Compile Include="Model\Methods.cs" />
     <Compile Include="Serializer\Serializer.cs" />
     <Compile Include="UndoRedo\AddandRemove\AddLine.cs" />
     <Compile Include="UndoRedo\AddandRemove\AddBox.cs" />
@@ -118,11 +116,6 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Model\Box.cs" />
-    <Compile Include="Model\Diagram.cs" />
-    <Compile Include="Model\EBox.cs" />
-    <Compile Include="Model\ELine.cs" />
-    <Compile Include="Model\Line.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\ElementViewModels\BoxViewModel.cs" />
     <Compile Include="ViewModel\ElementViewModels\ElementViewModel.cs" />
@@ -167,8 +160,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\IBox.cs" />
-    <Compile Include="Model\ILine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -196,7 +187,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\ClassModel.Model\ClassModel.Model.csproj">
+      <Project>{4e105963-d3aa-46d4-964f-5ee12895fe9c}</Project>
+      <Name>ClassModel.Model</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Open.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

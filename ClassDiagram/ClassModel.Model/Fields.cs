@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ClassDiagram.Model
+namespace ClassModel.Model
 {
     public class Fields
     {

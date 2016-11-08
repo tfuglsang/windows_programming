@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using ClassDiagram.Model;
+using ClassModel.Model;
 using GalaSoft.MvvmLight.CommandWpf;
 
 namespace ClassDiagram.ViewModel.ElementViewModels

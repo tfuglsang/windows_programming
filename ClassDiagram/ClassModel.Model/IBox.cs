@@ -1,18 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using GalaSoft.MvvmLight.CommandWpf;
+﻿using System.Collections.ObjectModel;
 
-namespace ClassDiagram.Model
+namespace ClassModel.Model
 {
     public interface IBox
     {
-        RelayCommand AddFieldsTextBoxCommand { get; set; }
-        RelayCommand AddMethodTextBoxCommand { get; set; }
         ObservableCollection<Fields> FieldsList { get; set; }   // List of fields in the box
         ObservableCollection<Methods> MethodList { get; set; }   // List of methods in the box
         string Label { get; set; }  // The name of the box shown in the View

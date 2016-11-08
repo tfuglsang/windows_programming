@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using ClassDiagram.Helpers;
 using ClassDiagram.ViewModel.ElementViewModels;
@@ -41,6 +42,8 @@ namespace ClassDiagram.ViewModel
         public ICommand RedoCommand { get; }
         public ICommand SaveDiagram => new RelayCommand(SaveDiagramClicked);    
         public ICommand LoadDiagram => new RelayCommand(LoadDiagramClicked); 
+
+        public ICommand SelectAllCommand => new RelayCommand(SelectAll);
 
         public Coordinates statusBarCoordinates { get; set; }
         public String statusBarMessages { get; set; }
@@ -272,22 +275,67 @@ namespace ClassDiagram.ViewModel
             if (!_isMoving || _clickedBox == null || _initialMousePosition == null) return;
 
             var pos = Mouse.GetPosition(visual);
+            var gridSize = visual.RenderSize;
 
             if (_clickedBox.IsSelected)
             {
+                var boxesToUpdate = new List<BoxViewModel>();
+                var updateBoxes = true;
                 foreach (var box in Boxes)
                 {
-                    if (box.IsSelected && box.StartingOffset.HasValue)
-                        box.Position = new Point(pos.X - box.StartingOffset.Value.X , pos.Y - box.StartingOffset.Value.Y);
+                    if (!box.IsSelected || !box.StartingOffset.HasValue) continue;
+
+                    var newPosition = new Point(pos.X - box.StartingOffset.Value.X,
+                        pos.Y - box.StartingOffset.Value.Y);
+                    if (newPosition.X < 0 || newPosition.X > gridSize.Width - box.Width || newPosition.Y < 0 ||
+                        newPosition.Y > gridSize.Height - box.Height)
+                    {
+                        updateBoxes = false;
+                        break;
+                    }
+                    else
+                    {
+                        boxesToUpdate.Add(box);
+                    }
                 }
+
+                if (updateBoxes)
+                {
+                    foreach (var box in boxesToUpdate)
+                    {
+                        box.Position = new Point(pos.X - box.StartingOffset.Value.X, pos.Y - box.StartingOffset.Value.Y);
+                    }
+                }
+                
             }
             else
             {
-                _clickedBox.Position = new Point(pos.X - _startingOffset.X, pos.Y - _startingOffset.Y);
+                var currentPoint = new Point(pos.X - _startingOffset.X, pos.Y - _startingOffset.Y);
+
+                if (currentPoint.X > gridSize.Width - _clickedBox.Width)
+                {
+                    currentPoint.X = gridSize.Width - _clickedBox.Width;
+                }
+                if (currentPoint.Y > gridSize.Height - _clickedBox.Height)
+                {
+                    currentPoint.Y = gridSize.Height - _clickedBox.Height;
+                }
+                if (currentPoint.X < 0)
+                {
+                    currentPoint.X = 0;
+                }
+                if (currentPoint.Y < 0)
+                {
+                    currentPoint.Y = 0;
+                }
+
+                _clickedBox.Position = currentPoint;
             }
 
             _hasMoved = true;
         }
+
+        
 
         /// <summary>
         /// This method is used to reset the starting offset on boxes if the boxes has been moved.
@@ -301,7 +349,7 @@ namespace ClassDiagram.ViewModel
                 UndoRedo.Add(new MoveBox(_clickedBox, _startingPosition, _clickedBox.Position));
             }
 
-            List<BoxViewModel> movedBoxes = new List<BoxViewModel>();
+            var movedBoxes = new List<BoxViewModel>();
             foreach (var box in Boxes)
             {
                 if (box.StartingOffset.HasValue)
@@ -326,7 +374,21 @@ namespace ClassDiagram.ViewModel
             _isMoving = false;
             _hasMoved = false;
         }
+        /// <summary>
+        /// This method selects all of the selected lines and boxes on the diagram
+        /// </summary>
+        private void SelectAll()
+        {
+            foreach (var line in Lines)
+            {
+                line.IsSelected = true;
+            }
 
+            foreach (var box in Boxes)
+            {
+                box.IsSelected = true;
+            }
+        }
         /// <summary>
         /// This method deselects all of the selected lines and boxes on the diagram
         /// </summary>
@@ -373,7 +435,7 @@ namespace ClassDiagram.ViewModel
                     newBox.Type = EBox.Interface;
                     IsAddingInterface = false;
                 }
-
+                e.EventArgs.Handled = true;
                 UndoRedo.AddExecute(new AddBox(Boxes, new BoxViewModel(newBox)));
             }
             else if (IsAddingAssosiation || IsAddingDependency || IsAddingAggregation || IsAddingComposition ||
@@ -456,7 +518,7 @@ namespace ClassDiagram.ViewModel
 
             }
         }
-
+        
         /// <summary>
         /// This method changes focus to the specified UIElement.
         /// </summary>

@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace ClassDiagram.Model
 {
@@ -6,6 +7,8 @@ namespace ClassDiagram.Model
     {
         ObservableCollection<Fields> FieldsList { get; set; }   // List of fields in the box
         ObservableCollection<Methods> MethodList { get; set; }   // List of methods in the box
+        List<string> FieldsStringList { get; set; }
+        List<string> MethodStringList { get; set; }
         string Label { get; set; }  // The name of the box shown in the View
         double Height { get; set; } 
         double Width { get; set; }

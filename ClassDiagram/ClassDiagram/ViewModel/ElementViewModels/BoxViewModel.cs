@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using ClassDiagram.Model;
 using GalaSoft.MvvmLight.CommandWpf;
+using System;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
 {
@@ -129,7 +130,6 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             =>
             (pointToCheck.X > Position.X) && (pointToCheck.X < Position.X + Width) && (pointToCheck.Y > Position.Y) &&
             (pointToCheck.Y < Position.Y + Height);
-
         #region properties
 
         public double Height
@@ -213,24 +213,10 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         public BoxViewModel(IBox box)
         {
             _box = box;
-
-            _box.FieldsList = new ObservableCollection<Fields>();
-            _box.MethodList = new ObservableCollection<Methods>();
-
-            // For test purposes
-            _box.Height = 100; 
-            _box.Width = 150;
-            _box.FieldsList.Add(new Fields("Insert Fields1"));
-            //_box.FieldsList.Add("Insert Fields2");
-            //_box.FieldsList.Add("Insert Fields3");
-            _box.MethodList.Add(new Methods("Insert Method1"));
-            //_box.MethodList.Add("Insert Method2");
-            //_box.MethodList.Add("Insert Method3");
-
-            _box.Label = "ClassName";
-
+            
             AddFieldsTextBoxCommand = new RelayCommand(AddFieldsTextbox);
             AddMethodTextBoxCommand = new RelayCommand(AddMethodTextbox);
         }
+
     }
 }

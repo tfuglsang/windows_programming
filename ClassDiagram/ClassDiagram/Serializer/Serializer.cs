@@ -25,6 +25,25 @@ namespace ClassDiagram.Serializer
         {
             using (FileStream stream = File.Create(path))
             {
+                // Extract strings from observable collection and add them to string list so they can be serialized
+                int ff = 0;
+                foreach(Box box in diagram.Boxes)
+                {
+                    diagram.Boxes[ff].FieldsStringList = new List<string>();                    
+                    foreach (Fields field in box.FieldsList)
+                    {
+                        diagram.Boxes[ff].FieldsStringList.Add(field.Field);                        
+                    }
+
+                    diagram.Boxes[ff].MethodStringList = new List<string>();
+                    foreach (Methods method in box.MethodList)
+                    {
+                        diagram.Boxes[ff].MethodStringList.Add(method.Method);
+                    }
+
+                    ff++;
+                }                
+                
                 XmlSerializer serializer = new XmlSerializer(typeof(Diagram));
                 serializer.Serialize(stream, diagram);
             }
@@ -42,6 +61,21 @@ namespace ClassDiagram.Serializer
                 XmlSerializer serializer = new XmlSerializer(typeof(Diagram));
                 Diagram diagram = serializer.Deserialize(stream) as Diagram;
 
+                int ff = 0;
+                foreach (Box box in diagram.Boxes)
+                {
+                    diagram.Boxes[ff].FieldsList = new System.Collections.ObjectModel.ObservableCollection<Fields>();
+                    diagram.Boxes[ff].MethodList = new System.Collections.ObjectModel.ObservableCollection<Methods>();
+                    foreach (string field in box.FieldsStringList)
+                    {                        
+                        diagram.Boxes[ff].FieldsList.Add(new Fields(field));                        
+                    }
+                    foreach (string method in box.MethodStringList)
+                    {
+                        diagram.Boxes[ff].MethodList.Add(new Methods(method));
+                    }
+                    ff++;
+                }
                 return diagram;
             }
         }

@@ -143,84 +143,97 @@ namespace ClassDiagram.ViewModel
             Elements.Add(new CollectionContainer {Collection = Lines});
         }
 
+        private string OpenFileDialog()
+        {
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            // Set filter options and filter index.
+            openFileDialog.Filter = "Xml Files (.xml)|*.xml";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.Multiselect = false;
+
+            // Call the ShowDialog method to show the dialog box.
+            openFileDialog.ShowDialog();
+
+            string filename = openFileDialog.FileName.ToString();
+            return filename;
+        }
+
+        private string SaveFileDialog()
+        {
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
+            
+            // Call the ShowDialog method to show the dialog box.
+            saveFileDialog.ShowDialog();
+
+            string filename = saveFileDialog.FileName.ToString() + ".xml";
+            return filename;
+        }
+
+
         private void LoadDiagramClicked()
         {
-            Diagram = Serializer.Serializer.Instance.DeserializeFromFile("C:\\temp/serial.xml");
-
-            Boxes.Clear();
-            foreach (Box _box in Diagram.Boxes)
+            string filename = OpenFileDialog();
+            if (filename != "")
             {
-                BoxViewModel newBox = new BoxViewModel(_box);
-                Boxes.Add(newBox);
-            }
+                Diagram = Serializer.Serializer.Instance.DeserializeFromFile(filename);
+                
+                Boxes.Clear();
+                foreach (Box _box in Diagram.Boxes)
+                {
+                    BoxViewModel newBox = new BoxViewModel(_box);
+                    Boxes.Add(newBox);
+                }
 
-            Lines.Clear();
-            foreach (Line _line in Diagram.Lines)
-            {
-                // Find the box that the line starts from
+                Lines.Clear();
+                foreach (Line _line in Diagram.Lines)
+                {                // Find the box that the line starts from
 
-
-
-                LineViewModel newLine = new LineViewModel(_line, Boxes[_line.FromNumber-1] , Boxes[_line.ToNumber-1]);
-                //LineViewModel newLine = new LineViewModel(_line);
-                Lines.Add(newLine);
+                    LineViewModel newLine = new LineViewModel(_line, Boxes[_line.FromNumber - 1], Boxes[_line.ToNumber - 1]);
+                    //LineViewModel newLine = new LineViewModel(_line);
+                    Lines.Add(newLine);
+                }
             }
         }
 
         private void SaveDiagramClicked()
         {
-            // Store boxes and lines in diagram class
-            Diagram.Boxes.Clear();
-            Diagram.Lines.Clear();
-            foreach (CollectionContainer collection in Elements)
+            string filename = SaveFileDialog();
+            // Only store if filename is valid
+            if (filename != "")
             {
-                try
-                {
-                    foreach (BoxViewModel boxes in collection.Collection)
-                    {
-                        Box _Box = new Box
-                        {
-                            Number = boxes.Number,
-                            Height = boxes.Height,
-                            Width = boxes.Width,
-                            X = boxes.Position.X,
-                            Y = boxes.Position.Y,
-                            Label = boxes.Label,
-                            FieldsList = boxes.FieldsList,
-                            MethodList = boxes.MethodList,
-                        };
+                // Store boxes and lines in diagram class
+                Diagram.Boxes.Clear();
+                Diagram.Lines.Clear();
 
-                        Diagram.Boxes.Add(_Box);
-                        var x = collection.Collection.GetType();
-                    }
-                }
-                catch (System.Exception e)
+                foreach (BoxViewModel box in Boxes)
                 {
-                    // Invalid cast..
-                }
-                try
-                {
-                    foreach (LineViewModel lines in collection.Collection)
+                    Box _Box = new Box
                     {
-                        Line _Line = new Line
-                        {
-                            FromNumber = lines.FromNumber,
-                            ToNumber = lines.ToNumber,
-                            Type = lines.Type,
-                        };
-                        Diagram.Lines.Add(_Line);
-
-                    }
+                        Number = box.Number,                    
+                        X = box.Position.X,
+                        Y = box.Position.Y,
+                        Label = box.Label,
+                        Type = box.Type,
+                        Height = box.Height,
+                        FieldsList = box.FieldsList,
+                        MethodList = box.MethodList,
+                    };
+                    Diagram.Boxes.Add(_Box); 
                 }
-                catch (System.Exception e)
-                {                   
-                    // Invalid cast..
+                
+                foreach (LineViewModel line in Lines)
+                {
+                    Line _Line = new Line
+                    {
+                        FromNumber = line.FromNumber,
+                        ToNumber = line.ToNumber,
+                        Type = line.Type,
+                    };
+                    Diagram.Lines.Add(_Line);
                 }
+                Serializer.Serializer.Instance.AsyncSerializeToFile(Diagram, filename);
             }
-
-            // Serialize and save to .xml file                
-            System.IO.Directory.CreateDirectory("C:\\temp");
-            Serializer.Serializer.Instance.AsyncSerializeToFile(Diagram, "C:\\temp/serial.xml");
+            
         }
 
         private void CanvasOnMouseLeftBtnDown(MouseButtonEventArgs e)
@@ -349,8 +362,11 @@ namespace ClassDiagram.ViewModel
                 {
                     X = point.X,
                     Y = point.Y,
-                    Number = _boxCounter++
+                    Number = _boxCounter++,                    
                 };
+                newBox.FieldsList.Add(new Fields("Insert Fields1"));
+                newBox.MethodList.Add(new Methods("Insert Method1"));
+                newBox.Label= "ClassName";
 
                 if (IsAddingClass)
                 {

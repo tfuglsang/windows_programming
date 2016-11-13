@@ -54,7 +54,28 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         public ICommand OnMouseLeftBtnDownCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftBtnDown);
         public ICommand OnMouseMoveCommand => new RelayCommand<UIElement>(OnMouseMove);
         public ICommand OnMouseLeftBtnUpCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftUp);
+        public ICommand ChangeTypeCommand => new RelayCommand<string>(ChangeType);
 
+        private void ChangeType(string typeSelected)
+        {
+            Debug.Print(typeSelected);
+            switch (typeSelected)
+            {
+                // TODO move statusbar controls to be available
+                case "Class":
+                    Type = EBox.Class;
+                    break;
+                case "AbstractClass":
+                    Type = EBox.Abstract;
+                    break;
+                case "Interface": 
+                    Type = EBox.Interface;
+                    break;
+                default:
+                    Debug.Print("Something went wrong - tell the user about this");
+                    break;
+            }
+        }
         private void OnMouseLeftBtnDown(MouseButtonEventArgs e)
         {
             _wasClicked = true;

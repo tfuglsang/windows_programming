@@ -22,7 +22,7 @@
     <UserControl.ContextMenu>
         <ContextMenu>
             <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Class" Header="Class"></MenuItem>
-            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="AbstractClass" Header="Abstract Class"></MenuItem>
+            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Abstract" Header="Abstract Class"></MenuItem>
             <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Interface" Header="Interface"></MenuItem>
         </ContextMenu>
     </UserControl.ContextMenu>

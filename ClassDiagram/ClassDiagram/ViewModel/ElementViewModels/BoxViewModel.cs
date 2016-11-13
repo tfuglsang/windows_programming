@@ -62,13 +62,13 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             switch (typeSelected)
             {
                 // TODO move statusbar controls to be available
-                case "Class":
+                case nameof(EBox.Class):
                     Type = EBox.Class;
                     break;
-                case "AbstractClass":
+                case nameof(EBox.Abstract):
                     Type = EBox.Abstract;
                     break;
-                case "Interface": 
+                case nameof(EBox.Interface): 
                     Type = EBox.Interface;
                     break;
                 default:

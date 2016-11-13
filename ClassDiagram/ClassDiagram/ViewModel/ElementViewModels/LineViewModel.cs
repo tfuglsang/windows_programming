@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using ClassDiagram.Model;
@@ -15,7 +16,36 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         private BoxViewModel _to;
 
         public ICommand SelectLineCommand => new RelayCommand<MouseButtonEventArgs>(SelectLine);
+        public ICommand ChangeTypeCommand => new RelayCommand<string>(ChangeType);
 
+        private void ChangeType(string selectedType)
+        {
+            Debug.Print(selectedType);
+            switch (selectedType)
+            {
+                case nameof(ELine.Association):
+                    Type = ELine.Association;
+                    break;
+                case nameof(ELine.Dependency):
+                    Type = ELine.Dependency;
+                    break;
+                case nameof(ELine.Aggregation):
+                    Type = ELine.Aggregation;
+                    break;
+                case nameof(ELine.Composition):
+                    Type = ELine.Composition;
+                    break;
+                case nameof(ELine.Inheritance):
+                    Type = ELine.Inheritance;
+                    break;
+                case nameof(ELine.Realization):
+                    Type = ELine.Realization;
+                    break;
+                default:
+                    Debug.Print("Something went wrong - The user should be told");
+                    break;
+            }
+        }
         private void SelectLine(MouseButtonEventArgs e)
         {
             IsSelected = !IsSelected;
@@ -215,6 +245,8 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             {
                 _line.Type = value;
                 RaisePropertyChanged();
+                RaisePropertyChanged(nameof(ArrowHeadPoints));
+                RaisePropertyChanged(nameof(ArrowHeadFill));
             }
         }
 

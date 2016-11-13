@@ -10,6 +10,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="100"
              d:DataContext="{d:DesignInstance Type=vm:LineViewModel, IsDesignTimeCreatable=True}">
+    <UserControl.ContextMenu>
+        <ContextMenu>
+            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Association" Header="Association"></MenuItem>
+            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Dependency" Header="Dependency"></MenuItem>
+            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Aggregation" Header="Aggregation"></MenuItem>
+            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Composition" Header="Composition"></MenuItem>
+            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Inheritance" Header="Inheritance"></MenuItem>
+            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Realization" Header="Realization"></MenuItem>
+        </ContextMenu>
+    </UserControl.ContextMenu>
     <Grid>
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="MouseLeftButtonDown">

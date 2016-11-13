@@ -22,15 +22,15 @@
             <TextBlock>
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}{0} : {1}">
-                        <Binding Path="statusBarCoordinates.Coordinate_x" />
-                        <Binding Path="statusBarCoordinates.Coordinate_y" />
+                        <Binding Path="StatusBarCoordinates.X" />
+                        <Binding Path="StatusBarCoordinates.Y" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
         </StatusBarItem>
         <Separator Grid.Column="1"/>
         <StatusBarItem Grid.Column="2">
-            <TextBlock Text="{Binding statusBarMessages}"/>
+            <TextBlock Text="{Binding StatusBarMessage}"/>
         </StatusBarItem>
     </StatusBar>
 </UserControl>

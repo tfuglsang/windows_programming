@@ -45,9 +45,21 @@ namespace ClassDiagram.ViewModel
 
         public ICommand SelectAllCommand => new RelayCommand(SelectAll);
 
-        public Coordinates statusBarCoordinates { get; set; }
-        public String statusBarMessages { get; set; }
-        
+        private Point _statusBarCoordinates;
+        private string _statusBarMessage;
+
+        public Point StatusBarCoordinates
+        {
+            get { return _statusBarCoordinates;}
+            set { Set(ref _statusBarCoordinates, value); }
+        }
+
+        public string StatusBarMessage
+        {
+            get { return _statusBarMessage; }
+            set { Set(ref _statusBarMessage, value); }
+        }
+
         public ObservableCollection<BoxViewModel> Boxes { get; }
         public ObservableCollection<LineViewModel> Lines { get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
@@ -148,8 +160,8 @@ namespace ClassDiagram.ViewModel
             Elements.Add(new CollectionContainer {Collection = Boxes});
             Elements.Add(new CollectionContainer {Collection = Lines});
 
-            statusBarMessages = "This text is set in the constructor";
-            statusBarCoordinates = new Coordinates(175, 20);
+            StatusBarMessage = "This text is set in the constructor";
+            StatusBarCoordinates = new Point(175, 20);
         }
 
         private string OpenFileDialog()

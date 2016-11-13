@@ -74,6 +74,7 @@ namespace ClassDiagram.ViewModel
         private bool _hasMoved;
         private bool _isMoving;
         private BoxViewModel _clickedBox;
+
         #region propertiesForTheButtons
 
         private bool _isAddingClass;

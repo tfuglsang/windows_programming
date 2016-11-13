@@ -17,7 +17,20 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         public ICommand SelectLineCommand => new RelayCommand<MouseButtonEventArgs>(SelectLine);
         public ICommand ChangeTypeCommand => new RelayCommand<string>(ChangeType);
+        
+        public LineViewModel(ILine line, BoxViewModel from, BoxViewModel to)
+        {
+            _line = line;
+            From = from;
+            To = to;
+            From.PropertyChanged += BoxPropertyChanged;
+            To.PropertyChanged += BoxPropertyChanged;
+        }
 
+        public LineViewModel(ILine line)
+        {
+            _line = line;
+        }
         private void ChangeType(string selectedType)
         {
             Debug.Print(selectedType);
@@ -51,21 +64,6 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             IsSelected = !IsSelected;
             e.Handled = true;
         }
-
-        public LineViewModel(ILine line, BoxViewModel from, BoxViewModel to)
-        {
-            _line = line;
-            From = from;
-            To = to;
-            From.PropertyChanged += BoxPropertyChanged;
-            To.PropertyChanged += BoxPropertyChanged;
-        }
-
-        public LineViewModel(ILine line)
-        {
-            _line = line;
-        }
-
         private void BoxPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(BoxViewModel.Position))

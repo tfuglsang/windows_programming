@@ -18,139 +18,22 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         private bool _wasClicked;
         private Point? _startingOffset = null;
         private Point? _startingPosition = null;
-
-        public Point? StartingOffset
-        {
-            get { return _startingOffset; }
-            set
-            {
-                if (value == null)
-                {
-                    _startingOffset = null;
-                    return;
-                }
-
-                var point = (Point) value;
-                _startingOffset = new Point(point.X - Position.X, point.Y - Position.Y);
-                Debug.Print($"{_startingOffset.Value.X},{_startingOffset.Value.Y}");
-            }
-        }
-
-        public Point? StartingPosition
-        {
-            get { return _startingOffset; }
-            set
-            {
-                if (value == null)
-                {
-                    _startingOffset = null;
-                    return;
-                }
-
-                _startingPosition = value.Value;
-            }
-        }
-
-        public ICommand OnMouseLeftBtnDownCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftBtnDown);
-        public ICommand OnMouseMoveCommand => new RelayCommand<UIElement>(OnMouseMove);
-        public ICommand OnMouseLeftBtnUpCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftUp);
-        public ICommand ChangeTypeCommand => new RelayCommand<string>(ChangeType);
-
-        private void ChangeType(string typeSelected)
-        {
-            Debug.Print(typeSelected);
-            switch (typeSelected)
-            {
-                // TODO move statusbar controls to be available
-                case nameof(EBox.Class):
-                    Type = EBox.Class;
-                    break;
-                case nameof(EBox.Abstract):
-                    Type = EBox.Abstract;
-                    break;
-                case nameof(EBox.Interface): 
-                    Type = EBox.Interface;
-                    break;
-                default:
-                    Debug.Print("Something went wrong - tell the user about this");
-                    break;
-            }
-        }
-        private void OnMouseLeftBtnDown(MouseButtonEventArgs e)
-        {
-            _wasClicked = true;
-        }
-
-        /// <summary>
-        /// THIS METHOD IS UNUSED
-        /// </summary>
-        /// <param name="visual"></param>
-        private void OnMouseMove(UIElement visual)
-        {
-            // THIS METHOD IS UNUSED
-
-            if (!_isMoving) return;
-
-            var pos = Mouse.GetPosition(visual);
-            var currentPoint = new Point(pos.X - _initialMousePostion.X, pos.Y - _initialMousePostion.Y);
-
-            // Ensure that box is within the canvas limits
-            Size grid_size = visual.RenderSize;            
-            
-            if (currentPoint.X > grid_size.Width - Width)
-            {
-                currentPoint.X = grid_size.Width - Width;
-            }
-            if (currentPoint.Y > grid_size.Height - Height)
-            {
-                currentPoint.Y = grid_size.Height - Height;
-            }
-            if (currentPoint.X < 0 )
-            {
-                currentPoint.X = 0 ;
-            }
-            if (currentPoint.Y < 0 )
-            {
-                currentPoint.Y = 0 ;
-            }
-
-            Position = currentPoint;
-            _hasMoved = true;
-        }
-
-        private void OnMouseLeftUp(MouseButtonEventArgs e)
-        {
-            if (_wasClicked)
-                IsSelected = !IsSelected;
-
-            _wasClicked = false;
-        }
-
         private readonly IBox _box;
 
-        //
-
+        public ICommand OnMouseLeftBtnDownCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftBtnDown);
+        public ICommand OnMouseLeftBtnUpCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftUp);
+        public ICommand ChangeTypeCommand => new RelayCommand<string>(ChangeType);
         public RelayCommand AddFieldsTextBoxCommand { get; private set; }
         public RelayCommand AddMethodTextBoxCommand { get; private set; }
-
-        public void AddFieldsTextbox()
+        
+        public BoxViewModel(IBox box)
         {
-            _box.FieldsList.Add(new Fields(""));
-            Height += 20;
+            _box = box;
+
+            AddFieldsTextBoxCommand = new RelayCommand(AddFieldsTextbox);
+            AddMethodTextBoxCommand = new RelayCommand(AddMethodTextbox);
         }
 
-        public void AddMethodTextbox()
-        {
-            _box.MethodList.Add(new Methods(""));
-            Height += 20;
-        }
-        
-        public int Number => _box.Number;
-        
-        public bool IsPointInBox(Point pointToCheck)
-            =>
-            (pointToCheck.X > Position.X) && (pointToCheck.X < Position.X + Width) && (pointToCheck.Y > Position.Y) &&
-            (pointToCheck.Y < Position.Y + Height);
         #region properties
 
         public double Height
@@ -186,7 +69,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         public Point CenterPoint
         {
-            get { return new Point(_box.X + Width/2, _box.Y + Height/2); }
+            get { return new Point(_box.X + Width / 2, _box.Y + Height / 2); }
         }
 
         public EBox Type
@@ -229,15 +112,88 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
-        #endregion
-
-        public BoxViewModel(IBox box)
+        public Point? StartingOffset
         {
-            _box = box;
-            
-            AddFieldsTextBoxCommand = new RelayCommand(AddFieldsTextbox);
-            AddMethodTextBoxCommand = new RelayCommand(AddMethodTextbox);
+            get { return _startingOffset; }
+            set
+            {
+                if (value == null)
+                {
+                    _startingOffset = null;
+                    return;
+                }
+
+                var point = (Point)value;
+                _startingOffset = new Point(point.X - Position.X, point.Y - Position.Y);
+                Debug.Print($"{_startingOffset.Value.X},{_startingOffset.Value.Y}");
+            }
+        }
+        public Point? StartingPosition
+        {
+            get { return _startingOffset; }
+            set
+            {
+                if (value == null)
+                {
+                    _startingOffset = null;
+                    return;
+                }
+
+                _startingPosition = value.Value;
+            }
         }
 
+        public int Number => _box.Number;
+        #endregion
+
+        private void ChangeType(string typeSelected)
+        {
+            Debug.Print(typeSelected);
+            switch (typeSelected)
+            {
+                // TODO move statusbar controls to be available
+                case nameof(EBox.Class):
+                    Type = EBox.Class;
+                    break;
+                case nameof(EBox.Abstract):
+                    Type = EBox.Abstract;
+                    break;
+                case nameof(EBox.Interface): 
+                    Type = EBox.Interface;
+                    break;
+                default:
+                    Debug.Print("Something went wrong - tell the user about this");
+                    break;
+            }
+        }
+        private void OnMouseLeftBtnDown(MouseButtonEventArgs e)
+        {
+            _wasClicked = true;
+        }
+        
+        private void OnMouseLeftUp(MouseButtonEventArgs e)
+        {
+            if (_wasClicked)
+                IsSelected = !IsSelected;
+
+            _wasClicked = false;
+        }
+
+        private void AddFieldsTextbox()
+        {
+            _box.FieldsList.Add(new Fields(""));
+            Height += 20;
+        }
+
+        private void AddMethodTextbox()
+        {
+            _box.MethodList.Add(new Methods(""));
+            Height += 20;
+        }
+        
+        public bool IsPointInBox(Point pointToCheck)
+            =>
+            (pointToCheck.X > Position.X) && (pointToCheck.X < Position.X + Width) && (pointToCheck.Y > Position.Y) &&
+            (pointToCheck.Y < Position.Y + Height);
     }
 }

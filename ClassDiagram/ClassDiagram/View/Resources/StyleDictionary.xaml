@@ -16,10 +16,10 @@
             <DataTrigger Binding="{Binding Type}" Value="Class">
                 <Setter Property="TextBox.FontStyle" Value="Normal"></Setter>
             </DataTrigger>
-            <DataTrigger Binding="{Binding Type}" Value="Abstract">
+            <DataTrigger Binding="{Binding Type}" Value="Interface">
                 <Setter Property="TextBox.TextDecorations" Value="Underline"></Setter>
             </DataTrigger>
-            <DataTrigger Binding="{Binding Type}" Value="Interface">
+            <DataTrigger Binding="{Binding Type}" Value="Abstract">
                 <Setter Property="TextBox.FontStyle" Value="Italic"></Setter>
             </DataTrigger>
         </Style.Triggers>

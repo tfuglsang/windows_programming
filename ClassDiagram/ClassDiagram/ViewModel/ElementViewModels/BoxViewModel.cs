@@ -6,6 +6,7 @@ using System.Windows.Input;
 using ClassDiagram.Model;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
+using ClassDiagram.UndoRedo.AddandRemove;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
 {
@@ -153,13 +154,13 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             {
                 // TODO move statusbar controls to be available
                 case nameof(EBox.Class):
-                    Type = EBox.Class;
+                    UndoRedo.URController.Instance.AddExecute(new ChangeBoxType(this, EBox.Class));
                     break;
                 case nameof(EBox.Abstract):
-                    Type = EBox.Abstract;
+                    UndoRedo.URController.Instance.AddExecute(new ChangeBoxType(this, EBox.Abstract));
                     break;
-                case nameof(EBox.Interface): 
-                    Type = EBox.Interface;
+                case nameof(EBox.Interface):
+                    UndoRedo.URController.Instance.AddExecute(new ChangeBoxType(this, EBox.Interface));
                     break;
                 default:
                     Debug.Print("Something went wrong - tell the user about this");

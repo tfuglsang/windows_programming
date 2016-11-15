@@ -82,6 +82,8 @@
     <Compile Include="Serializer\Serializer.cs" />
     <Compile Include="UndoRedo\AddandRemove\AddLine.cs" />
     <Compile Include="UndoRedo\AddandRemove\AddBox.cs" />
+    <Compile Include="UndoRedo\AddandRemove\ChangeLineType.cs" />
+    <Compile Include="UndoRedo\AddandRemove\ChangeBoxType.cs" />
     <Compile Include="UndoRedo\AddandRemove\MoveBox.cs" />
     <Compile Include="UndoRedo\AddandRemove\MoveMultipleBoxes.cs" />
     <Compile Include="UndoRedo\AddandRemove\RemoveBox.cs" />

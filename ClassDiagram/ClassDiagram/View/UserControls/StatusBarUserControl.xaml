@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ClassDiagram.View.UserControls"
+             xmlns:ViewModels="clr-namespace:ClassDiagram.ViewModel"
              mc:Ignorable="d" 
              d:DesignHeight="20" d:DesignWidth="800">
+
     <StatusBar DockPanel.Dock="Bottom" HorizontalAlignment="Left" Width="800" Height="20">
         <StatusBar.ItemsPanel>
             <ItemsPanelTemplate>
@@ -22,15 +24,19 @@
             <TextBlock>
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}{0} : {1}">
-                        <Binding Path="StatusBarCoordinates.X" />
-                        <Binding Path="StatusBarCoordinates.Y" />
+                        <Binding Path="StatusBarCoordinates.X" Source="{x:Static ViewModels:StatusBarViewModel.Instance}" />
+                        <Binding Path="StatusBarCoordinates.Y" Source="{x:Static ViewModels:StatusBarViewModel.Instance}"/>
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
         </StatusBarItem>
         <Separator Grid.Column="1"/>
         <StatusBarItem Grid.Column="2">
-            <TextBlock Text="{Binding StatusBarMessage}"/>
+            <TextBlock>
+                <TextBlock.Text>
+                    <Binding Path="StatusBarMessage" Source="{x:Static ViewModels:StatusBarViewModel.Instance}"/>
+                </TextBlock.Text>
+            </TextBlock> 
         </StatusBarItem>
     </StatusBar>
 </UserControl>

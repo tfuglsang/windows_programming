@@ -88,6 +88,7 @@
     <Compile Include="UndoRedo\AddandRemove\RemoveLine.cs" />
     <Compile Include="UndoRedo\IURCommand.cs" />
     <Compile Include="UndoRedo\URController.cs" />
+    <Compile Include="ViewModel\StatusBarViewModel.cs" />
     <Compile Include="View\Selectors\CustomDataTemplateSelector.cs" />
     <Compile Include="View\Selectors\CustomStyleSelector.cs" />
     <Compile Include="View\UserControls\AddLineUserControl.xaml.cs">

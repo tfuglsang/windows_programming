@@ -13,6 +13,7 @@
         xmlns:ViewModels="clr-namespace:ClassDiagram.ViewModel"
         xmlns:selectors="clr-namespace:ClassDiagram.View.Selectors"
         mc:Ignorable="d"
+        x:Name="TheMainWindow"
         Title="ClassDiagram" Height="600" Width="800">
     <Window.DataContext>
         <ViewModels:MainViewModel />
@@ -57,11 +58,7 @@
                         EventArgsConverterParameter="{Binding ElementName=diagramCanvas}"
                         PassEventArgsToCommand="True" />
                 </i:EventTrigger>
-
-                <i:EventTrigger EventName="PreviewMouseLeftButtonUp">
-                    <cmd:EventToCommand Command="{Binding CanvasPreviewOnMouseLeftBtnUpCommand}" PassEventArgsToCommand="True" />
-                </i:EventTrigger>
-                
+               
                 <i:EventTrigger EventName="MouseLeftButtonDown">
                     <cmd:EventToCommand Command="{Binding CanvasOnMouseLeftBtnDownCommand}" PassEventArgsToCommand="True" />
                 </i:EventTrigger>
@@ -73,13 +70,22 @@
                 <i:EventTrigger EventName="MouseMove">
                     <cmd:EventToCommand Command="{Binding CanvasOnMouseMoveCommand}" CommandParameter="{Binding ElementName=diagramCanvas, Mode=OneWay}" ></cmd:EventToCommand>
                 </i:EventTrigger>
+
+                <i:EventTrigger EventName="PreviewMouseRightButtonDown">
+                    <cmd:EventToCommand Command="{Binding SetMousePosCommand}" CommandParameter="{Binding ElementName=diagramCanvas, Mode=OneWay}" ></cmd:EventToCommand>
+                </i:EventTrigger>
             </i:Interaction.Triggers>
             
+            <Grid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Command="{Binding PasteCommand}" Header="Paste"></MenuItem>
+                </ContextMenu>
+            </Grid.ContextMenu>
             
             <ItemsControl ItemsSource="{Binding Elements}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <Canvas />
+                        <Canvas/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 

@@ -24,6 +24,12 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         public ICommand OnMouseLeftBtnDownCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftBtnDown);
         public ICommand OnMouseLeftBtnUpCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftUp);
         public ICommand ChangeTypeCommand => new RelayCommand<string>(ChangeType);
+        public ICommand CopyCommand => new RelayCommand(Copy);
+
+        private void Copy()
+        {
+            CopyPaste.CopyPasteController.Instance.Copy(this);
+        }
         public RelayCommand AddFieldsTextBoxCommand { get; private set; }
         public RelayCommand AddMethodTextBoxCommand { get; private set; }
         

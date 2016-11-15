@@ -44,6 +44,25 @@ namespace ClassDiagram.ViewModel
         public ICommand LoadDiagram => new RelayCommand(LoadDiagramClicked); 
 
         public ICommand SelectAllCommand => new RelayCommand(SelectAll);
+        public ICommand PasteCommand => new RelayCommand(Paste);
+        public ICommand SetMousePosCommand => new RelayCommand<UIElement>(SetMousePos);
+
+        private void SetMousePos(UIElement canvas)
+        {
+            _mousePos = Mouse.GetPosition(canvas);
+        }
+
+        private Point _mousePos;
+        private void Paste()
+        {
+            var boxToPaste = CopyPaste.CopyPasteController.Instance.Paste();
+            // Null check
+            if (boxToPaste == null)
+                return;
+
+            boxToPaste.Position = _mousePos;
+            Boxes.Add(boxToPaste);
+        }
 
         private Point _statusBarCoordinates;
         private string _statusBarMessage;

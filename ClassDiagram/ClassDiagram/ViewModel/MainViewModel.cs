@@ -42,24 +42,28 @@ namespace ClassDiagram.ViewModel
         public ICommand RedoCommand { get; }
         public ICommand SaveDiagram => new RelayCommand(SaveDiagramClicked);    
         public ICommand LoadDiagram => new RelayCommand(LoadDiagramClicked);
-
         public ICommand SelectAllCommand => new RelayCommand(SelectAll);
-
+        public ICommand PasteCommand => new RelayCommand(Paste);
+        public ICommand SetMousePosCommand => new RelayCommand<UIElement>(SetMousePos);
+        private Point _mousePos;
         private Point _statusBarCoordinates;
         private string _statusBarMessage;
 
-        public Point StatusBarCoordinates
+        private void SetMousePos(UIElement canvas)
         {
-            get { return _statusBarCoordinates;}
-            set { Set(ref _statusBarCoordinates, value); }
+            _mousePos = Mouse.GetPosition(canvas);
         }
-
-        public string StatusBarMessage
+       
+        private void Paste()
         {
-            get { return _statusBarMessage; }
-            set { Set(ref _statusBarMessage, value); }
-        }
+            var boxToPaste = CopyPaste.CopyPasteController.Instance.Paste();
+            // Null check
+            if (boxToPaste == null)
+                return;
 
+            boxToPaste.Position = _mousePos;
+            Boxes.Add(boxToPaste);
+        }
         public ObservableCollection<BoxViewModel> Boxes { get; }
         public ObservableCollection<LineViewModel> Lines { get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
@@ -161,8 +165,8 @@ namespace ClassDiagram.ViewModel
             Elements.Add(new CollectionContainer {Collection = Boxes});
             Elements.Add(new CollectionContainer {Collection = Lines});
 
-            StatusBarMessage = "The program has been started";
-            StatusBarCoordinates = new Point(175, 20);
+            StatusBarViewModel.Instance.StatusBarMessage = "The program has been started";
+            StatusBarViewModel.Instance.StatusBarCoordinates = new Point(175, 20);
         }
 
         private string OpenFileDialog()
@@ -214,7 +218,7 @@ namespace ClassDiagram.ViewModel
                     //LineViewModel newLine = new LineViewModel(_line);
                     Lines.Add(newLine);
                 }
-                StatusBarMessage = "The file has been loaded";
+                StatusBarViewModel.Instance.StatusBarMessage = "The file has been loaded";
             }
         }
 
@@ -255,7 +259,7 @@ namespace ClassDiagram.ViewModel
                     Diagram.Lines.Add(_Line);
                 }
                 Serializer.Serializer.Instance.AsyncSerializeToFile(Diagram, filename);
-                StatusBarMessage = $"The file has been saved as {filename}";
+                StatusBarViewModel.Instance.StatusBarMessage = $"The file has been saved as {filename}";
             }
             
         }
@@ -303,7 +307,7 @@ namespace ClassDiagram.ViewModel
             if (visual == null) return;
 
             var pos = Mouse.GetPosition(visual);
-            StatusBarCoordinates = pos;
+            StatusBarViewModel.Instance.StatusBarCoordinates = pos;
 
             if (!_isMoving || _clickedBox == null || _initialMousePosition == null) return;
 
@@ -339,7 +343,7 @@ namespace ClassDiagram.ViewModel
                         box.Position = new Point(pos.X - box.StartingOffset.Value.X, pos.Y - box.StartingOffset.Value.Y);
                     }
                 }
-                StatusBarMessage = "Boxes are moving";
+                StatusBarViewModel.Instance.StatusBarMessage = "Boxes are moving";
             }
             else
             {
@@ -363,7 +367,7 @@ namespace ClassDiagram.ViewModel
                 }
 
                 _clickedBox.Position = currentPoint;
-                StatusBarMessage = "The box is moving";
+                StatusBarViewModel.Instance.StatusBarMessage = "The box is moving";
             }
 
             _hasMoved = true;
@@ -401,7 +405,7 @@ namespace ClassDiagram.ViewModel
                 if (_clickedBox != null && _clickedBox.IsSelected)
                 {
                     UndoRedo.Add(new MoveMultipleBoxes(movedBoxes, _startingPosition.X - _clickedBox.Position.X, _startingPosition.Y - _clickedBox.Position.Y ));
-                    StatusBarMessage = "Classes has been moved";
+                    StatusBarViewModel.Instance.StatusBarMessage = "Classes has been moved";
                 }
 
                 e.Handled = true;
@@ -423,7 +427,7 @@ namespace ClassDiagram.ViewModel
             {
                 box.IsSelected = true;
             }
-            StatusBarMessage = "Everything has been selected";
+            StatusBarViewModel.Instance.StatusBarMessage = "Everything has been selected";
         }
         /// <summary>
         /// This method deselects all of the selected lines and boxes on the diagram
@@ -439,7 +443,7 @@ namespace ClassDiagram.ViewModel
             {
                 box.IsSelected = false;
             }
-            StatusBarMessage = "Removed selection from everything";
+            StatusBarViewModel.Instance.StatusBarMessage = "Removed selection from everything";
         }
 
         private void CanvasClicked(CustomClickArgs e)
@@ -464,19 +468,19 @@ namespace ClassDiagram.ViewModel
                 {
                     newBox.Type = EBox.Class;
                     IsAddingClass = false;
-                    StatusBarMessage = "A new class has been added";
+                    StatusBarViewModel.Instance.StatusBarMessage = "A new class has been added";
                 }
                 else if (IsAddingAbstractClass)
                 {
                     newBox.Type = EBox.Abstract;
                     IsAddingAbstractClass = false;
-                    StatusBarMessage = "A new abstract class has been added";
+                    StatusBarViewModel.Instance.StatusBarMessage = "A new abstract class has been added";
                 }
                 else if (IsAddingInterface)
                 {
                     newBox.Type = EBox.Interface;
                     IsAddingInterface = false;
-                    StatusBarMessage = "A new interface has been added";
+                    StatusBarViewModel.Instance.StatusBarMessage = "A new interface has been added";
                 }
                 e.EventArgs.Handled = true;
                 UndoRedo.AddExecute(new AddBox(Boxes, new BoxViewModel(newBox)));
@@ -534,14 +538,14 @@ namespace ClassDiagram.ViewModel
 
                             if (Lines.Any(line => (line.FromNumber == _fromBox.Number && line.ToNumber == boxViewModel.Number) || (line.FromNumber == boxViewModel.Number && line.ToNumber == _fromBox.Number)))
                             {
-                                StatusBarMessage =
+                                StatusBarViewModel.Instance.StatusBarMessage =
                                     "Cant add additional connections between two classes which has allready been connected";
                                 return;
                             }
                             
                             UndoRedo.AddExecute(new AddLine(Lines, lineViewModel));
                             _fromBox = null;
-                            StatusBarMessage = "Connection has been added";
+                            StatusBarViewModel.Instance.StatusBarMessage = "Connection has been added";
                             break;
                         }
                     }

@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using ClassDiagram.Model;
+using ClassDiagram.UndoRedo.AddandRemove;
 using GalaSoft.MvvmLight.Command;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
@@ -37,22 +38,22 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             switch (selectedType)
             {
                 case nameof(ELine.Association):
-                    Type = ELine.Association;
+                    UndoRedo.URController.Instance.AddExecute(new ChangeLineType(this, ELine.Association));
                     break;
                 case nameof(ELine.Dependency):
-                    Type = ELine.Dependency;
+                    UndoRedo.URController.Instance.AddExecute(new ChangeLineType(this, ELine.Dependency));
                     break;
                 case nameof(ELine.Aggregation):
-                    Type = ELine.Aggregation;
+                    UndoRedo.URController.Instance.AddExecute(new ChangeLineType(this, ELine.Aggregation));
                     break;
                 case nameof(ELine.Composition):
-                    Type = ELine.Composition;
+                    UndoRedo.URController.Instance.AddExecute(new ChangeLineType(this, ELine.Composition));
                     break;
                 case nameof(ELine.Inheritance):
-                    Type = ELine.Inheritance;
+                    UndoRedo.URController.Instance.AddExecute(new ChangeLineType(this, ELine.Inheritance));
                     break;
                 case nameof(ELine.Realization):
-                    Type = ELine.Realization;
+                    UndoRedo.URController.Instance.AddExecute(new ChangeLineType(this, ELine.Realization));
                     break;
                 default:
                     Debug.Print("Something went wrong - The user should be told");

@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Input;
 using ClassDiagram.Model;
 using GalaSoft.MvvmLight.CommandWpf;
+using System;
 using ClassDiagram.UndoRedo.AddandRemove;
 using System.Windows.Controls;
 
@@ -15,30 +16,25 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         private Point? _startingOffset = null;
         private Point? _startingPosition = null;
         private readonly IBox _box;
-        
 
         public ICommand OnMouseLeftBtnDownCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftBtnDown);
         public ICommand OnMouseLeftBtnUpCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftUp);
         public ICommand ChangeTypeCommand => new RelayCommand<string>(ChangeType);
+        public ICommand CopyCommand => new RelayCommand(Copy);
+
+        private void Copy()
+        {
+            CopyPaste.CopyPasteController.Instance.Copy(this);
+        }
         public RelayCommand AddFieldsTextBoxCommand { get; private set; }
         public RelayCommand AddMethodTextBoxCommand { get; private set; }
         
         public RelayCommand TextChangedCommand { get; private set; }        
-        private Box _oldbox; // Used for undo/redo of text 
-        
+        private Box _oldbox; // Used for undo/redo of text         
 
         private UndoRedo.URController UndoRedo { get; }
         public ICommand UndoCommand { get; }
         public ICommand RedoCommand { get; }
-
-        public BoxViewModel(BoxViewModel box, IBox boxi)
-        {
-            _box = boxi;
-            FieldsList = box.FieldsList;
-            AddFieldsTextBoxCommand = new RelayCommand(AddFieldsTextbox);
-            AddMethodTextBoxCommand = new RelayCommand(AddMethodTextbox);            
-        }
-
 
         public BoxViewModel(IBox box)
         {
@@ -198,7 +194,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                 case nameof(EBox.Abstract):
                     Type = EBox.Abstract;
                     break;
-                case nameof(EBox.Interface): 
+                case nameof(EBox.Interface):
                     Type = EBox.Interface;
                     break;
                 default:
@@ -206,7 +202,6 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                     break;
             }
         }
-
         private void OnMouseLeftBtnDown(MouseButtonEventArgs e)
         {
             _wasClicked = true;
@@ -221,7 +216,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         }
 
         private void AddFieldsTextbox()
-        {            
+        {
             _box.FieldsList.Add(new Fields(""));
             Height += 20;
         }

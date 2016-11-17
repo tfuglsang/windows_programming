@@ -75,6 +75,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CopyPaste\CopyPasteController.cs" />
     <Compile Include="Helpers\AttachedArdorner.cs" />
     <Compile Include="Helpers\CustomClickArgs.cs" />
     <Compile Include="Helpers\MouseButtonEventArgsToCustomClickConverter.cs" />
@@ -82,6 +83,8 @@
     <Compile Include="Serializer\Serializer.cs" />
     <Compile Include="UndoRedo\AddandRemove\AddLine.cs" />
     <Compile Include="UndoRedo\AddandRemove\AddBox.cs" />
+    <Compile Include="UndoRedo\AddandRemove\ChangeLineType.cs" />
+    <Compile Include="UndoRedo\AddandRemove\ChangeBoxType.cs" />
     <Compile Include="UndoRedo\AddandRemove\MoveBox.cs" />
     <Compile Include="UndoRedo\AddandRemove\MoveMultipleBoxes.cs" />
     <Compile Include="UndoRedo\AddandRemove\RemoveBox.cs" />
@@ -89,6 +92,7 @@
     <Compile Include="UndoRedo\AddandRemove\TextChanged.cs" />
     <Compile Include="UndoRedo\IURCommand.cs" />
     <Compile Include="UndoRedo\URController.cs" />
+    <Compile Include="ViewModel\StatusBarViewModel.cs" />
     <Compile Include="View\Selectors\CustomDataTemplateSelector.cs" />
     <Compile Include="View\Selectors\CustomStyleSelector.cs" />
     <Compile Include="View\UserControls\AddLineUserControl.xaml.cs">

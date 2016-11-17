@@ -14,7 +14,6 @@ using ClassDiagram.UndoRedo.AddandRemove;
 using ClassDiagram.View.UserControls;
 using ClassDiagram.Model;
 using System;
-using System.Threading.Tasks;
 
 namespace ClassDiagram.ViewModel
 {
@@ -198,7 +197,6 @@ namespace ClassDiagram.ViewModel
             string filename = OpenFileDialog();
             if (filename != "")
             {
-                //Diagram = Serializer.Serializer.Instance.AsyncDeserializeFromFile(filename);
                 Diagram = Serializer.Serializer.Instance.DeserializeFromFile(filename);
                 
                 Boxes.Clear();

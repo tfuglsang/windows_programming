@@ -86,6 +86,7 @@
     <Compile Include="UndoRedo\AddandRemove\MoveMultipleBoxes.cs" />
     <Compile Include="UndoRedo\AddandRemove\RemoveBox.cs" />
     <Compile Include="UndoRedo\AddandRemove\RemoveLine.cs" />
+    <Compile Include="UndoRedo\AddandRemove\TextChanged.cs" />
     <Compile Include="UndoRedo\IURCommand.cs" />
     <Compile Include="UndoRedo\URController.cs" />
     <Compile Include="View\Selectors\CustomDataTemplateSelector.cs" />

@@ -14,6 +14,7 @@ using ClassDiagram.UndoRedo.AddandRemove;
 using ClassDiagram.View.UserControls;
 using ClassDiagram.Model;
 using System;
+using System.Threading.Tasks;
 
 namespace ClassDiagram.ViewModel
 {
@@ -41,7 +42,7 @@ namespace ClassDiagram.ViewModel
         public ICommand UndoCommand { get; }
         public ICommand RedoCommand { get; }
         public ICommand SaveDiagram => new RelayCommand(SaveDiagramClicked);    
-        public ICommand LoadDiagram => new RelayCommand(LoadDiagramClicked); 
+        public ICommand LoadDiagram => new RelayCommand(LoadDiagramClicked);
 
         public ICommand SelectAllCommand => new RelayCommand(SelectAll);
 
@@ -197,6 +198,7 @@ namespace ClassDiagram.ViewModel
             string filename = OpenFileDialog();
             if (filename != "")
             {
+                //Diagram = Serializer.Serializer.Instance.AsyncDeserializeFromFile(filename);
                 Diagram = Serializer.Serializer.Instance.DeserializeFromFile(filename);
                 
                 Boxes.Clear();

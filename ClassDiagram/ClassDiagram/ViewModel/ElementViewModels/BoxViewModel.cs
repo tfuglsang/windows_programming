@@ -1,24 +1,21 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
 using ClassDiagram.Model;
 using GalaSoft.MvvmLight.CommandWpf;
-using System;
+using ClassDiagram.UndoRedo.AddandRemove;
+using System.Windows.Controls;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
 {
     public class BoxViewModel : ElementViewModel
     {
-        //private bool _isSelected;
-        private Point _initialMousePostion;
-        private bool _isMoving;
-        private bool _hasMoved;
         private bool _wasClicked;
         private Point? _startingOffset = null;
         private Point? _startingPosition = null;
         private readonly IBox _box;
+        
 
         public ICommand OnMouseLeftBtnDownCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftBtnDown);
         public ICommand OnMouseLeftBtnUpCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftUp);
@@ -26,12 +23,53 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         public RelayCommand AddFieldsTextBoxCommand { get; private set; }
         public RelayCommand AddMethodTextBoxCommand { get; private set; }
         
+        public RelayCommand TextChangedCommand { get; private set; }        
+        private Box _oldbox; // Used for undo/redo of text 
+        
+
+        private UndoRedo.URController UndoRedo { get; }
+        public ICommand UndoCommand { get; }
+        public ICommand RedoCommand { get; }
+
+        public BoxViewModel(BoxViewModel box, IBox boxi)
+        {
+            _box = boxi;
+            FieldsList = box.FieldsList;
+            AddFieldsTextBoxCommand = new RelayCommand(AddFieldsTextbox);
+            AddMethodTextBoxCommand = new RelayCommand(AddMethodTextbox);            
+        }
+
+
         public BoxViewModel(IBox box)
         {
             _box = box;
+            
 
             AddFieldsTextBoxCommand = new RelayCommand(AddFieldsTextbox);
             AddMethodTextBoxCommand = new RelayCommand(AddMethodTextbox);
+            TextChangedCommand = new RelayCommand(TextChanged);
+
+            UndoRedo = ClassDiagram.UndoRedo.URController.Instance;
+            UndoCommand = UndoRedo.UndoC;
+            RedoCommand = UndoRedo.RedoC;
+
+            _oldbox = new Box();
+
+            string s = this.Label;
+            _oldbox.Label = s;
+            foreach (Fields f in this.FieldsList)
+            {
+                s = f.Field;
+                Fields field = new Fields(s);
+                _oldbox.FieldsList.Add(field);
+            }
+            foreach (Methods f in this.MethodList)
+            {
+                s = f.Method;
+                Methods method = new Methods(s);
+                _oldbox.MethodList.Add(method);
+            }
+
         }
 
         #region properties
@@ -94,9 +132,11 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         public ObservableCollection<Fields> FieldsList
         {
-            get { return _box.FieldsList; }
+            get {
+                return _box.FieldsList;
+            }
             set
-            {
+            {                
                 _box.FieldsList = value;
                 RaisePropertyChanged();
             }
@@ -166,6 +206,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                     break;
             }
         }
+
         private void OnMouseLeftBtnDown(MouseButtonEventArgs e)
         {
             _wasClicked = true;
@@ -180,7 +221,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         }
 
         private void AddFieldsTextbox()
-        {
+        {            
             _box.FieldsList.Add(new Fields(""));
             Height += 20;
         }
@@ -190,10 +231,124 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             _box.MethodList.Add(new Methods(""));
             Height += 20;
         }
-        
+
+        private void TextChanged()
+        {
+            // Check if text boxes are the same as before a keystroke 
+            string s1;
+            string s2;
+
+            bool label_same = true;
+
+            if (this.Label == _oldbox.Label)
+            {
+                label_same = true;
+            }
+            else
+            {
+                label_same = false;
+            }
+
+            bool fields_same = true;
+
+            if (FieldsList.Count == _oldbox.FieldsList.Count)
+            {
+                for (int i = 0; i < FieldsList.Count; i++)
+                {
+                    s1 = FieldsList[i].Field;
+                    s2 = _oldbox.FieldsList[i].Field;
+                    if (s1 == s2)
+                    {
+
+                        fields_same = true;
+                    }
+                    else
+                    {
+                        fields_same = false;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                fields_same = false;
+            }
+
+            bool methods_same = true;
+            if (MethodList.Count == _oldbox.MethodList.Count)
+            {
+                for (int i = 0; i < MethodList.Count; i++)
+                {
+                    s1 = MethodList[i].Method;
+                    s2 = _oldbox.MethodList[i].Method;
+
+                    if (s1 == s2)
+                    {
+                        methods_same = true;
+                    }
+                    else
+                    {
+                        methods_same = false;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                methods_same = false;
+            }
+
+            // If the text has changed, update the undo/redo controller
+            if (methods_same == false || fields_same == false || label_same == false)
+            {
+                UndoRedo.AddExecute(new TextChanged(this, _oldbox, _box));
+
+                // Then update the 'old' textbox to reflect the newest text
+                string s;
+                int i = 0;
+                foreach (Fields f in this.FieldsList)
+                {
+                    s = f.Field;
+                    Fields field = new Fields(s);
+
+                    if (_oldbox.FieldsList.Count - 1 < i)
+                    {
+                        _oldbox.FieldsList.Add(new Fields(""));
+                        _oldbox.FieldsList[i] = field;
+                    }
+                    else
+                    {
+                        _oldbox.FieldsList[i] = field;
+                    }
+                    i++;
+                }
+
+                i = 0;
+                foreach (Methods f in this.MethodList)
+                {
+                    s = f.Method;
+                    Methods method = new Methods(s);
+
+                    if (_oldbox.MethodList.Count - 1 < i)
+                    {
+                        _oldbox.MethodList.Add(new Methods(""));
+                        _oldbox.MethodList[i] = method;
+                    }
+                    else
+                    {
+                        _oldbox.MethodList[i] = method;
+                    }
+                    i++;
+                }
+                s = Label;
+                _oldbox.Label = s;
+            }
+        }
+
         public bool IsPointInBox(Point pointToCheck)
             =>
             (pointToCheck.X > Position.X) && (pointToCheck.X < Position.X + Width) && (pointToCheck.Y > Position.Y) &&
             (pointToCheck.Y < Position.Y + Height);
     }
+
 }

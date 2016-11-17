@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 
 namespace ClassDiagram.Model
 {
     public class Fields
     {
-        public Fields(String aField)
+        public Fields(string aField)
         {
             Field = aField;
         }
-        public String Field { get; set; }
+        public string Field { get; set; }
     }
 }

@@ -15,6 +15,7 @@ namespace ClassDiagram.Model
             FieldsList = new ObservableCollection<Fields>();
             MethodList = new ObservableCollection<Methods>();
         }
+
         public string Label { get; set; }          // The name of the box shown in the View
         [XmlIgnore]
         public ObservableCollection<Fields> FieldsList { get; set; }          

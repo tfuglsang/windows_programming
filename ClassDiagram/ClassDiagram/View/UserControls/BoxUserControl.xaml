@@ -41,13 +41,27 @@
     </i:Interaction.Triggers>
 
     <DockPanel VerticalAlignment="Stretch" Height="Auto">
-        <TextBox x:Name="LabelList" DockPanel.Dock="Top" Text="{Binding Label}" TextAlignment="Center" Style="{StaticResource TextBoxLabel}" MinHeight="18" MinWidth="120" BorderThickness="0,0,0,1" BorderBrush="Black"/>
+        <TextBox x:Name="LabelList" DockPanel.Dock="Top" Text="{Binding Label, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" Style="{StaticResource TextBoxLabel}" MinHeight="18" MinWidth="120" BorderThickness="0,0,0,1" BorderBrush="Black">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="KeyUp">
+                    <cmd:EventToCommand Command="{Binding ElementName=BoxUserControlName, Path=DataContext.TextChangedCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </TextBox>
+        
         <ListBox x:Name="FieldListBox" DockPanel.Dock="Top" ItemsSource="{Binding FieldsList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListBoxItemStyle}" HorizontalContentAlignment="Stretch" MinHeight="18" MinWidth="120" BorderThickness="0,0,0,1" BorderBrush="Black">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBox Text="{Binding Field,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Style="{StaticResource TextBoxFocus}">
+                    <TextBox Name="FieldsTextBox" Text="{Binding Field,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Style="{StaticResource TextBoxFocus}">
+                        
+                        <i:Interaction.Triggers>                            
+                            <i:EventTrigger EventName="KeyUp">
+                                <cmd:EventToCommand Command="{Binding ElementName=BoxUserControlName, Path=DataContext.TextChangedCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        
                         <TextBox.InputBindings>
-                            <KeyBinding Command="{Binding ElementName=BoxUserControlName, Path=DataContext.AddFieldsTextBoxCommand}" Key="Return" />
+                            <KeyBinding Command="{Binding ElementName=BoxUserControlName, Path=DataContext.AddFieldsTextBoxCommand}" Key="Return"/>
                             <KeyBinding Command="{Binding ElementName=BoxUserControlName, Path=DataContext.AddFieldsTextBoxCommand}" Key="Enter" />
                         </TextBox.InputBindings>
                     </TextBox>
@@ -58,7 +72,14 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <TextBox Text="{Binding Method, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Style="{StaticResource TextBoxFocus}">
-                        <TextBox.InputBindings>
+
+                        <i:Interaction.Triggers>
+                            <i:EventTrigger EventName="KeyUp">
+                                <cmd:EventToCommand Command="{Binding ElementName=BoxUserControlName, Path=DataContext.TextChangedCommand}"/>
+                            </i:EventTrigger>
+                        </i:Interaction.Triggers>
+                        
+                        <TextBox.InputBindings>                            
                             <KeyBinding Command="{Binding ElementName=BoxUserControlName, Path=DataContext.AddMethodTextBoxCommand}" Key="Return" />
                             <KeyBinding Command="{Binding ElementName=BoxUserControlName, Path=DataContext.AddMethodTextBoxCommand}" Key="Enter" />
                         </TextBox.InputBindings>

@@ -1,9 +1,11 @@
-﻿namespace ClassDiagram.Model
+﻿using System;
+
+namespace ClassDiagram.Model
 {
     public class Line : ILine
     {
-        public int FromNumber { get; set; }
-        public int ToNumber { get; set; }
+        public Guid FromBoxId { get; set; }
+        public Guid ToBoxId { get; set; }
         public string Label { get; set; }
         public ELine Type { get; set; }
 

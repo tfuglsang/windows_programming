@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Xml.Serialization;
 
@@ -25,7 +26,7 @@ namespace ClassDiagram.Model
         public List<string> MethodStringList { get; set; }
         public double Height { get; set; }
         public double Width { get; set; }
-        public int Number { get; set; }
+        public Guid BoxId { get; set; }
         public double X { get; set; }
         public double Y { get; set; }
         //[XmlIgnore]

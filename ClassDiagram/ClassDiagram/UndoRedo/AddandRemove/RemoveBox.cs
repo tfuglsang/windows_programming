@@ -20,7 +20,7 @@ namespace ClassDiagram.UndoRedo.AddandRemove
             boxes = _boxes;
             lines = _lines;
             removeBoxes = _removeBoxes;
-            removeLines = _lines.Where(x => _removeBoxes.Any(y => y.Number == x.From.Number || y.Number == x.To.Number)).ToList();
+            removeLines = _lines.Where(x => _removeBoxes.Any(y => y.BoxId == x.FromBoxId || y.BoxId == x.ToBoxId)).ToList();
         }
 
         public RemoveBox(ObservableCollection<BoxViewModel> _boxes, ObservableCollection<LineViewModel> _lines,
@@ -28,9 +28,8 @@ namespace ClassDiagram.UndoRedo.AddandRemove
         {
             boxes = _boxes;
             lines = _lines;
-            removeBoxes = new List<BoxViewModel>();
-            removeBoxes.Add(_removeBox);
-            removeLines = _lines.Where(x => removeBoxes.Any(y => y.Number == x.From.Number || y.Number == x.To.Number)).ToList();
+            removeBoxes = new List<BoxViewModel> {_removeBox};
+            removeLines = _lines.Where(x => removeBoxes.Any(y => y.BoxId == x.FromBoxId || y.BoxId == x.ToBoxId)).ToList();
         }
 
         public void Execute()

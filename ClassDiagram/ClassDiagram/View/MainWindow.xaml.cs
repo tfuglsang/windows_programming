@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -29,6 +30,12 @@ namespace ClassDiagram
             // Force US culture since we prefer dot as decimal separator, as opposed to comma.
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+        }
+
+        private void MainWindow_OnCutEventHandler(object sender, RoutedEventArgs e)
+        {
+            Debug.Print("hi there");
+            
         }
     }
 }

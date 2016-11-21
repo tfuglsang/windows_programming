@@ -12,9 +12,8 @@ namespace ClassDiagram.ViewModel.ElementViewModels
     public class LineViewModel : ElementViewModel
     {
         private readonly ILine _line;
-        private BoxViewModel _from;
+        public ILine Line => _line;
         private bool _isConnectingBoxes;
-        private BoxViewModel _to;
 
         public ICommand SelectLineCommand => new RelayCommand<MouseButtonEventArgs>(SelectLine);
         public ICommand ChangeTypeCommand => new RelayCommand<string>(ChangeType);
@@ -22,6 +21,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         public LineViewModel(ILine line, BoxViewModel from, BoxViewModel to)
         {
             _line = line;
+
             From = from;
             To = to;
             From.PropertyChanged += BoxPropertyChanged;
@@ -87,28 +87,24 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
-        public BoxViewModel From
-        {
-            get { return _from; }
-            set { Set(ref _from, value); }
-        }
+        private BoxViewModel From { get; }
 
         public Point FromPoint
         {
             get
             {
-                var angleDegrees = GetAngleBetweenPoints(_from.CenterPoint, _to.CenterPoint);
+                var angleDegrees = GetAngleBetweenPoints(From.CenterPoint, To.CenterPoint);
 
-                var pointToConnect = _from.CenterPoint;
+                var pointToConnect = From.CenterPoint;
 
                 if ((45 <= angleDegrees) && (angleDegrees < 135))
-                    pointToConnect.Y = pointToConnect.Y - _from.Height/2;
+                    pointToConnect.Y = pointToConnect.Y - From.Height/2;
                 else if ((135 <= angleDegrees) || (angleDegrees < -135))
-                    pointToConnect.X = pointToConnect.X + _from.Width/2;
+                    pointToConnect.X = pointToConnect.X + From.Width/2;
                 else if ((-135 <= angleDegrees) && (angleDegrees < -45))
-                    pointToConnect.Y = pointToConnect.Y + _from.Height/2;
+                    pointToConnect.Y = pointToConnect.Y + From.Height/2;
                 else if ((-45 <= angleDegrees) && (angleDegrees < 45))
-                    pointToConnect.X = pointToConnect.X - _from.Width/2;
+                    pointToConnect.X = pointToConnect.X - From.Width/2;
 
                 return pointToConnect;
             }
@@ -205,36 +201,32 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
-        public BoxViewModel To
-        {
-            get { return _to; }
-            set { Set(ref _to, value); }
-        }
+        private BoxViewModel To { get; }
 
         public Point ToPoint
         {
             get
             {
-                var angleDegrees = GetAngleBetweenPoints(_to.CenterPoint, _from.CenterPoint);
+                var angleDegrees = GetAngleBetweenPoints(To.CenterPoint, From.CenterPoint);
 
-                var pointToConnect = _to.CenterPoint;
+                var pointToConnect = To.CenterPoint;
 
                 if ((45 <= angleDegrees) && (angleDegrees < 135))
-                    pointToConnect.Y = pointToConnect.Y - _to.Height/2;
+                    pointToConnect.Y = pointToConnect.Y - To.Height/2;
                 else if ((135 <= angleDegrees) || (angleDegrees < -135))
-                    pointToConnect.X = pointToConnect.X + _to.Width/2;
+                    pointToConnect.X = pointToConnect.X + To.Width/2;
                 else if ((-135 <= angleDegrees) && (angleDegrees < -45))
-                    pointToConnect.Y = pointToConnect.Y + _to.Height/2;
+                    pointToConnect.Y = pointToConnect.Y + To.Height/2;
                 else if ((-45 <= angleDegrees) && (angleDegrees < 45))
-                    pointToConnect.X = pointToConnect.X - _to.Width/2;
+                    pointToConnect.X = pointToConnect.X - To.Width/2;
 
                 return pointToConnect;
             }
         }
 
-        public int ToNumber => To.Number;
+        public Guid ToBoxId => _line.ToBoxId;
 
-        public int FromNumber => From.Number;
+        public Guid FromBoxId => _line.FromBoxId;
 
 
         public ELine Type

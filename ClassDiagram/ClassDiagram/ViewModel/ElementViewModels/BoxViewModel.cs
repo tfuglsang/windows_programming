@@ -7,6 +7,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using ClassDiagram.UndoRedo.AddandRemove;
 using System.Windows.Controls;
+using ClassDiagram.View.UserControls;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
 {
@@ -16,22 +17,18 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         private Point? _startingOffset = null;
         private Point? _startingPosition = null;
         private readonly IBox _box;
+        public IBox Box => _box;
 
         public ICommand OnMouseLeftBtnDownCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftBtnDown);
         public ICommand OnMouseLeftBtnUpCommand => new RelayCommand<MouseButtonEventArgs>(OnMouseLeftUp);
         public ICommand ChangeTypeCommand => new RelayCommand<string>(ChangeType);
-        public ICommand CopyCommand => new RelayCommand(Copy);
-
-        private void Copy()
-        {
-            CopyPaste.CopyPasteController.Instance.Copy(this);
-        }
+ 
         public RelayCommand AddFieldsTextBoxCommand { get; private set; }
         public RelayCommand AddMethodTextBoxCommand { get; private set; }
-        
-        public RelayCommand TextChangedCommand { get; private set; }        
-        private Box _oldbox; // Used for undo/redo of text         
 
+        public RelayCommand TextChangedCommand { get; private set; }
+        private Box _oldbox; // Used for undo/redo of text         
+        
         private UndoRedo.URController UndoRedo { get; }
         public ICommand UndoCommand { get; }
         public ICommand RedoCommand { get; }
@@ -39,7 +36,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         public BoxViewModel(IBox box)
         {
             _box = box;
-            
+
 
             AddFieldsTextBoxCommand = new RelayCommand(AddFieldsTextbox);
             AddMethodTextBoxCommand = new RelayCommand(AddMethodTextbox);
@@ -65,8 +62,8 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                 Methods method = new Methods(s);
                 _oldbox.MethodList.Add(method);
             }
-
         }
+      
 
         #region properties
 
@@ -103,7 +100,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         public Point CenterPoint
         {
-            get { return new Point(_box.X + Width / 2, _box.Y + Height / 2); }
+            get { return new Point(_box.X + Width/2, _box.Y + Height/2); }
         }
 
         public EBox Type
@@ -128,11 +125,9 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         public ObservableCollection<Fields> FieldsList
         {
-            get {
-                return _box.FieldsList;
-            }
+            get { return _box.FieldsList; }
             set
-            {                
+            {
                 _box.FieldsList = value;
                 RaisePropertyChanged();
             }
@@ -159,11 +154,12 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                     return;
                 }
 
-                var point = (Point)value;
+                var point = (Point) value;
                 _startingOffset = new Point(point.X - Position.X, point.Y - Position.Y);
                 Debug.Print($"{_startingOffset.Value.X},{_startingOffset.Value.Y}");
             }
         }
+
         public Point? StartingPosition
         {
             get { return _startingOffset; }
@@ -179,7 +175,8 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             }
         }
 
-        public int Number => _box.Number;
+        public Guid BoxId => _box.BoxId;
+
         #endregion
 
         private void ChangeType(string typeSelected)
@@ -202,11 +199,12 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                     break;
             }
         }
+
         private void OnMouseLeftBtnDown(MouseButtonEventArgs e)
         {
             _wasClicked = true;
         }
-        
+
         private void OnMouseLeftUp(MouseButtonEventArgs e)
         {
             if (_wasClicked)
@@ -254,7 +252,6 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                     s2 = _oldbox.FieldsList[i].Field;
                     if (s1 == s2)
                     {
-
                         fields_same = true;
                     }
                     else
@@ -345,5 +342,4 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             (pointToCheck.X > Position.X) && (pointToCheck.X < Position.X + Width) && (pointToCheck.Y > Position.Y) &&
             (pointToCheck.Y < Position.Y + Height);
     }
-
 }

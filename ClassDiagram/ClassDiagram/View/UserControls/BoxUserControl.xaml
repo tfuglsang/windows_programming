@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ClassDiagram.View.UserControls.BoxUserControl"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,9 @@
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
              xmlns:local="clr-namespace:ClassDiagram.View.UserControls"
+             xmlns:viewModel="clr-namespace:ClassDiagram.ViewModel"
              xmlns:elementViewModels="clr-namespace:ClassDiagram.ViewModel.ElementViewModels"
+             xmlns:ClassDiagram="clr-namespace:ClassDiagram" x:Class="ClassDiagram.View.UserControls.BoxUserControl"
              mc:Ignorable="d"
              Background="White"
              x:Name="BoxUserControlName" 
@@ -15,16 +17,17 @@
              Height="{Binding Height}"
              BorderThickness="2"
              BorderBrush="{Binding SelectedBorder}"
-             >
+             d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type={x:Type elementViewModels:BoxViewModel}}">
     <UserControl.Resources>
         <ResourceDictionary Source="../Resources/StyleDictionary.xaml"/>
     </UserControl.Resources>
     <UserControl.ContextMenu>
-        <ContextMenu>
-            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Class" Header="Class"></MenuItem>
-            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Abstract" Header="Abstract Class"></MenuItem>
-            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Interface" Header="Interface"></MenuItem>
-            <MenuItem Command="{Binding CopyCommand}" Header="Copy"></MenuItem>
+        <ContextMenu x:Name="ContextMenu">
+            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Class" Header="Class"/>
+            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Abstract" Header="Abstract Class"/>
+            <MenuItem Command="{Binding ChangeTypeCommand}" CommandParameter="Interface" Header="Interface"/>
+            <MenuItem Command="{Binding CopyCommand, ElementName=BoxUserControlName}" CommandParameter="{Binding BoxId}" Header="Copy"/>
+            <MenuItem Command="{Binding CutCommand, ElementName=BoxUserControlName}" CommandParameter="{Binding BoxId}" Header="Cut"/>
         </ContextMenu>
     </UserControl.ContextMenu>
     <i:Interaction.Triggers>
@@ -45,25 +48,25 @@
         <TextBox x:Name="LabelList" DockPanel.Dock="Top" Text="{Binding Label, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" TextAlignment="Center" Style="{StaticResource TextBoxLabel}" MinHeight="18" MinWidth="120" BorderThickness="0,0,0,1" BorderBrush="Black">
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="KeyUp">
-                    <cmd:EventToCommand Command="{Binding ElementName=BoxUserControlName, Path=DataContext.TextChangedCommand}"/>
+                    <cmd:EventToCommand Command="{Binding DataContext.TextChangedCommand, ElementName=BoxUserControlName}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </TextBox>
-        
+
         <ListBox x:Name="FieldListBox" DockPanel.Dock="Top" ItemsSource="{Binding FieldsList, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ItemContainerStyle="{StaticResource ListBoxItemStyle}" HorizontalContentAlignment="Stretch" MinHeight="18" MinWidth="120" BorderThickness="0,0,0,1" BorderBrush="Black">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBox Name="FieldsTextBox" Text="{Binding Field,  Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Style="{StaticResource TextBoxFocus}">
-                        
-                        <i:Interaction.Triggers>                            
+                    <TextBox x:Name="FieldsTextBox" Text="{Binding Field, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" BorderThickness="0" Style="{StaticResource TextBoxFocus}">
+
+                        <i:Interaction.Triggers>
                             <i:EventTrigger EventName="KeyUp">
-                                <cmd:EventToCommand Command="{Binding ElementName=BoxUserControlName, Path=DataContext.TextChangedCommand}"/>
+                                <cmd:EventToCommand Command="{Binding DataContext.TextChangedCommand, ElementName=BoxUserControlName}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
-                        
+
                         <TextBox.InputBindings>
-                            <KeyBinding Command="{Binding ElementName=BoxUserControlName, Path=DataContext.AddFieldsTextBoxCommand}" Key="Return"/>
-                            <KeyBinding Command="{Binding ElementName=BoxUserControlName, Path=DataContext.AddFieldsTextBoxCommand}" Key="Enter" />
+                            <KeyBinding Command="{Binding DataContext.AddFieldsTextBoxCommand, ElementName=BoxUserControlName}" Key="Return"/>
+                            <KeyBinding Command="{Binding DataContext.AddFieldsTextBoxCommand, ElementName=BoxUserControlName}" Key="Enter" />
                         </TextBox.InputBindings>
                     </TextBox>
                 </DataTemplate>
@@ -76,13 +79,13 @@
 
                         <i:Interaction.Triggers>
                             <i:EventTrigger EventName="KeyUp">
-                                <cmd:EventToCommand Command="{Binding ElementName=BoxUserControlName, Path=DataContext.TextChangedCommand}"/>
+                                <cmd:EventToCommand Command="{Binding DataContext.TextChangedCommand, ElementName=BoxUserControlName}"/>
                             </i:EventTrigger>
                         </i:Interaction.Triggers>
-                        
-                        <TextBox.InputBindings>                            
-                            <KeyBinding Command="{Binding ElementName=BoxUserControlName, Path=DataContext.AddMethodTextBoxCommand}" Key="Return" />
-                            <KeyBinding Command="{Binding ElementName=BoxUserControlName, Path=DataContext.AddMethodTextBoxCommand}" Key="Enter" />
+
+                        <TextBox.InputBindings>
+                            <KeyBinding Command="{Binding DataContext.AddMethodTextBoxCommand, ElementName=BoxUserControlName}" Key="Return" />
+                            <KeyBinding Command="{Binding DataContext.AddMethodTextBoxCommand, ElementName=BoxUserControlName}" Key="Enter" />
                         </TextBox.InputBindings>
                     </TextBox>
                 </DataTemplate>

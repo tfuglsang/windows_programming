@@ -14,6 +14,7 @@ using ClassDiagram.UndoRedo.AddandRemove;
 using ClassDiagram.View.UserControls;
 using ClassDiagram.Model;
 using System;
+using ClassDiagram.CopyPaste;
 
 namespace ClassDiagram.ViewModel
 {
@@ -45,30 +46,93 @@ namespace ClassDiagram.ViewModel
         public ICommand SelectAllCommand => new RelayCommand(SelectAll);
         public ICommand PasteCommand => new RelayCommand(Paste);
         public ICommand SetMousePosCommand => new RelayCommand<UIElement>(SetMousePos);
-        private Point _mousePos;
-        private Point _statusBarCoordinates;
-        private string _statusBarMessage;
+        public ICommand CutCommand => new RelayCommand<CopyPasteArgs>(CutCopy);
 
-        private void SetMousePos(UIElement canvas)
+        private void CutCopy(CopyPasteArgs args)
         {
-            _mousePos = Mouse.GetPosition(canvas);
+            var selectedBox = Boxes.Where(box => box.BoxId == args.BoxId).First();
+
+            if(args.Type == CopyPasteArgs.COPY)
+                Copy(selectedBox);
+            else if(args.Type == CopyPasteArgs.CUT)
+                Cut(selectedBox);
         }
-       
-        private void Paste()
+        private void Cut(BoxViewModel selectedBox)
         {
-            var boxToPaste = CopyPaste.CopyPasteController.Instance.Paste();
-            // Null check
-            if (boxToPaste == null)
-                return;
+            var diagramToCopy = new Diagram();
 
-            boxToPaste.Position = _mousePos;
-            Boxes.Add(boxToPaste);
+            if (selectedBox.IsSelected)
+            {
+                diagramToCopy.Boxes = new List<Box>();
+                var boxViewModelsToRemove = new List<BoxViewModel>();
+                var tempGuidList = new List<Guid>();
+                foreach (var boxViewModel in Boxes)
+                {
+                    if (boxViewModel.IsSelected)
+                    {
+                        tempGuidList.Add(boxViewModel.BoxId);
+                        boxViewModelsToRemove.Add(boxViewModel);
+                        diagramToCopy.Boxes.Add((Box)boxViewModel.Box);
+                    }
+                }
+
+                diagramToCopy.Lines = new List<Line>();
+                foreach (var lineViewModel in Lines)
+                {
+                    if (tempGuidList.Contains(lineViewModel.FromBoxId) && tempGuidList.Contains(lineViewModel.ToBoxId))
+                        diagramToCopy.Lines.Add((Line)lineViewModel.Line);
+                }
+                UndoRedo.AddExecute(new RemoveBox(Boxes, Lines, boxViewModelsToRemove));
+            }
+            else
+            {
+                diagramToCopy.Boxes = new List<Box>();
+                diagramToCopy.Boxes.Add((Box)selectedBox.Box);
+                UndoRedo.AddExecute(new RemoveBox(Boxes, Lines, selectedBox));
+            }
+           
+            CopyPasteController.Instance.Copy(diagramToCopy);
+        }
+         
+        private void Copy(BoxViewModel selectedBox)
+        {
+            var diagramToCopy = new Diagram();
+
+            if (selectedBox.IsSelected)
+            {
+                diagramToCopy.Boxes = new List<Box>();
+                var tempGuidList = new List<Guid>();
+                foreach (var boxViewModel in Boxes)
+                {
+                    if (boxViewModel.IsSelected)
+                    {
+                        tempGuidList.Add(boxViewModel.BoxId);
+                        diagramToCopy.Boxes.Add((Box) boxViewModel.Box);
+                    }
+                }
+
+                diagramToCopy.Lines = new List<Line>();
+                foreach (var lineViewModel in Lines)
+                {
+                    if(tempGuidList.Contains(lineViewModel.FromBoxId) && tempGuidList.Contains(lineViewModel.ToBoxId))
+                        diagramToCopy.Lines.Add((Line) lineViewModel.Line);
+                }
+            }
+            else
+            {
+                diagramToCopy.Boxes = new List<Box>();
+                diagramToCopy.Boxes.Add((Box) selectedBox.Box);
+            }
+
+            CopyPasteController.Instance.Copy(diagramToCopy);
         }
         public ObservableCollection<BoxViewModel> Boxes { get; }
         public ObservableCollection<LineViewModel> Lines { get; }
         public CompositeCollection Elements { get; } = new CompositeCollection();
 
         public Diagram Diagram = new Diagram();
+        private Point _mousePos;
+        private Size _canvasSize;
         private UndoRedo.URController UndoRedo {get;}
         private BoxViewModel _fromBox;
         private int _boxCounter = 1;
@@ -169,6 +233,18 @@ namespace ClassDiagram.ViewModel
             StatusBarViewModel.Instance.StatusBarCoordinates = new Point(175, 20);
         }
 
+        private void SetMousePos(UIElement canvas)
+        {
+            _mousePos = Mouse.GetPosition(canvas);
+            _canvasSize = canvas.RenderSize;
+        }
+
+        private void Paste()
+        {
+            CopyPaste.CopyPasteController.Instance.Paste(Boxes, Lines, _mousePos, _canvasSize);
+           
+        }
+
         private string OpenFileDialog()
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
@@ -214,7 +290,7 @@ namespace ClassDiagram.ViewModel
                 foreach (Line _line in Diagram.Lines)
                 {                // Find the box that the line starts from
 
-                    LineViewModel newLine = new LineViewModel(_line, Boxes[_line.FromNumber - 1], Boxes[_line.ToNumber - 1]);
+                    LineViewModel newLine = new LineViewModel(_line, Boxes.Where(box => box.BoxId == _line.FromBoxId).First(), Boxes.Where(box => box.BoxId == _line.ToBoxId).First());
                     //LineViewModel newLine = new LineViewModel(_line);
                     Lines.Add(newLine);
                 }
@@ -236,7 +312,7 @@ namespace ClassDiagram.ViewModel
                 {
                     Box _Box = new Box
                     {
-                        Number = box.Number,                    
+                        BoxId = box.BoxId,                    
                         X = box.Position.X,
                         Y = box.Position.Y,
                         Label = box.Label,
@@ -252,8 +328,8 @@ namespace ClassDiagram.ViewModel
                 {
                     Line _Line = new Line
                     {
-                        FromNumber = line.FromNumber,
-                        ToNumber = line.ToNumber,
+                        FromBoxId = line.FromBoxId,
+                        ToBoxId = line.ToBoxId,
                         Type = line.Type,
                     };
                     Diagram.Lines.Add(_Line);
@@ -458,7 +534,7 @@ namespace ClassDiagram.ViewModel
                 {
                     X = point.X,
                     Y = point.Y,
-                    Number = _boxCounter++,                    
+                    BoxId = Guid.NewGuid()                   
                 };
                 newBox.FieldsList.Add(new Fields("Insert Fields1"));
                 newBox.MethodList.Add(new Methods("Insert Method1"));
@@ -504,7 +580,7 @@ namespace ClassDiagram.ViewModel
                     {
                         if (boxViewModel.IsPointInBox(point))
                         {
-                            var lineViewModel = new LineViewModel(new Line(), _fromBox, boxViewModel);
+                            var lineViewModel = new LineViewModel(new Line() {FromBoxId = _fromBox.BoxId, ToBoxId = boxViewModel.BoxId}, _fromBox, boxViewModel);
                             if (IsAddingAssosiation)
                             {
                                 lineViewModel.Type = ELine.Association;
@@ -536,7 +612,7 @@ namespace ClassDiagram.ViewModel
                                 IsAddingRealization = false;
                             }
 
-                            if (Lines.Any(line => (line.FromNumber == _fromBox.Number && line.ToNumber == boxViewModel.Number) || (line.FromNumber == boxViewModel.Number && line.ToNumber == _fromBox.Number)))
+                            if (Lines.Any(line => (line.FromBoxId == _fromBox.BoxId && line.ToBoxId == boxViewModel.BoxId) || (line.FromBoxId == boxViewModel.BoxId && line.ToBoxId == _fromBox.BoxId)))
                             {
                                 StatusBarViewModel.Instance.StatusBarMessage =
                                     "Cant add additional connections between two classes which has allready been connected";

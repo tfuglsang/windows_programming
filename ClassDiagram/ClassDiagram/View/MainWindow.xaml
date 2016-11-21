@@ -14,7 +14,9 @@
         xmlns:selectors="clr-namespace:ClassDiagram.View.Selectors"
         mc:Ignorable="d"
         x:Name="TheMainWindow"
-        Title="ClassDiagram" Height="600" Width="800">
+        Title="ClassDiagram" Height="600" Width="800"
+        
+        >
     <Window.DataContext>
         <ViewModels:MainViewModel />
     </Window.DataContext>
@@ -29,6 +31,11 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
+    <i:Interaction.Triggers>
+        <helpers:RoutedEventTrigger RoutedEvent="UserControls:BoxUserControl.CutEventHandler">
+            <cmd:EventToCommand Command="{Binding CutCommand}" PassEventArgsToCommand="True"/>
+        </helpers:RoutedEventTrigger>
+    </i:Interaction.Triggers>
     <Window.InputBindings>
         <MouseBinding Command="{Binding WindowOnMouseLeftBtnDown}" MouseAction="LeftClick" CommandParameter="{Binding ElementName=diagramCanvas, Mode=OneWay}"></MouseBinding>
         <!--Delete the selected items-->
@@ -43,7 +50,6 @@
         <KeyBinding Command="{Binding UndoCommand}" Key="Z" Modifiers="Control"/>
         <KeyBinding Command="{Binding RedoCommand}" Key="Z" Modifiers="Control+Shift"/>
         <KeyBinding Command="{Binding RedoCommand}" Key="Y" Modifiers="Control"/>
-
     </Window.InputBindings>
     <DockPanel>
         <UserControls:ToolbarUserControl DockPanel.Dock="Top" />
@@ -74,6 +80,7 @@
                 <i:EventTrigger EventName="PreviewMouseRightButtonDown">
                     <cmd:EventToCommand Command="{Binding SetMousePosCommand}" CommandParameter="{Binding ElementName=diagramCanvas, Mode=OneWay}" ></cmd:EventToCommand>
                 </i:EventTrigger>
+
             </i:Interaction.Triggers>
             
             <Grid.ContextMenu>

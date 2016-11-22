@@ -402,8 +402,9 @@ namespace ClassDiagram.ViewModel
         /// <param name="e">MouseButtonEventArgs specifying the even which happend</param>
         private void CanvasOnMouseLeftUp(MouseButtonEventArgs e)
         {
-            if (_clickedBox != null && !_clickedBox.IsSelected)
+            if (_clickedBox != null && !_clickedBox.IsSelected && (_startingPosition.X != _clickedBox.Position.X || _startingPosition.Y != _clickedBox.Position.Y))
             {
+                
                 UndoRedo.Add(new MoveBox(_clickedBox, _startingPosition, _clickedBox.Position));
             }
 

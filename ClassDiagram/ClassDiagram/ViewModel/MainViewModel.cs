@@ -56,6 +56,8 @@ namespace ClassDiagram.ViewModel
                 Copy(selectedBox);
             else if(args.Type == CopyPasteArgs.CUT)
                 Cut(selectedBox);
+
+            RaisePropertyChanged(nameof(CanPaste));
         }
         private void Cut(BoxViewModel selectedBox)
         {

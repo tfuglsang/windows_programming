@@ -19,7 +19,7 @@ namespace ClassDiagram.CopyPaste
         public static CopyPasteController Instance { get; } = new CopyPasteController();
         private string _copiedDiagramString;
         private Point _positionOfSelectedBox;
-        public bool CanPaste => string.IsNullOrEmpty(_copiedDiagramString);
+        public bool CanPaste => !string.IsNullOrEmpty(_copiedDiagramString);
 
         private CopyPasteController()
         {

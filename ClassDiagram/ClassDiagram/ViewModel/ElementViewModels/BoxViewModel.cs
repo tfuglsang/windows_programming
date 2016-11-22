@@ -27,7 +27,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         public RelayCommand AddMethodTextBoxCommand { get; private set; }
 
         public RelayCommand TextChangedCommand { get; private set; }
-        private Box _oldbox; // Used for undo/redo of text         
+        private IBox _oldbox; // Used for undo/redo of text         
         
         private UndoRedo.URController UndoRedo { get; }
         public ICommand UndoCommand { get; }

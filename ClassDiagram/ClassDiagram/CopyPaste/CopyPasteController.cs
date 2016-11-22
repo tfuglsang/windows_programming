@@ -16,8 +16,7 @@ namespace ClassDiagram.CopyPaste
     public class CopyPasteController
     {
         public static CopyPasteController Instance { get; } = new CopyPasteController();
-        private Box copiedBox;
-        private string copiedDiagramString;
+        private string _copiedDiagramString;
         private CopyPasteController()
         {
             
@@ -45,21 +44,21 @@ namespace ClassDiagram.CopyPaste
             using (var textWriter = new StringWriter())
             {
                 xmlSerializer.Serialize(textWriter, diagram);
-                copiedDiagramString = textWriter.ToString();
+                _copiedDiagramString = textWriter.ToString();
             }
         }
    
 
         public void Paste(ObservableCollection<BoxViewModel> boxes, ObservableCollection<LineViewModel> lines, Point mousePosition, Size canvasSize)
         {
-            if(string.IsNullOrEmpty(copiedDiagramString))
+            if(string.IsNullOrEmpty(_copiedDiagramString))
                 throw new Exception("Can't paste when the diagram is null");
 
             var xmlSerializer = new XmlSerializer(typeof(Diagram));
 
             Diagram diagramToPaste;
 
-            using (var stringReader = new StringReader(copiedDiagramString))
+            using (var stringReader = new StringReader(_copiedDiagramString))
             {
                 diagramToPaste = xmlSerializer.Deserialize(stringReader) as Diagram;
             }
@@ -110,8 +109,5 @@ namespace ClassDiagram.CopyPaste
             
             UndoRedo.URController.Instance.AddExecute(new AddBoxesWithLines(boxes, lines, boxesToAdd, linesToAdd));
         }
-
-
-
     }
 }

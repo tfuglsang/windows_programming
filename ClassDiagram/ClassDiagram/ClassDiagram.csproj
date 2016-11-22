@@ -77,11 +77,9 @@
     </ApplicationDefinition>
     <Compile Include="CopyPaste\CopyPasteArgs.cs" />
     <Compile Include="CopyPaste\CopyPasteController.cs" />
-    <Compile Include="Helpers\AttachedArdorner.cs" />
     <Compile Include="Helpers\RoutedEventTriggers.cs" />
     <Compile Include="Helpers\CustomClickArgs.cs" />
     <Compile Include="Helpers\MouseButtonEventArgsToCustomClickConverter.cs" />
-    <Compile Include="Helpers\MyCustomAdorner.cs" />
     <Compile Include="Serializer\Serializer.cs" />
     <Compile Include="UndoRedo\AddandRemove\AddBoxesWithLines.cs" />
     <Compile Include="UndoRedo\AddandRemove\AddLine.cs" />

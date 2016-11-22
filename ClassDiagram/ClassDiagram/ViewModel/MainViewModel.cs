@@ -50,7 +50,7 @@ namespace ClassDiagram.ViewModel
 
         private void CutCopy(CopyPasteArgs args)
         {
-            var selectedBox = Boxes.Where(box => box.BoxId == args.BoxId).First();
+            var selectedBox = Boxes.First(box => box.BoxId == args.BoxId);
 
             if(args.Type == CopyPasteArgs.COPY)
                 Copy(selectedBox);
@@ -475,7 +475,6 @@ namespace ClassDiagram.ViewModel
                 }
             }
 
-
             if (_hasMoved)
             {
                 if (_clickedBox != null && _clickedBox.IsSelected)
@@ -525,8 +524,6 @@ namespace ClassDiagram.ViewModel
         private void CanvasClicked(CustomClickArgs e)
         {
             var point = e.ClickedPoint;
-
-            Debug.Print($"{point.X},{point.Y}"); // debug information
             
             if (IsAddingClass || IsAddingAbstractClass || IsAddingInterface)
             {

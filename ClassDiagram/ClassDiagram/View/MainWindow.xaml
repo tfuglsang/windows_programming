@@ -85,7 +85,7 @@
             
             <Grid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Command="{Binding PasteCommand}" Header="Paste"></MenuItem>
+                    <MenuItem Command="{Binding PasteCommand}" Header="Paste" IsEnabled="False"></MenuItem>
                 </ContextMenu>
             </Grid.ContextMenu>
             

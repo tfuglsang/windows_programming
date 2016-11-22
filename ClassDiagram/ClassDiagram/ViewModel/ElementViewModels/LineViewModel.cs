@@ -67,7 +67,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
         }
         private void BoxPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(BoxViewModel.Position))
+            if (e.PropertyName == nameof(BoxViewModel.Position) || e.PropertyName == nameof(BoxViewModel.Height))
             {
                 RaisePropertyChanged(nameof(FromPoint));
                 RaisePropertyChanged(nameof(ToPoint));

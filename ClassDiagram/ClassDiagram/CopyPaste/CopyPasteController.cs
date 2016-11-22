@@ -9,6 +9,7 @@ using System.Windows;
 using System.Xml.Serialization;
 using ClassDiagram.Model;
 using ClassDiagram.UndoRedo.AddandRemove;
+using ClassDiagram.ViewModel;
 using ClassDiagram.ViewModel.ElementViewModels;
 
 namespace ClassDiagram.CopyPaste
@@ -17,14 +18,50 @@ namespace ClassDiagram.CopyPaste
     {
         public static CopyPasteController Instance { get; } = new CopyPasteController();
         private string _copiedDiagramString;
+        private Point _positionOfSelectedBox;
+        public bool CanPaste => string.IsNullOrEmpty(_copiedDiagramString);
+
         private CopyPasteController()
         {
             
         }
 
-        public void Copy(Diagram diagram)
+        private Diagram GenerateDiagram(BoxViewModel selectedBox, ObservableCollection<BoxViewModel> boxes, ObservableCollection<LineViewModel> lines)
         {
-            foreach (var box in diagram.Boxes)
+            var diagramToCopy = new Diagram();
+
+            if (selectedBox.IsSelected)
+            {
+                diagramToCopy.Boxes = new List<Box>();
+                var tempGuidList = new List<Guid>();
+                foreach (var boxViewModel in boxes)
+                {
+                    if (boxViewModel.IsSelected)
+                    {
+                        tempGuidList.Add(boxViewModel.BoxId);
+                        diagramToCopy.Boxes.Add(boxViewModel.Box as Box);
+                    }
+                }
+
+                diagramToCopy.Lines = new List<Line>();
+                foreach (var lineViewModel in lines)
+                {
+                    if (tempGuidList.Contains(lineViewModel.FromBoxId) && tempGuidList.Contains(lineViewModel.ToBoxId))
+                        diagramToCopy.Lines.Add((Line)lineViewModel.Line);
+                }
+            }
+            else
+            {
+                diagramToCopy.Boxes = new List<Box>();
+                diagramToCopy.Boxes.Add((Box)selectedBox.Box);
+            }
+
+            return diagramToCopy;
+        }
+
+        private string SerializeDiagramToString(Diagram diagramToSerialize)
+        {
+            foreach (var box in diagramToSerialize.Boxes)
             {
                 box.FieldsStringList = new List<string>();
                 foreach (var field in box.FieldsList)
@@ -38,14 +75,36 @@ namespace ClassDiagram.CopyPaste
                     box.MethodStringList.Add(method.Method);
                 }
             }
-            
+
             var xmlSerializer = new XmlSerializer(typeof(Diagram));
 
             using (var textWriter = new StringWriter())
             {
-                xmlSerializer.Serialize(textWriter, diagram);
-                _copiedDiagramString = textWriter.ToString();
+                xmlSerializer.Serialize(textWriter, diagramToSerialize);
+                return textWriter.ToString();
             }
+        }
+
+        public void Cut(BoxViewModel selectedBox, ObservableCollection<BoxViewModel> boxes,
+            ObservableCollection<LineViewModel> lines)
+        {
+            var diagram = GenerateDiagram(selectedBox, boxes, lines);
+
+            var boxesToDelete = diagram.Boxes.Select(box => boxes.First(boxViewModel => boxViewModel.BoxId == box.BoxId)).ToList();
+
+            _positionOfSelectedBox = new Point(selectedBox.Position.X, selectedBox.Position.Y);
+            _copiedDiagramString = SerializeDiagramToString(diagram);
+
+            UndoRedo.URController.Instance.AddExecute(new RemoveBox(boxes, lines, boxesToDelete));
+        }
+
+        public void Copy(BoxViewModel selectedBox, ObservableCollection<BoxViewModel> boxes, ObservableCollection<LineViewModel> lines)
+        {
+            var diagram = GenerateDiagram(selectedBox, boxes, lines);
+            _positionOfSelectedBox = new Point(selectedBox.Position.X, selectedBox.Position.Y);
+            
+            _copiedDiagramString = SerializeDiagramToString(diagram);
+            
         }
    
 
@@ -87,7 +146,16 @@ namespace ClassDiagram.CopyPaste
                     box.MethodList.Add(new Methods(method));
                 }
 
-                var boxViewModel = new BoxViewModel(box) {Position = mousePosition};
+                var newPosition = new Point(box.X - _positionOfSelectedBox.X + mousePosition.X, box.Y - _positionOfSelectedBox.Y + mousePosition.Y);
+
+                if (newPosition.X < 0 || newPosition.X > canvasSize.Width - box.Width || newPosition.Y < 0 ||
+                    newPosition.Y > canvasSize.Height - box.Height)
+                {
+                    StatusBarViewModel.Instance.StatusBarMessage = "Cant add paste boxes outside of the canvas";
+                    return;
+                }
+
+                var boxViewModel = new BoxViewModel(box) {Position = newPosition};
 
                 boxesToAdd.Add(boxViewModel); 
             }

@@ -59,72 +59,12 @@ namespace ClassDiagram.ViewModel
         }
         private void Cut(BoxViewModel selectedBox)
         {
-            var diagramToCopy = new Diagram();
-
-            if (selectedBox.IsSelected)
-            {
-                diagramToCopy.Boxes = new List<Box>();
-                var boxViewModelsToRemove = new List<BoxViewModel>();
-                var tempGuidList = new List<Guid>();
-                foreach (var boxViewModel in Boxes)
-                {
-                    if (boxViewModel.IsSelected)
-                    {
-                        tempGuidList.Add(boxViewModel.BoxId);
-                        boxViewModelsToRemove.Add(boxViewModel);
-                        diagramToCopy.Boxes.Add((Box)boxViewModel.Box);
-                    }
-                }
-
-                diagramToCopy.Lines = new List<Line>();
-                foreach (var lineViewModel in Lines)
-                {
-                    if (tempGuidList.Contains(lineViewModel.FromBoxId) && tempGuidList.Contains(lineViewModel.ToBoxId))
-                        diagramToCopy.Lines.Add((Line)lineViewModel.Line);
-                }
-                UndoRedo.AddExecute(new RemoveBox(Boxes, Lines, boxViewModelsToRemove));
-            }
-            else
-            {
-                diagramToCopy.Boxes = new List<Box>();
-                diagramToCopy.Boxes.Add((Box)selectedBox.Box);
-                UndoRedo.AddExecute(new RemoveBox(Boxes, Lines, selectedBox));
-            }
-           
-            CopyPasteController.Instance.Copy(diagramToCopy);
+            CopyPasteController.Instance.Cut(selectedBox, Boxes, Lines);
         }
          
         private void Copy(BoxViewModel selectedBox)
         {
-            var diagramToCopy = new Diagram();
-
-            if (selectedBox.IsSelected)
-            {
-                diagramToCopy.Boxes = new List<Box>();
-                var tempGuidList = new List<Guid>();
-                foreach (var boxViewModel in Boxes)
-                {
-                    if (boxViewModel.IsSelected)
-                    {
-                        tempGuidList.Add(boxViewModel.BoxId);
-                        diagramToCopy.Boxes.Add((Box) boxViewModel.Box);
-                    }
-                }
-
-                diagramToCopy.Lines = new List<Line>();
-                foreach (var lineViewModel in Lines)
-                {
-                    if(tempGuidList.Contains(lineViewModel.FromBoxId) && tempGuidList.Contains(lineViewModel.ToBoxId))
-                        diagramToCopy.Lines.Add((Line) lineViewModel.Line);
-                }
-            }
-            else
-            {
-                diagramToCopy.Boxes = new List<Box>();
-                diagramToCopy.Boxes.Add((Box) selectedBox.Box);
-            }
-
-            CopyPasteController.Instance.Copy(diagramToCopy);
+            CopyPasteController.Instance.Copy(selectedBox, Boxes, Lines);
         }
         public ObservableCollection<BoxViewModel> Boxes { get; }
         public ObservableCollection<LineViewModel> Lines { get; }
@@ -233,6 +173,11 @@ namespace ClassDiagram.ViewModel
             StatusBarViewModel.Instance.StatusBarCoordinates = new Point(175, 20);
         }
 
+        public bool CanPaste
+        {
+            get { return CopyPasteController.Instance.CanPaste; }
+        }
+
         private void SetMousePos(UIElement canvas)
         {
             _mousePos = Mouse.GetPosition(canvas);
@@ -242,7 +187,6 @@ namespace ClassDiagram.ViewModel
         private void Paste()
         {
             CopyPaste.CopyPasteController.Instance.Paste(Boxes, Lines, _mousePos, _canvasSize);
-           
         }
 
         private string OpenFileDialog()
@@ -477,10 +421,11 @@ namespace ClassDiagram.ViewModel
 
             if (_hasMoved)
             {
-                if (_clickedBox != null && _clickedBox.IsSelected)
+                if (_clickedBox != null && _clickedBox.IsSelected && ((_startingPosition.X - _clickedBox.Position.X) != 0 || (_startingPosition.Y - _clickedBox.Position.Y) != 0))
                 {
                     UndoRedo.Add(new MoveMultipleBoxes(movedBoxes, _startingPosition.X - _clickedBox.Position.X, _startingPosition.Y - _clickedBox.Position.Y ));
                     StatusBarViewModel.Instance.StatusBarMessage = "Classes has been moved";
+                    _startingPosition = new Point(0,0);
                 }
 
                 e.Handled = true;
@@ -601,7 +546,7 @@ namespace ClassDiagram.ViewModel
                             else if (IsAddingInheritance)
                             {
                                 lineViewModel.Type = ELine.Inheritance;
-                                IsAddingInterface = false;
+                                IsAddingInheritance = false;
                             }
                             else if (IsAddingRealization)
                             {

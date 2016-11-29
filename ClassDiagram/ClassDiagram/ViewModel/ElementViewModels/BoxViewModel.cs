@@ -158,7 +158,6 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
                 var point = (Point) value;
                 _startingOffset = new Point(point.X - Position.X, point.Y - Position.Y);
-                Debug.Print($"{_startingOffset.Value.X},{_startingOffset.Value.Y}");
             }
         }
 
@@ -183,10 +182,8 @@ namespace ClassDiagram.ViewModel.ElementViewModels
 
         private void ChangeType(string typeSelected)
         {
-            Debug.Print(typeSelected);
             switch (typeSelected)
             {
-                // TODO move statusbar controls to be available
                 case nameof(EBox.Class):
                     Type = EBox.Class;
                     break;
@@ -197,9 +194,10 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                     Type = EBox.Interface;
                     break;
                 default:
-                    Debug.Print("Something went wrong - tell the user about this");
-                    break;
+                    StatusBarViewModel.Instance.StatusBarMessage = "The type of the class could not be changed";
+                    return;
             }
+            StatusBarViewModel.Instance.StatusBarMessage = $"The box type was changed to {Type}";
         }
 
         private void OnMouseLeftBtnDown(MouseButtonEventArgs e)

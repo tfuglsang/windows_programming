@@ -31,16 +31,16 @@ namespace ClassDiagram.View.UserControls
             NameScope.SetNameScope(ContextMenu, NameScope.GetNameScope(this));
         }
 
-        public static readonly RoutedEvent CutEvent = EventManager.RegisterRoutedEvent(
-            "CutEventHandler",
+        public static readonly RoutedEvent CutCopyEvent = EventManager.RegisterRoutedEvent(
+            "CutCopyEventHandler",
             RoutingStrategy.Bubble,
             typeof(RoutedEventHandler),
             typeof(BoxUserControl));
 
-        public event RoutedEventHandler CutEventHandler
+        public event RoutedEventHandler CutCopyEventHandler
         {
-            add { AddHandler(CutEvent, value); }
-            remove { RemoveHandler(CutEvent, value); }
+            add { AddHandler(CutCopyEvent, value); }
+            remove { RemoveHandler(CutCopyEvent, value); }
         }
 
         public ICommand CutCommand => new RelayCommand<Guid>(Cut);
@@ -48,13 +48,13 @@ namespace ClassDiagram.View.UserControls
 
         private void Copy(Guid commandParam)
         {
-            var newEventArgs = new CopyPasteArgs(CutEvent, commandParam, CopyPasteArgs.COPY);
+            var newEventArgs = new CopyPasteArgs(CutCopyEvent, commandParam, CopyPasteArgs.COPY);
             RaiseEvent(newEventArgs);
         }
         private void Cut(Guid commandParam)
         {
             Debug.Print($"{commandParam}");
-            var newEventArgs = new CopyPasteArgs(CutEvent, commandParam, CopyPasteArgs.CUT);
+            var newEventArgs = new CopyPasteArgs(CutCopyEvent, commandParam, CopyPasteArgs.CUT);
             RaiseEvent(newEventArgs);
         }
     }

@@ -46,7 +46,7 @@ namespace ClassDiagram.ViewModel
         public ICommand SelectAllCommand => new RelayCommand(SelectAll);
         public ICommand PasteCommand => new RelayCommand(Paste);
         public ICommand SetMousePosCommand => new RelayCommand<UIElement>(SetMousePos);
-        public ICommand CutCommand => new RelayCommand<CopyPasteArgs>(CutCopy);
+        public ICommand CutCopyCommand => new RelayCommand<CopyPasteArgs>(CutCopy);
 
         private void CutCopy(CopyPasteArgs args)
         {

@@ -12,9 +12,11 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using ClassDiagram.UndoRedo.AddandRemove;
 using ClassDiagram.View.UserControls;
-using ClassDiagram.Model;
 using System;
 using ClassDiagram.CopyPaste;
+using ClassModel.Model;
+using ClassModel.Model.Implementation;
+using ClassModel.Model.Interfaces;
 
 namespace ClassDiagram.ViewModel
 {

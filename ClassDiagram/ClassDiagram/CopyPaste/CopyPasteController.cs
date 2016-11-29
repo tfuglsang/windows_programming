@@ -7,10 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Serialization;
-using ClassDiagram.Model;
 using ClassDiagram.UndoRedo.AddandRemove;
 using ClassDiagram.ViewModel;
 using ClassDiagram.ViewModel.ElementViewModels;
+using ClassModel.Model.Implementation;
 
 namespace ClassDiagram.CopyPaste
 {
@@ -66,13 +66,13 @@ namespace ClassDiagram.CopyPaste
                 box.FieldsStringList = new List<string>();
                 foreach (var field in box.FieldsList)
                 {
-                    box.FieldsStringList.Add(field.Field);
+                    box.FieldsStringList.Add(field.CurrentString);
                 }
 
                 box.MethodStringList = new List<string>();
                 foreach (var method in box.MethodList)
                 {
-                    box.MethodStringList.Add(method.Method);
+                    box.MethodStringList.Add(method.CurrentString);
                 }
             }
 

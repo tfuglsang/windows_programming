@@ -1,5 +1,6 @@
-﻿using ClassDiagram.Model;
-using ClassDiagram.ViewModel.ElementViewModels;
+﻿using ClassDiagram.ViewModel.ElementViewModels;
+using ClassModel.Model.Implementation;
+using ClassModel.Model.Interfaces;
 
 namespace ClassDiagram.UndoRedo.AddandRemove
 {
@@ -10,7 +11,7 @@ namespace ClassDiagram.UndoRedo.AddandRemove
         private Box newbox = new Box();
         private Box oldbox = new Box();
 
-        public TextChanged(BoxViewModel box, Model.IBox old_settings, Model.IBox new_settings)
+        public TextChanged(BoxViewModel box, IBox old_settings, IBox new_settings)
         {
             // Reference to BoxViewModel
             _box = box;
@@ -34,14 +35,14 @@ namespace ClassDiagram.UndoRedo.AddandRemove
             string s;
             foreach (Methods m in settings.MethodList)
             {
-                s = m.Method;
+                s = m.CurrentString;
                 Methods method = new Methods(s);
                 box.MethodList.Add(method);
             }
 
             foreach (Fields f in settings.FieldsList)
             {
-                s = f.Field;
+                s = f.CurrentString;
                 Fields field = new Fields(s);
                 box.FieldsList.Add(field);
             }
@@ -57,7 +58,7 @@ namespace ClassDiagram.UndoRedo.AddandRemove
             int i = 0;
             foreach (Fields f in settings.FieldsList)
             {
-                s = f.Field;
+                s = f.CurrentString;
                 Fields field = new Fields(s);
 
                 if (_box.FieldsList.Count - 1 < i)
@@ -89,7 +90,7 @@ namespace ClassDiagram.UndoRedo.AddandRemove
             i = 0;
             foreach (Methods m in settings.MethodList)
             {
-                s = m.Method;
+                s = m.CurrentString;
                 Methods method = new Methods(s);
 
                 if (_box.MethodList.Count - 1 < i)

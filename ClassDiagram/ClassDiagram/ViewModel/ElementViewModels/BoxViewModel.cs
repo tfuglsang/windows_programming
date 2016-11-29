@@ -2,12 +2,14 @@
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
-using ClassDiagram.Model;
 using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using ClassDiagram.UndoRedo.AddandRemove;
 using System.Windows.Controls;
 using ClassDiagram.View.UserControls;
+using ClassModel.Model;
+using ClassModel.Model.Implementation;
+using ClassModel.Model.Interfaces;
 
 namespace ClassDiagram.ViewModel.ElementViewModels
 {
@@ -52,13 +54,13 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             _oldbox.Label = s;
             foreach (Fields f in this.FieldsList)
             {
-                s = f.Field;
+                s = f.CurrentString;
                 Fields field = new Fields(s);
                 _oldbox.FieldsList.Add(field);
             }
             foreach (Methods f in this.MethodList)
             {
-                s = f.Method;
+                s = f.CurrentString;
                 Methods method = new Methods(s);
                 _oldbox.MethodList.Add(method);
             }
@@ -248,8 +250,8 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             {
                 for (int i = 0; i < FieldsList.Count; i++)
                 {
-                    s1 = FieldsList[i].Field;
-                    s2 = _oldbox.FieldsList[i].Field;
+                    s1 = FieldsList[i].CurrentString;
+                    s2 = _oldbox.FieldsList[i].CurrentString;
                     if (s1 == s2)
                     {
                         fields_same = true;
@@ -271,8 +273,8 @@ namespace ClassDiagram.ViewModel.ElementViewModels
             {
                 for (int i = 0; i < MethodList.Count; i++)
                 {
-                    s1 = MethodList[i].Method;
-                    s2 = _oldbox.MethodList[i].Method;
+                    s1 = MethodList[i].CurrentString;
+                    s2 = _oldbox.MethodList[i].CurrentString;
 
                     if (s1 == s2)
                     {
@@ -300,7 +302,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                 int i = 0;
                 foreach (Fields f in this.FieldsList)
                 {
-                    s = f.Field;
+                    s = f.CurrentString;
                     Fields field = new Fields(s);
 
                     if (_oldbox.FieldsList.Count - 1 < i)
@@ -318,7 +320,7 @@ namespace ClassDiagram.ViewModel.ElementViewModels
                 i = 0;
                 foreach (Methods f in this.MethodList)
                 {
-                    s = f.Method;
+                    s = f.CurrentString;
                     Methods method = new Methods(s);
 
                     if (_oldbox.MethodList.Count - 1 < i)

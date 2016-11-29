@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using ClassDiagram.Model;
 using ClassDiagram.ViewModel.ElementViewModels;
+using ClassModel.Model;
+using ClassModel.Model.Interfaces;
 
 namespace ClassDiagram.UndoRedo.AddandRemove
 {

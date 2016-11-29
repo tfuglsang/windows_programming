@@ -1,4 +1,4 @@
-﻿namespace ClassDiagram.Model
+﻿namespace ClassModel.Model
 {
     public enum ELine
     {

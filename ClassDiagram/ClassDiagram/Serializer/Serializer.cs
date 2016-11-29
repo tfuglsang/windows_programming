@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Xml.Serialization;
 using System.Xml;
-using ClassDiagram.Model;
+using ClassModel.Model.Implementation;
 
 namespace ClassDiagram.Serializer
 {
@@ -32,13 +32,13 @@ namespace ClassDiagram.Serializer
                     diagram.Boxes[ff].FieldsStringList = new List<string>();                    
                     foreach (Fields field in box.FieldsList)
                     {
-                        diagram.Boxes[ff].FieldsStringList.Add(field.Field);                        
+                        diagram.Boxes[ff].FieldsStringList.Add(field.CurrentString);                        
                     }
 
                     diagram.Boxes[ff].MethodStringList = new List<string>();
                     foreach (Methods method in box.MethodList)
                     {
-                        diagram.Boxes[ff].MethodStringList.Add(method.Method);
+                        diagram.Boxes[ff].MethodStringList.Add(method.CurrentString);
                     }
 
                     ff++;

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using ClassModel.Model.Implementation;
 
-namespace ClassDiagram.Model
+namespace ClassModel.Model.Interfaces
 {
     public interface IBox
     {

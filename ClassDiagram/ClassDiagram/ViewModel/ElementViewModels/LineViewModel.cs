@@ -3,8 +3,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
-using ClassDiagram.Model;
 using ClassDiagram.UndoRedo.AddandRemove;
+using ClassModel.Model;
+using ClassModel.Model.Interfaces;
 using GalaSoft.MvvmLight.Command;
 
 namespace ClassDiagram.ViewModel.ElementViewModels

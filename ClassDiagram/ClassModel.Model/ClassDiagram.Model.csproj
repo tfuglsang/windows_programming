@@ -40,15 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Box.cs" />
-    <Compile Include="Diagram.cs" />
+    <Compile Include="Implementation\Box.cs" />
+    <Compile Include="Implementation\Diagram.cs" />
     <Compile Include="EBox.cs" />
     <Compile Include="ELine.cs" />
-    <Compile Include="Fields.cs" />
-    <Compile Include="IBox.cs" />
-    <Compile Include="ILine.cs" />
-    <Compile Include="Line.cs" />
-    <Compile Include="Methods.cs" />
+    <Compile Include="Implementation\Fields.cs" />
+    <Compile Include="Interfaces\IBox.cs" />
+    <Compile Include="Interfaces\ILine.cs" />
+    <Compile Include="Implementation\Line.cs" />
+    <Compile Include="Implementation\Methods.cs" />
+    <Compile Include="Interfaces\IStringHolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

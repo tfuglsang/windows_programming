@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Xml.Serialization;
+using ClassModel.Model.Interfaces;
 
-namespace ClassDiagram.Model
+namespace ClassModel.Model.Implementation
 {
     public class Box: IBox
     {

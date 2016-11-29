@@ -1,6 +1,7 @@
 ﻿using System;
+using ClassModel.Model.Interfaces;
 
-namespace ClassDiagram.Model
+namespace ClassModel.Model.Implementation
 {
     public class Line : ILine
     {

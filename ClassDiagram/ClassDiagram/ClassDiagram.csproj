@@ -96,9 +96,6 @@
     <Compile Include="ViewModel\StatusBarViewModel.cs" />
     <Compile Include="View\Selectors\CustomDataTemplateSelector.cs" />
     <Compile Include="View\Selectors\CustomStyleSelector.cs" />
-    <Compile Include="View\UserControls\AddLineUserControl.xaml.cs">
-      <DependentUpon>AddLineUserControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="View\UserControls\LineUserControl.xaml.cs">
       <DependentUpon>LineUserControl.xaml</DependentUpon>
     </Compile>
@@ -139,10 +136,6 @@
     <Page Include="View\Resources\StyleDictionary.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\UserControls\AddLineUserControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\UserControls\LineUserControl.xaml">
       <SubType>Designer</SubType>
